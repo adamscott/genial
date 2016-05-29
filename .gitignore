@@ -60,3 +60,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# Generated ui_*.py and *_rc.py files
+ui_*.py
+*_rc.py
