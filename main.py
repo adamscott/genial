@@ -7,4 +7,5 @@ Created on 28 mai 2016
 if __name__ == '__main__':
     import sys
     from genial import app
+
     sys.exit(app.run())
