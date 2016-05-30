@@ -1,9 +1,18 @@
-'''
-Created on 28 mai 2016
+"""
+    Génial
+    ================================================
+    A "Génies en herbe" questions manager.
 
-@author: Adam Scott
-'''
-
+    :copyright: (c) 2015, Adam Scott.
+    :license: GPL3, see LICENSE for more details.
+"""
+from PyQt5 import QtCore, QtGui, QtWidgets
+from genial.ui.mainwindow import MainWindow
 
 def run():
-    print("Hello, World.")
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    return app.exec_()
+

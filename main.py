@@ -1,9 +1,11 @@
-'''
-Created on 28 mai 2016
+"""
+    Génial
+    ================================================
+    A "Génies en herbe" questions manager.
 
-@author: Adam Scott
-'''
-
+    :copyright: (c) 2015, Adam Scott.
+    :license: GPL3, see LICENSE for more details.
+"""
 if __name__ == '__main__':
     import sys
     from genial import app
