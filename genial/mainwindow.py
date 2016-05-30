@@ -6,57 +6,73 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtCore import QCoreApplication, QDir, Qt
+from PyQt5.QtCore import QCoreApplication, QDir, pyqtSlot
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMdiSubWindow
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
-from genial.questionswidget import QuestionsWidget
 from genial.ui.ui_mainwindow import Ui_MainWindow
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
+
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
-        self.ui.action_New.triggered.connect(self.onActionNewTriggered)
-        self.ui.action_Open.triggered.connect(self.onActionOpenTriggered)
-        self.ui.action_Save.triggered.connect(self.onActionSaveTriggered)
-        self.ui.actionSave_As.triggered.connect(self.onActionSaveAsTriggered)
-        self.setIcons()
+        self.set_icons()
 
     # noinspection PyCallByClass,PyTypeChecker
-    def setIcons(self):
-        self.ui.action_New.setIcon(
+    def set_icons(self):
+        self.ui.action_new.setIcon(
             QIcon.fromTheme(
                 'document-new',
                 QIcon(':/icon/document-new')
             )
         )
-        self.ui.action_Open.setIcon(
+        self.ui.action_open.setIcon(
             QIcon.fromTheme(
                 'document-open',
                 QIcon(':/icon/document-open')
             )
         )
-        self.ui.action_Save.setIcon(
+        self.ui.action_save.setIcon(
             QIcon.fromTheme(
                 'document-save',
                 QIcon(':/icon/document-save')
             )
         )
-        self.ui.actionSave_As.setIcon(
+        self.ui.action_saveas.setIcon(
             QIcon.fromTheme(
                 'document-save-as',
                 QIcon(':/icon/document-save-as')
             )
         )
+        self.ui.action_quit.setIcon(
+            QIcon.fromTheme(
+                'document-quit',
+                QIcon(':/icon/document-quit')
+            )
+        )
+        self.ui.action_undo.setIcon(
+            QIcon.fromTheme(
+                'document-undo',
+                QIcon(':/icon/document-undo')
+            )
+        )
+        self.ui.action_redo.setIcon(
+            QIcon.fromTheme(
+                'document-redo',
+                QIcon(':/icon/document-redo')
+            )
+        )
 
-    def onActionNewTriggered(self):
-        print('onActionNewTriggered')
+    @pyqtSlot()
+    def on_action_new_triggered(self):
+        print('on_action_new_triggered')
 
-    def onActionOpenTriggered(self):
+    @pyqtSlot()
+    def on_action_open_triggered(self):
         _translate = QCoreApplication.translate
         # noinspection PyTypeChecker,PyArgumentList
         fileName = QFileDialog.getOpenFileName(
@@ -66,8 +82,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             _translate('MainWindow', 'Génial files (*.gnl)')
         )
 
-    def onActionSaveTriggered(self):
+    @pyqtSlot()
+    def on_action_save_triggered(self):
         print('Save...')
 
-    def onActionSaveAsTriggered(self):
+    @pyqtSlot()
+    def on_action_saveas_triggered(self):
         print('Save as...')
+
+    @pyqtSlot()
+    def on_action_quit_triggered(self):
+        print('Let\'s quit!')
+
+    @pyqtSlot()
+    def on_action_newuser_triggered(self):
+        print('New user!')
+
+    @pyqtSlot()
+    def on_action_removeuser_triggered(self):
+        print('Remove user.')
