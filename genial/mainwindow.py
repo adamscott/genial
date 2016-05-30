@@ -24,9 +24,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.action_Open.triggered.connect(self.onActionOpenTriggered)
         self.ui.action_Save.triggered.connect(self.onActionSaveTriggered)
         self.ui.actionSave_As.triggered.connect(self.onActionSaveAsTriggered)
-        self.ui.mdiArea.subWindowActivated.connect(self.onSubWindowActivated)
         self.setIcons()
-        self.setupNoSubWindow()
 
     # noinspection PyCallByClass,PyTypeChecker
     def setIcons(self):
@@ -55,16 +53,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
         )
 
-    def setupNoSubWindow(self):
-        self.ui.action_Save.setDisabled(True)
-        self.ui.actionSave_As.setDisabled(True)
-
-    def setupHasSubWindow(self):
-        self.ui.action_Save.setDisabled(False)
-        self.ui.actionSave_As.setDisabled(False)
-
     def onActionNewTriggered(self):
-        self.openDocument()
+        print('onActionNewTriggered')
 
     def onActionOpenTriggered(self):
         _translate = QCoreApplication.translate
@@ -75,41 +65,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QDir.homePath(),
             _translate('MainWindow', 'Génial files (*.gnl)')
         )
-        if fileName[0]:
-            self.openDocument(fileName)
 
     def onActionSaveTriggered(self):
         print('Save...')
 
     def onActionSaveAsTriggered(self):
         print('Save as...')
-
-    def openDocument(self, fileName=None):
-        subwindow = QMdiSubWindow(self.ui.mdiArea)
-        questionWidget = QuestionsWidget(subwindow)
-        questionWidget.open(fileName)
-        subwindow.setWidget(questionWidget)
-        subwindow.setAttribute(Qt.WA_DeleteOnClose)
-        subwindow.show()
-        subwindow.destroyed.connect(self.onSubWindowDestroyed)
-        questionWidget.show()
-        self.ui.mdiArea.addSubWindow(subwindow)
-        self.setupHasSubWindow()
-
-    def onSubWindowActivated(self, subwindow):
-        '''
-        @type subwindow: QMdiSubWindow
-        '''
-        print('activated')
-        print(subwindow)
-
-    def onSubWindowDestroyed(self, subwindow):
-        '''
-        @type subwindow: QMdiSubWindow
-        '''
-        print('destroyed')
-        print(subwindow)
-
-        list = self.ui.mdiArea.subWindowList() # array[QMdiSubWindow]
-        if len(list) == 0:
-            self.setupNoSubWindow()
