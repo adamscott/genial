@@ -1,3 +1,15 @@
+# ---------------------------------------------------------------------
+
+### Génial ###
+# Generated ui_*.py and *_rc.py files
+ui_*.py
+*_rc.py
+
+# ---------------------------------------------------------------------
+
+# Created by https://www.gitignore.io/api/python
+
+### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -51,6 +63,14 @@ coverage.xml
 
 # Django stuff:
 *.log
+local_settings.py
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
 
 # Sphinx documentation
 docs/_build/
@@ -58,12 +78,29 @@ docs/_build/
 # PyBuilder
 target/
 
-#Ipython Notebook
+# IPython Notebook
 .ipynb_checkpoints
 
-# Generated ui_*.py and *_rc.py files
-ui_*.py
-*_rc.py
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# dotenv
+.env
+
+# virtualenv
+venv/
+ENV/
+
+# Spyder project settings
+.spyderproject
+
+# Rope project settings
+.ropeproject
+
+# ---------------------------------------------------------------------
 
 # Created by https://www.gitignore.io
 
