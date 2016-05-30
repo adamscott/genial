@@ -14,3 +14,6 @@ class QuestionsWidget(QtWidgets.QWidget, Ui_QuestionsWidget):
         QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_QuestionsWidget()
         self.ui.setupUi(self)
+
+    def open(self, fileName):
+        print('Opening...')

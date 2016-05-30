@@ -21,8 +21,33 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
-     <widget class="QuestionsWidget" name="widget" native="true"/>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="viewMode">
+       <enum>QMdiArea::TabbedView</enum>
+      </property>
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="tabsMovable">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -40,6 +65,10 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_New"/>
+    <addaction name="action_Open"/>
+    <addaction name="separator"/>
+    <addaction name="action_Save"/>
+    <addaction name="actionSave_As"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -56,16 +85,19 @@
      <string>&amp;Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
+   <addaction name="menu_View"/>
    <addaction name="menu_Window"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -73,6 +105,9 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_New"/>
+   <addaction name="action_Open"/>
+   <addaction name="separator"/>
+   <addaction name="action_Save"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
    <attribute name="dockWidgetArea">
@@ -96,27 +131,39 @@
   </widget>
   <action name="action_New">
    <property name="text">
-    <string>&amp;New</string>
-   </property>
-   <property name="toolTip">
-    <string>New</string>
+    <string>&amp;New…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
   </action>
+  <action name="action_Open">
+   <property name="text">
+    <string>&amp;Open…</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="text">
+    <string>&amp;Save…</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_As">
+   <property name="text">
+    <string>Save As…</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QuestionsWidget</class>
-   <extends>QWidget</extends>
-   <header>genial.ui.questionswidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PropertiesWidget</class>
    <extends>QWidget</extends>
-   <header>genial.ui.propertieswidget.h</header>
+   <header>genial.propertieswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -14,3 +14,4 @@ class PropertiesWidget(QtWidgets.QWidget, Ui_PropertiesWidget):
         QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_PropertiesWidget()
         self.ui.setupUi(self)
+        self.ui.retranslateUi(self)
