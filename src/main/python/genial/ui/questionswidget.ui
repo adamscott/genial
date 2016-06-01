@@ -50,6 +50,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/genial.qrc"/>
+ </resources>
  <connections/>
 </ui>
