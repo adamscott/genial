@@ -11,6 +11,7 @@ from PyQt5.QtGui import QIcon, QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 from genial.ui.ui_mainwindow import Ui_MainWindow
+from genial.propertieswidget import PropertiesWidget
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -22,6 +23,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.retranslateUi(self)
         self.set_icons()
         self.set_slots()
+        self.properties_widget = None  # type: PropertiesWidget
+        self.setup_properties()
         # There is no document opened, so...
         self.set_document_related_widgets_disabled(True)
 
@@ -110,6 +113,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.action_undo.setDisabled(True)
             self.ui.action_redo.setDisabled(True)
 
+    def setup_properties(self):
+        self.properties_widget = PropertiesWidget()  # type: PropertiesWidget
+        self.properties_widget.setObjectName("settings_widget")
 
     @pyqtSlot()
     def on_action_new_triggered(self):
@@ -142,6 +148,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_action_removeuser_triggered(self):
         print('Remove user.')
+
+    @pyqtSlot()
+    def on_action_properties_triggered(self):
+        self.properties_widget.show()
 
     @pyqtSlot()
     def on_document_widget_document_available(self):
