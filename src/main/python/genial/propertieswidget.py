@@ -16,3 +16,11 @@ class PropertiesWidget(QWidget, Ui_PropertiesWidget):
         self.ui = Ui_PropertiesWidget()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.setup_general_tab()
+        self.setup_categories_tab()
+
+    def setup_general_tab(self):
+        pass
+
+    def setup_categories_tab(self):
+        pass
