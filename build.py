@@ -1,7 +1,11 @@
-import re
 from pybuilder.core import init, use_plugin, task, description, depends, Project, Logger
 from pybuilder.utils import assert_can_execute, execute_command, discover_files
 from pybuilder.errors import BuildFailedException
+
+from tempfile import NamedTemporaryFile
+from os.path import basename
+
+import re
 
 use_plugin("python.core")
 use_plugin("python.unittest")
@@ -39,12 +43,25 @@ def compile_ui(project: Project, logger: Logger):
     assert_can_execute(["pyuic5", "--version"],
                        prerequisite="pyuic (PyQt5)",
                        caller="genial build file.")
-    compile_generic("{}/src/main/python".format(project.basedir),
-                    'pyuic5',
-                    '.ui',
-                    r'((.*/)(.*)).ui',
-                    r'\2ui_\3.py',
-                    options="--from-imports")
+
+    source_dir = "{}/src/main/python".format(project.basedir)
+    error_file = NamedTemporaryFile()
+
+    files_names = discover_files("{}/genial/ui".format(source_dir), ".ui")
+    for file_name in files_names:
+        base_name = basename(file_name)
+        output_base_name = re.sub(r'(.*)\.ui', r'ui_\1\.py', base_name)
+        exit_code = execute_command(
+            "pyuic5 {} {} -o {}".format(
+                "--import-from=genial.resources",
+                file_name,
+                "{}/genial/views/gen/{}".format(source_dir, output_base_name)
+            ),
+            shell=True,
+            error_file_name=error_file.name
+        )
+        if exit_code != 0:
+            raise_error(error_file.name, "pyuic5 returned an error:")
 
 
 @task
@@ -55,67 +72,74 @@ def compile_qrc(project: Project, logger: Logger):
     assert_can_execute(["pyrcc5", "--version"],
                        prerequisite="pyrcc5 (PyQt5)",
                        caller="genial build file.")
-    compile_generic("{}/src/main/python".format(project.basedir),
-                    'pyrcc5',
-                    '.qrc',
-                    r'(.*)/resources/(.*).qrc',
-                    r'\1/ui/\2_rc.py')
+
+    source_dir = "{}/src/main/python".format(project.basedir)
+    error_file = NamedTemporaryFile()
+
+    files_names = discover_files("{}/genial/resources".format(source_dir), ".qrc")
+    for file_name in files_names:
+        base_name = basename(file_name)
+        output_base_name = re.sub(r'(.*)\.qrc', r'\1_rc\.py', base_name)
+        exit_code = execute_command(
+            "pyrcc5 {} -o {}".format(
+                file_name,
+                "{}/genial/resources/{}".format(source_dir, output_base_name)
+            ),
+            shell=True,
+            error_file_name=error_file.name
+        )
+        if exit_code != 0:
+            raise_error(error_file.name, "pyrcc5 returned an error:")
+
 
 @task
-@depends('update_localisation')
+@depends('update_ts')
 @description('Compiles .ts files to .qm using lrelease')
 def compile_ts(project: Project, logger:Logger):
     logger.info("Compiling .ts files.")
     assert_can_execute(["lrelease", "--version"],
                        prerequisite="lupdate (Qt5)",
                        caller="genial build file.")
-    compile_generic("{}/src/main/python/genial/ui/locale".format(project.basedir),
-                    'lrelease',
-                    '.ts')
 
+    source_dir = "{}/src/main/python".format(project.basedir)
+    error_file = NamedTemporaryFile()
 
-def compile_generic(basedir: str, compiler: str,
-                    file_extension: str, pattern_find: re=None,
-                    pattern_replace: re=None, output_command="-o",
-                    error_file_name="", options=""):
-    import os
-    import tempfile
-
-    error_file = tempfile.NamedTemporaryFile()
-
-    files = discover_files(basedir, file_extension)
-    for file in files:
-        if pattern_find and pattern_replace:
-            output = re.sub(pattern_find, pattern_replace, file)
-        else:
-            output = ""
+    files_names = discover_files("{}/genial/resources/locale".format(source_dir), ".ts")
+    for file_name in files_names:
+        base_name = basename(file_name)
+        output_base_name = re.sub(r'(.*)\.ts', r'\1\.qm', base_name)
         exit_code = execute_command(
-            "{} {} {} {} {}".format(compiler, options, file, output_command, output),
+            "lrelease {} -qm {}".format(
+                file_name,
+                "{}/genial/resources/locale/{}".format(
+                    source_dir,
+                    output_base_name
+                )
+            ),
             shell=True,
             error_file_name=error_file.name
         )
         if exit_code != 0:
-            raise_error(
-                error_file.name,
-                "{} failed to compile {}. It returned this error:".format(
-                    compiler,
-                    file
-                )
-            )
-
-
-def raise_error(error_file_name:str, message:str):
-    with open(error_file_name, 'r') as f:
-        error_message = f.read()
-        f.close()
-    raise BuildFailedException(message + "\n" + error_message)
+            raise_error(error_file.name, "lrelease returned an error:")
 
 
 @task
 @description("Updates the localisation files.")
-def update_localisation(project: Project, logger: Logger):
+def update_ts(project: Project, logger: Logger):
     import re
     import tempfile
+
+    def create_pro_content(header: str, elements: list) -> str:
+        value = header
+        elements_len = len(elements)
+        i = 0
+        for element in elements:
+            i += 1
+            escape_newline = ""
+            if i < elements_len: escape_newline = '\\\n'
+            value += "{} {}".format(element, escape_newline)
+        value += '\n'
+        return value
 
     logger.info("Generating .ts files.")
     assert_can_execute(["pylupdate5", "--version"],
@@ -125,12 +149,14 @@ def update_localisation(project: Project, logger: Logger):
     forms = []
     translations = []
 
-    files = discover_files("{}/src/main/python".format(project.basedir), ".py")
+    source_dir = "{}/src/main/python".format(project.basedir)
+
+    files = discover_files(source_dir, ".py")
     for file in files:
         if not (re.match(r'(.*/)ui_(.*).py', file) or re.match(r'(.*/)__init__\.py', file)):
             sources.append(file)
 
-    files = discover_files("{}/src/main/python".format(project.basedir), ".ui")
+    files = discover_files("{}/genial/ui".format(source_dir), ".ui")
     for file in files:
         forms.append(file)
 
@@ -163,14 +189,8 @@ def update_localisation(project: Project, logger: Logger):
             f.close()
 
 
-def create_pro_content(header: str, elements: list) -> str:
-    value = header
-    elements_len = len(elements)
-    i = 0
-    for element in elements:
-        i += 1
-        escape_newline = ""
-        if i < elements_len: escape_newline = '\\\n'
-        value += "{} {}".format(element, escape_newline)
-    value += '\n'
-    return value
+def raise_error(error_file_name:str, message:str):
+    with open(error_file_name, 'r') as f:
+        error_message = f.read()
+        f.close()
+    raise BuildFailedException(message + "\n" + error_message)
