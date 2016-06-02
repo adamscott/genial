@@ -9,7 +9,7 @@
 from PyQt5.QtCore import QCoreApplication, QTranslator, QLocale, Qt
 from PyQt5.QtWidgets import QApplication
 
-from genial.mainwindow import MainWindow
+from genial.views.mainview import MainView
 
 
 def run():
@@ -22,7 +22,7 @@ def run():
     if translator.load(QLocale(), "genial", "_", ":/locale"):
         # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
         QCoreApplication.installTranslator(translator)
-    window = MainWindow()
+    window = MainView()
     window.show()
     return app.exec_()
 
