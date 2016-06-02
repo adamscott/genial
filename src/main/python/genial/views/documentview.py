@@ -10,13 +10,13 @@ from PyQt5.QtWidgets import QWidget, QMessageBox, QFileDialog
 from PyQt5.QtCore import QObject, QCoreApplication, QDir, pyqtSignal, pyqtSlot
 from PyQt5.QtSql import QSqlDatabase, QSqlDriver, QSqlTableModel
 
-from genial.ui.ui_documentwidget import Ui_DocumentWidget
+from genial.views.gen.ui_documentview import Ui_DocumentView
 
 from zipfile import ZipFile
 from tempfile import TemporaryDirectory, TemporaryFile
 
 
-class DocumentWidget(QWidget, Ui_DocumentWidget):
+class DocumentView(QWidget, Ui_DocumentView):
     document_available = pyqtSignal()
     document_unavailable = pyqtSignal()
     document_was_modified = pyqtSignal()
@@ -26,7 +26,7 @@ class DocumentWidget(QWidget, Ui_DocumentWidget):
 
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-        self.ui = Ui_DocumentWidget()
+        self.ui = Ui_DocumentView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
         self.file = None
