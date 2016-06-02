@@ -145,7 +145,7 @@
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="games_tree_dock_widget_contents">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="games_tree_dock_widget_layout">
      <item>
       <widget class="GamesTreeWidget" name="games_tree_widget" native="true"/>
      </item>
