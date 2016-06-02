@@ -75,6 +75,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 QIcon(':/icon/document-redo')
             )
         )
+        self.ui.action_print.setIcon(
+            QIcon.fromTheme(
+                'document-print',
+                QIcon(':/icon/document-print')
+            )
+        )
+        self.ui.action_properties.setIcon(
+            QIcon.fromTheme(
+                'document-properties',
+                QIcon(':/icon/document-properties')
+            )
+        )
 
     def set_slots(self):
         self.ui.document_widget.document_available.connect(
@@ -89,6 +101,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.action_saveas.setDisabled(disabled)
         self.ui.action_newuser.setDisabled(disabled)
         self.ui.action_removeuser.setDisabled(disabled)
+        self.ui.action_properties.setDisabled(disabled)
+        self.ui.action_print.setDisabled(disabled)
+        self.ui.action_close.setDisabled(disabled)
         if disabled:
             # Here, we KNOW that there is no undo/redo
             # when there is no document.
@@ -111,6 +126,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_action_saveas_triggered(self):
         self.ui.document_widget.save_file_as()
+
+    @pyqtSlot()
+    def on_action_close_triggered(self):
+        self.ui.document_widget.close_file()
 
     @pyqtSlot()
     def on_action_quit_triggered(self):

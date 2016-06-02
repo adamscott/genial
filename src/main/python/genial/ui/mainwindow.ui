@@ -57,6 +57,11 @@
     <addaction name="action_save"/>
     <addaction name="action_saveas"/>
     <addaction name="separator"/>
+    <addaction name="action_properties"/>
+    <addaction name="separator"/>
+    <addaction name="action_print"/>
+    <addaction name="separator"/>
+    <addaction name="action_close"/>
     <addaction name="action_quit"/>
    </widget>
    <widget class="QMenu" name="menu_edit">
@@ -198,6 +203,24 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Z</string>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+  </action>
+  <action name="action_properties">
+   <property name="text">
+    <string>Properties…</string>
+   </property>
+  </action>
+  <action name="action_print">
+   <property name="text">
+    <string>&amp;Print…</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>
