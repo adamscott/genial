@@ -107,6 +107,9 @@
    <property name="windowTitle">
     <string>File</string>
    </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -122,6 +125,9 @@
   <widget class="QToolBar" name="document_toolbar">
    <property name="windowTitle">
     <string>Document</string>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
