@@ -25,6 +25,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # There is no document opened, so...
         self.set_document_related_widgets_disabled(True)
 
+    def closeEvent(self, event: QCloseEvent):
+        if self.ui.document_widget.close_file():
+            event.accept()
+        else:
+            event.ignore()
+
     # noinspection PyCallByClass,PyTypeChecker
     def set_icons(self):
         self.ui.action_new.setIcon(
@@ -89,11 +95,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.action_undo.setDisabled(True)
             self.ui.action_redo.setDisabled(True)
 
-    def closeEvent(self, event:QCloseEvent):
-        if self.ui.document_widget.close_file():
-            event.accept()
-        else:
-            event.ignore()
 
     @pyqtSlot()
     def on_action_new_triggered(self):
