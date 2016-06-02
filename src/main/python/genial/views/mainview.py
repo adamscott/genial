@@ -10,15 +10,15 @@ from PyQt5.QtCore import QCoreApplication, QDir, pyqtSlot
 from PyQt5.QtGui import QIcon, QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
-from genial.ui.ui_mainwindow import Ui_MainWindow
+from genial.views.gen.ui_mainview import Ui_MainView
 from genial.propertieswidget import PropertiesWidget
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):
+class MainView(QMainWindow, Ui_MainView):
 
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_MainView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
         self.set_icons()
