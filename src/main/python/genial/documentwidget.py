@@ -7,7 +7,7 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget, QMessageBox, QFileDialog
-from PyQt5.QtCore import QObject, QCoreApplication, QDir, pyqtSignal
+from PyQt5.QtCore import QObject, QCoreApplication, QDir, pyqtSignal, pyqtSlot
 from PyQt5.QtSql import QSqlDatabase, QSqlDriver, QSqlTableModel
 
 from genial.ui.ui_documentwidget import Ui_DocumentWidget
@@ -19,6 +19,10 @@ from tempfile import TemporaryDirectory, TemporaryFile
 class DocumentWidget(QWidget, Ui_DocumentWidget):
     document_available = pyqtSignal()
     document_unavailable = pyqtSignal()
+    document_was_modified = pyqtSignal()
+    document_open = pyqtSignal()
+    document_close = pyqtSignal()
+    document_requesting_settings_categories = pyqtSignal()
 
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
@@ -69,6 +73,8 @@ class DocumentWidget(QWidget, Ui_DocumentWidget):
                 return
         self.file = DocumentFile(self)
         self.file.new()
+        self.ui.stacked_widget.setCurrentWidget(self.ui.no_category_page)
+        self.document_open.emit()
         self.document_available.emit()
 
     def open_file(self):
@@ -80,6 +86,9 @@ class DocumentWidget(QWidget, Ui_DocumentWidget):
 
         self.file = DocumentFile(self)
         self.file.open(file_name)
+        self.setWindowFilePath(file_name)
+        self.ui.stacked_widget.setCurrentWidget(self.ui.no_category_page)
+        self.document_open.emit()
         self.document_available.emit()
 
     def save_file(self):
@@ -93,12 +102,38 @@ class DocumentWidget(QWidget, Ui_DocumentWidget):
     def close_file(self) -> bool:
         if self.file is not None:
             if self.file.close():
+                self.file = None
+                self.ui.stacked_widget.setCurrentWidget(self.ui.no_file_page)
+                self.document_close.emit()
                 self.document_unavailable.emit()
                 return True
             else:
                 return False
         else:
             return True
+
+    def set_dirty(self, dirty:bool):
+        self.setWindowModified(dirty)
+
+    def get_current_file_name(self) -> str:
+        _translate = QCoreApplication.translate
+        if self.file is not None:
+            if self.file.file_name is not None:
+                return self.file.file_name
+            else:
+                # noinspection PyArgumentList,PyTypeChecker
+                return _translate("DocumentWidget", "Untitled")
+        else:
+            return ""
+
+    def set_slots(self):
+        self.ui.change_project_settings_button.clicked.connect(
+            self.on_change_project_settings_button_clicked
+        )
+
+    @pyqtSlot()
+    def on_change_project_settings_button_clicked(self):
+        self.document_requesting_settings_categories.emit()
 
 
 class DocumentFile(QObject):
@@ -111,15 +146,15 @@ class DocumentFile(QObject):
         self.file_name = None  # type: str
 
     def new(self):
-        self.dirty = False
-        self.database = QSqlDatabase()
-        self.database.addDatabase("QSQLITE", ":memory:")
+        self.set_dirty(False)
+        self.init_new_database()
 
     def open(self, file_name):
         _translate = QCoreApplication.translate
         try:
             with ZipFile(file_name) as z:
                 pass
+            self.set_dirty(False)
             pass
         except OSError as err:
             message_box = QMessageBox()
@@ -167,7 +202,7 @@ class DocumentFile(QObject):
                     "DocumentWidget",
                     "Changes will be lost if you don't save."
                 ),
-                buttons=QMessageBox.Discard | QMessageBox.Save | QMessageBox.Cancel,
+                buttons=QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel,
                 defaultButton=QMessageBox.Save
             )
 
@@ -184,3 +219,11 @@ class DocumentFile(QObject):
         self.database = None
         self.directory.cleanup()
         self.database = None
+
+    def init_new_database(self):
+        self.database = QSqlDatabase()
+        self.database.addDatabase("QSQLITE", ":memory:")
+
+    def set_dirty(self, dirty:bool):
+        self.dirty = dirty
+        self.document_widget.set_dirty(dirty)

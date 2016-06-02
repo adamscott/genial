@@ -98,6 +98,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.document_widget.document_unavailable.connect(
             self.on_document_widget_document_unavailable
         )
+        self.ui.document_widget.document_open.connect(
+            self.on_document_widget_document_open
+        )
+        self.ui.document_widget.document_close.connect(
+            self.on_document_widget_document_close
+        )
+        self.ui.document_widget.document_requesting_settings_categories.connect(
+            self.on_document_widget_document_requesting_settings_categories
+        )
 
     def set_document_related_widgets_disabled(self, disabled:bool):
         self.ui.action_save.setDisabled(disabled)
@@ -139,7 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_action_quit_triggered(self):
-        print('Let\'s quit!')
+        self.close()
 
     @pyqtSlot()
     def on_action_newuser_triggered(self):
@@ -160,3 +169,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_document_widget_document_unavailable(self):
         self.set_document_related_widgets_disabled(True)
+
+    @pyqtSlot()
+    def on_document_widget_document_was_modified(self):
+        self.setWindowModified(self.ui.document_widget.is_modified())
+
+    @pyqtSlot()
+    def on_document_widget_document_open(self):
+        self.setWindowFilePath(self.ui.document_widget.get_current_file_name())
+
+    @pyqtSlot()
+    def on_document_widget_document_close(self):
+        self.setWindowFilePath("")
+
+    @pyqtSlot()
+    def on_document_widget_document_requesting_settings_categories(self):
+        self.properties_widget.show()
+        self.properties_widget.ui.tab_widget.setCurrentWidget(
+            self.properties_widget.ui.categories_tab
+        )
