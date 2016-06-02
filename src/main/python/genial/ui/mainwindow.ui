@@ -129,6 +129,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_properties"/>
   </widget>
   <widget class="QDockWidget" name="games_tree_dock_widget">
    <property name="windowTitle">
