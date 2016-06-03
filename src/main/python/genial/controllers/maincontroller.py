@@ -7,18 +7,18 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtCore import QObject
+
 from genial.views.mainview import MainView
-from genial.models.mainmodel import MainModel
+from genial.controllers.documentcontroller import DocumentController
 
 
 class MainController(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-
-    def bind(self, view:MainView, model:MainModel):
-        self.view = view
-        self.model = model
-        self.view.show()
+        self.view = None  # type: MainView
+        self.document_controller = None  # type: DocumentController
 
     def start(self):
-        pass
+        self.document_controller = DocumentController(self)
+        self.document_controller.view = self.view.ui.document_view
+        self.document_controller.start()

@@ -14,11 +14,10 @@ from genial.models.documentmodel import DocumentModel
 class DocumentController(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-
-    def bind(self, view:DocumentView, model:DocumentModel):
-        self.view = view
-        self.model = model
-        self.view.show()
+        self.view = None  # type: DocumentView
+        self.model = None  # type: DocumentModel
 
     def start(self):
+        if self.model is None:
+            self.model = DocumentModel()
         pass

@@ -11,7 +11,6 @@ from PyQt5.QtWidgets import QApplication
 
 from genial.views.mainview import MainView
 from genial.controllers.maincontroller import MainController
-from genial.models.mainmodel import MainModel
 
 def run():
     import sys
@@ -25,7 +24,7 @@ def run():
         QCoreApplication.installTranslator(translator)
 
     main_controller = MainController(app)
-    main_controller.bind(MainView(), MainModel())
+    main_controller.view = MainView()
     main_controller.start()
 
     return app.exec_()
