@@ -8,16 +8,17 @@
 """
 from PyQt5.QtCore import QObject
 from genial.views.documentview import DocumentView
-from genial.models.documentmodel import DocumentModel
+from genial.services.documentservice import DocumentService
 
 
 class DocumentController(QObject):
-    def __init__(self, parent=None):
-        QObject.__init__(self, parent)
-        self.view = None  # type: DocumentView
-        self.model = None  # type: DocumentModel
+    view = None  # type: DocumentView
 
     def start(self):
-        if self.model is None:
-            self.model = DocumentModel()
+        if self.view is None:
+            self.view = DocumentView()
+            self.view.show()
+        pass
+
+    def request_new_document(self) -> bool:
         pass
