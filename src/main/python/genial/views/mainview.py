@@ -29,7 +29,7 @@ class MainView(QMainWindow, Ui_MainView):
         self.set_document_related_widgets_disabled(True)
 
     def closeEvent(self, event: QCloseEvent):
-        if self.ui.document_widget.close_file():
+        if self.ui.document_view.close_file():
             event.accept()
         else:
             event.ignore()
@@ -92,20 +92,20 @@ class MainView(QMainWindow, Ui_MainView):
         )
 
     def set_slots(self):
-        self.ui.document_widget.document_available.connect(
-            self.on_document_widget_document_available
+        self.ui.document_view.document_available.connect(
+            self.on_document_view_document_available
         )
-        self.ui.document_widget.document_unavailable.connect(
-            self.on_document_widget_document_unavailable
+        self.ui.document_view.document_unavailable.connect(
+            self.on_document_view_document_unavailable
         )
-        self.ui.document_widget.document_open.connect(
-            self.on_document_widget_document_open
+        self.ui.document_view.document_open.connect(
+            self.on_document_view_document_open
         )
-        self.ui.document_widget.document_close.connect(
-            self.on_document_widget_document_close
+        self.ui.document_view.document_close.connect(
+            self.on_document_view_document_close
         )
-        self.ui.document_widget.document_requesting_settings_categories.connect(
-            self.on_document_widget_document_requesting_settings_categories
+        self.ui.document_view.document_requesting_settings_categories.connect(
+            self.on_document_view_document_requesting_settings_categories
         )
 
     def set_document_related_widgets_disabled(self, disabled:bool):
@@ -128,23 +128,23 @@ class MainView(QMainWindow, Ui_MainView):
 
     @pyqtSlot()
     def on_action_new_triggered(self):
-        self.ui.document_widget.new_file()
+        self.ui.document_view.new_file()
 
     @pyqtSlot()
     def on_action_open_triggered(self):
-        self.ui.document_widget.open_file()
+        self.ui.document_view.open_file()
 
     @pyqtSlot()
     def on_action_save_triggered(self):
-        self.ui.document_widget.save_file()
+        self.ui.document_view.save_file()
 
     @pyqtSlot()
     def on_action_saveas_triggered(self):
-        self.ui.document_widget.save_file_as()
+        self.ui.document_view.save_file_as()
 
     @pyqtSlot()
     def on_action_close_triggered(self):
-        self.ui.document_widget.close_file()
+        self.ui.document_view.close_file()
 
     @pyqtSlot()
     def on_action_quit_triggered(self):
@@ -163,27 +163,27 @@ class MainView(QMainWindow, Ui_MainView):
         self.properties_widget.show()
 
     @pyqtSlot()
-    def on_document_widget_document_available(self):
+    def on_document_view_document_available(self):
         self.set_document_related_widgets_disabled(False)
 
     @pyqtSlot()
-    def on_document_widget_document_unavailable(self):
+    def on_document_view_document_unavailable(self):
         self.set_document_related_widgets_disabled(True)
 
     @pyqtSlot()
-    def on_document_widget_document_was_modified(self):
-        self.setWindowModified(self.ui.document_widget.is_modified())
+    def on_document_view_document_was_modified(self):
+        self.setWindowModified(self.ui.document_view.is_modified())
 
     @pyqtSlot()
-    def on_document_widget_document_open(self):
-        self.setWindowFilePath(self.ui.document_widget.get_current_file_name())
+    def on_document_view_document_open(self):
+        self.setWindowFilePath(self.ui.document_view.get_current_file_name())
 
     @pyqtSlot()
-    def on_document_widget_document_close(self):
+    def on_document_view_document_close(self):
         self.setWindowFilePath("")
 
     @pyqtSlot()
-    def on_document_widget_document_requesting_settings_categories(self):
+    def on_document_view_document_requesting_settings_categories(self):
         self.properties_widget.show()
         self.properties_widget.ui.tab_widget.setCurrentWidget(
             self.properties_widget.ui.categories_tab

@@ -34,7 +34,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="DocumentView" name="document_widget" native="true"/>
+     <widget class="DocumentView" name="document_view" native="true"/>
     </item>
    </layout>
   </widget>
