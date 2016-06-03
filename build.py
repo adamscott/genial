@@ -25,7 +25,6 @@ def initialize(project: Project, logger: Logger):
     project.url = "https://github.com/adamscott/genial"
     project.license = "GPL3"
     project.version = "0.1.0"
-
     project.build_depends_on('mockito')
     project.set_property('coverage_exceptions', [
         'genial.ui'
@@ -33,7 +32,6 @@ def initialize(project: Project, logger: Logger):
     project.set_property('genial_localisations', [
         'fr'
     ])
-    pass
 
 
 @task
@@ -126,9 +124,6 @@ def compile_ts(project: Project, logger:Logger):
 @task
 @description("Updates the localisation files.")
 def update_ts(project: Project, logger: Logger):
-    import re
-    import tempfile
-
     def create_pro_content(header: str, elements: list) -> str:
         value = header
         elements_len = len(elements)
@@ -169,14 +164,14 @@ def update_ts(project: Project, logger: Logger):
             )
         )
 
-    tmp_pro_file = tempfile.NamedTemporaryFile()
+    tmp_pro_file = NamedTemporaryFile()
     with open(tmp_pro_file.name, 'w') as f:
         f.write(create_pro_content("SOURCES = ", sources))
         f.write(create_pro_content("FORMS = ", forms))
         f.write(create_pro_content("TRANSLATIONS = ", translations))
         f.close()
 
-    error_file = tempfile.NamedTemporaryFile()
+    error_file = NamedTemporaryFile()
     exit_code = execute_command("pylupdate5 {}".format(tmp_pro_file.name),
                                 error_file_name=error_file.name,
                                 shell=True)
@@ -189,8 +184,67 @@ def update_ts(project: Project, logger: Logger):
             f.close()
 
 
+@task
+@description("Generates a .qm from Qt for each language defined.")
+def generate_qt_qm(project: Project, logger: Logger):
+    logger.info("Generating .qm file from Qt.")
+    assert_can_execute(["pylupdate5", "--version"],
+                       prerequisite="pylupdate5 (PyQt5)",
+                       caller="genial build file.")
+    languages = project.get_property('genial_localisations')
+    qt_files_needed = [
+        'qtbase'
+    ]
+    source_dir = "{}/src/main/python".format(project.basedir)
+    for language in languages:
+        logger.info("Getting .ts files for {}.".format(language))
+        files_downloaded = []
+        for qt_file_needed in qt_files_needed:
+            file = NamedTemporaryFile()
+            downloaded = download_to_file(
+                'l10n-files.qt.io',
+                '/l10n-files/qt5-current/{}_{}.ts'.format(
+                    qt_file_needed,
+                    language
+                ),
+                file
+            )
+            if downloaded:
+                files_downloaded.append(file)
+
+        error_file = NamedTemporaryFile()
+        exit_code = execute_command(
+            "lrelease {} -qm {}".format(
+                " ".join([f.name for f in files_downloaded]),
+                "{}/genial/resources/locale/qt_{}.qm".format(
+                    source_dir,
+                    language
+                )
+            ),
+            error_file_name=error_file.name,
+            shell=True
+        )
+        if exit_code != 0:
+            message = "lrelease failed to join localisation files. It returned this error:"
+            raise_error(error_file.name, message)
+
+
 def raise_error(error_file_name:str, message:str):
     with open(error_file_name, 'r') as f:
         error_message = f.read()
         f.close()
     raise BuildFailedException(message + "\n" + error_message)
+
+
+def download_to_file(host, path, file) -> bool:
+    from http.client import HTTPConnection
+    connection = HTTPConnection(host)
+    connection.request('GET', path)
+    response = connection.getresponse()
+    if response.status == 200:
+        with open(file.name, 'wb') as f:
+            f.write(response.read())
+            f.close()
+        return True
+    else:
+        return False
