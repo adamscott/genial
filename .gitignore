@@ -4,6 +4,8 @@
 # Generated ui_*.py and *_rc.py files
 ui_*.py
 *_rc.py
+# Generated *.qm files
+*.qm
 
 # ---------------------------------------------------------------------
 
