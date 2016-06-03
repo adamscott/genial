@@ -7,8 +7,13 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtCore import QObject
+from PyQt5.QtSql import QSqlDatabase
 
 
-class DocumentModel(QObject):
-    def __init__(self, parent=None):
-        QObject.__init__(self, parent)
+class DocumentService(QObject):
+    database = None  # type: QSqlDatabase
+
+    @property
+    def is_loaded(self):
+        return database is not None
+
