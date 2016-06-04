@@ -62,8 +62,8 @@ class MainView(QMainWindow, Ui_MainView):
         )
         self.ui.action_quit.setIcon(
             QIcon.fromTheme(
-                'application-quit',
-                QIcon(':/icon/application-quit.svg')
+                'application-exit',
+                QIcon(':/icon/application-exit.svg')
             )
         )
         self.ui.action_undo.setIcon(
