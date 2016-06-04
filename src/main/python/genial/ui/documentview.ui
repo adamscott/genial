@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DocumentWidget</class>
- <widget class="QWidget" name="DocumentWidget">
+ <class>DocumentView</class>
+ <widget class="QWidget" name="DocumentView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -28,7 +28,7 @@
    </property>
    <item>
     <widget class="QStackedWidget" name="stacked_widget">
-     <widget class="QWidget" name="no_file_page">
+     <widget class="QWidget" name="no_document_page">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(159, 157, 154);</string>
       </property>
@@ -53,7 +53,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="no_category_page">
+     <widget class="QWidget" name="no_question_type_page">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <layout class="QGridLayout" name="grid_layout">
@@ -75,7 +75,7 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>No category is defined in the file.</string>
+              <string>No question type is defined.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -85,7 +85,7 @@
            <item>
             <widget class="QPushButton" name="change_project_settings_button">
              <property name="text">
-              <string>Change project settings…</string>
+              <string>Properties</string>
              </property>
             </widget>
            </item>
@@ -134,7 +134,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_page">
+     <widget class="QWidget" name="main_page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTabWidget" name="tab_widget">
@@ -153,7 +153,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources/genial.qrc"/>
+  <include location="../resources/icons.qrc"/>
+  <include location="../resources/locale.qrc"/>
  </resources>
  <connections/>
 </ui>

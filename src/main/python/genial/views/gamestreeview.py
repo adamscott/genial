@@ -7,12 +7,15 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget
-from genial.ui.ui_gamestreewidget import Ui_GamesTreeWidget
+from genial.views.gen.ui_gamestreeview import Ui_GamesTreeView
 
 
-class GamesTreeWidget(QWidget, Ui_GamesTreeWidget):
-    def __init__(self,parent=None):
+class GamesTreeView(QWidget, Ui_GamesTreeView):
+    def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-        self.ui = Ui_GamesTreeWidget()
+        self.ui = Ui_GamesTreeView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc

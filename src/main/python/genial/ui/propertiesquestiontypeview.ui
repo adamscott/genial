@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CategoryWidget</class>
- <widget class="QWidget" name="CategoryWidget">
+ <class>PropertiesQuestionTypeView</class>
+ <widget class="QWidget" name="PropertiesQuestionTypeView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,6 +23,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/icons.qrc"/>
+  <include location="../resources/locale.qrc"/>
+ </resources>
  <connections/>
 </ui>

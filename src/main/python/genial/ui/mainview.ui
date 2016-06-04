@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>MainView</class>
+ <widget class="QMainWindow" name="MainView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,7 +34,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="DocumentWidget" name="document_widget" native="true"/>
+     <widget class="DocumentView" name="document_view" native="true"/>
     </item>
    </layout>
   </widget>
@@ -44,7 +44,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -55,7 +55,7 @@
     <addaction name="action_open"/>
     <addaction name="separator"/>
     <addaction name="action_save"/>
-    <addaction name="action_saveas"/>
+    <addaction name="action_save_as"/>
     <addaction name="separator"/>
     <addaction name="action_properties"/>
     <addaction name="separator"/>
@@ -91,8 +91,8 @@
     <property name="title">
      <string>&amp;Users</string>
     </property>
-    <addaction name="action_newuser"/>
-    <addaction name="action_removeuser"/>
+    <addaction name="action_new_user"/>
+    <addaction name="action_remove_user"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menu_file"/>
@@ -147,7 +147,7 @@
    <widget class="QWidget" name="games_tree_dock_widget_contents">
     <layout class="QVBoxLayout" name="games_tree_dock_widget_layout">
      <item>
-      <widget class="GamesTreeWidget" name="games_tree_widget" native="true"/>
+      <widget class="GamesTreeView" name="games_tree_view" native="true"/>
      </item>
     </layout>
    </widget>
@@ -176,17 +176,17 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="action_saveas">
+  <action name="action_save_as">
    <property name="text">
     <string>Save As…</string>
    </property>
   </action>
-  <action name="action_newuser">
+  <action name="action_new_user">
    <property name="text">
     <string>Add a new user…</string>
    </property>
   </action>
-  <action name="action_removeuser">
+  <action name="action_remove_user">
    <property name="text">
     <string>Remove a user…</string>
    </property>
@@ -236,20 +236,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DocumentWidget</class>
+   <class>DocumentView</class>
    <extends>QWidget</extends>
-   <header>genial.documentwidget.h</header>
+   <header>genial.views.documentview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>GamesTreeWidget</class>
+   <class>GamesTreeView</class>
    <extends>QWidget</extends>
-   <header>genial.gamestreewidget.h</header>
+   <header>genial.views.gamestreeview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/genial.qrc"/>
+  <include location="../resources/icons.qrc"/>
+  <include location="../resources/locale.qrc"/>
  </resources>
  <connections/>
 </ui>

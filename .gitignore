@@ -4,6 +4,13 @@
 # Generated ui_*.py and *_rc.py files
 ui_*.py
 *_rc.py
+# Generated *.qm files
+*.qm
+# Generated .qrc files
+locale.qrc
+icons.qrc
+# Downloaded icons from GNOME Desktop
+*.svg
 
 # ---------------------------------------------------------------------
 
