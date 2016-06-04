@@ -334,6 +334,7 @@ def download_icons(project: Project, logger: Logger):
         svg_url = file_tree.xpath('//div[@class="fullImageLink"]/a/@href')
         if len(svg_url) > 0:
             svg_page = requests.get(svg_url[0])
+            os.makedirs(icons_dir, exist_ok=True)
             with open('{}/{}.svg'.format(icons_dir, needed_icon), '+w') as f:
                 f.write(svg_page.text)
         else:
