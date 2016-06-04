@@ -7,12 +7,12 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget
-from genial.views.gen.ui_categoryview import Ui_CategoryView
+from genial.views.gen.ui_propertiesquestiontypeview import Ui_PropertiesQuestionTypeView
 
 
-class CategoryView(QWidget, Ui_CategoryView):
+class PropertiesQuestionTypeView(QWidget, Ui_PropertiesQuestionTypeView):
     def __init__(self,parent=None):
         QWidget.__init__(self, parent)
-        self.ui = Ui_CategoryView()
+        self.ui = Ui_PropertiesQuestionTypeView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
