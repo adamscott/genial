@@ -33,7 +33,7 @@ class DocumentController(QObject):
         if len(document_service.categories) > 0:
             self.view.show_main()
         else:
-            self.view.show_no_category()
+            self.view.show_no_question_type()
 
     @pyqtSlot()
     def on_document_closed(self):

@@ -39,9 +39,8 @@ class DocumentView(QWidget, Ui_DocumentView):
         stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
         stacked_widget.setCurrentWidget(self.ui.main_page)
 
-    def show_no_category(self):
+    def show_no_question_type(self):
         stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
-        stacked_widget.setCurrentWidget(self.ui.no_category_page)
 
     def open_file_name(self) -> str:
         _translate = QCoreApplication.translate
