@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0">
 <context>
-    <name>CategoryWidget</name>
+    <name>CategoryView</name>
     <message>
-        <location filename="../../ui/categorywidget.ui" line="14"/>
+        <location filename="../../ui/categoryview.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -80,9 +80,9 @@
     </message>
 </context>
 <context>
-    <name>GamesTreeWidget</name>
+    <name>GamesTreeView</name>
     <message>
-        <location filename="../../ui/gamestreewidget.ui" line="14"/>
+        <location filename="../../ui/gamestreeview.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -231,42 +231,42 @@
     </message>
 </context>
 <context>
-    <name>PropertiesWidget</name>
+    <name>PropertiesView</name>
     <message>
-        <location filename="../../ui/propertieswidget.ui" line="33"/>
+        <location filename="../../ui/propertiesview.ui" line="33"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertieswidget.ui" line="41"/>
+        <location filename="../../ui/propertiesview.ui" line="41"/>
         <source>Edit general file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertieswidget.ui" line="47"/>
+        <location filename="../../ui/propertiesview.ui" line="47"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertieswidget.ui" line="60"/>
+        <location filename="../../ui/propertiesview.ui" line="60"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertieswidget.ui" line="107"/>
+        <location filename="../../ui/propertiesview.ui" line="107"/>
         <source>No category set.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>QuestionsWidget</name>
+    <name>QuestionsView</name>
     <message>
-        <location filename="../../ui/questionswidget.ui" line="14"/>
+        <location filename="../../ui/questionsview.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/questionswidget.ui" line="40"/>
+        <location filename="../../ui/questionsview.ui" line="40"/>
         <source>Search …</source>
         <translation type="unfinished"></translation>
     </message>

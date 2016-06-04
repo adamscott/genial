@@ -7,13 +7,13 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget
-from genial.views.gen.ui_questionswidget import Ui_QuestionsWidget
+from genial.views.gen.ui_questionsview import Ui_QuestionsView
 
 
-class QuestionsWidget(QWidget, Ui_QuestionsWidget):
+class QuestionsView(QWidget, Ui_QuestionsView):
     def __init__(self,parent=None):
         QWidget.__init__(self, parent)
-        self.ui = Ui_QuestionsWidget()
+        self.ui = Ui_QuestionsView()
         self.ui.setupUi(self)
 
     def open(self, filename):

@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 from genial.views.gen.ui_mainview import Ui_MainView
 from genial.controllers.maincontroller import *
-from genial.propertieswidget import PropertiesWidget
+from genial.views.propertiesview import PropertiesView
 
 
 class MainView(QMainWindow, Ui_MainView):
@@ -23,7 +23,7 @@ class MainView(QMainWindow, Ui_MainView):
         self.ui.retranslateUi(self)
         self.set_icons()
         self.set_slots()
-        self.properties_widget = None  # type: PropertiesWidget
+        self.properties_view = None  # type: PropertiesView
         self.setup_properties()
         # There is no document opened, so...
         self.set_document_related_widgets_disabled(True)
@@ -123,8 +123,8 @@ class MainView(QMainWindow, Ui_MainView):
             self.ui.action_redo.setDisabled(True)
 
     def setup_properties(self):
-        self.properties_widget = PropertiesWidget()  # type: PropertiesWidget
-        self.properties_widget.setObjectName("settings_widget")
+        self.properties_view = PropertiesView()  # type: PropertiesView
+        self.properties_view.setObjectName("settings_widget")
 
     @pyqtSlot()
     def on_action_save_triggered(self):
@@ -152,7 +152,7 @@ class MainView(QMainWindow, Ui_MainView):
 
     @pyqtSlot()
     def on_action_properties_triggered(self):
-        self.properties_widget.show()
+        self.properties_view.show()
 
     @pyqtSlot()
     def on_document_view_document_available(self):
@@ -176,7 +176,7 @@ class MainView(QMainWindow, Ui_MainView):
 
     @pyqtSlot()
     def on_document_view_document_requesting_settings_categories(self):
-        self.properties_widget.show()
-        self.properties_widget.ui.tab_widget.setCurrentWidget(
-            self.properties_widget.ui.categories_tab
+        self.properties_view.show()
+        self.properties_view.ui.tab_widget.setCurrentWidget(
+            self.properties_view.ui.categories_tab
         )

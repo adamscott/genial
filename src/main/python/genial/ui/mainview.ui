@@ -147,7 +147,7 @@
    <widget class="QWidget" name="games_tree_dock_widget_contents">
     <layout class="QVBoxLayout" name="games_tree_dock_widget_layout">
      <item>
-      <widget class="GamesTreeWidget" name="games_tree_widget" native="true"/>
+      <widget class="GamesTreeView" name="games_tree_view" native="true"/>
      </item>
     </layout>
    </widget>
@@ -242,9 +242,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>GamesTreeWidget</class>
+   <class>GamesTreeView</class>
    <extends>QWidget</extends>
-   <header>genial.gamestreewidget.h</header>
+   <header>genial.views.gamestreeview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
