@@ -18,3 +18,6 @@ class QuestionsView(QWidget, Ui_QuestionsView):
 
     def open(self, filename):
         print('Opening...')
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc

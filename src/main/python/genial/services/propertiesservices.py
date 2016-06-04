@@ -20,3 +20,6 @@ class PropertiesService(QObject):
             self.load_properties(document_service.properties)
 
 properties_service = PropertiesService()
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc

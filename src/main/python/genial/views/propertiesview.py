@@ -24,3 +24,6 @@ class PropertiesView(QWidget, Ui_PropertiesView):
 
     def setup_categories_tab(self):
         pass
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc

@@ -42,3 +42,6 @@ class DocumentView(QWidget, Ui_DocumentView):
     def show_no_question_type(self):
         stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
         stacked_widget.setCurrentWidget(self.ui.no_question_type_page)
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc

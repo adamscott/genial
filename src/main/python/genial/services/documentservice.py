@@ -243,3 +243,6 @@ class ZippedDocument():
 
 
 document_service = DocumentService()  # type: DocumentService
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc
