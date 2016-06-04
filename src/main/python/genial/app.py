@@ -35,7 +35,7 @@ def run():
     main_controller = MainController(app)
     main_controller.start()
 
-    return app.exec()
+    app.exec()
 
 from genial.resources import icons_rc
 from genial.resources import locale_rc
