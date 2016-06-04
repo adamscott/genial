@@ -38,3 +38,4 @@ class DocumentController(QObject):
     @pyqtSlot()
     def on_document_closed(self):
         self.view.show_no_document()
+        
