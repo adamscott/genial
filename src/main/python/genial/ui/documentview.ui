@@ -53,7 +53,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="no_category_page">
+     <widget class="QWidget" name="no_question_type_page">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <layout class="QGridLayout" name="grid_layout">
@@ -75,7 +75,7 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>No category is defined in the file.</string>
+              <string>No question type is defined.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -85,7 +85,7 @@
            <item>
             <widget class="QPushButton" name="change_project_settings_button">
              <property name="text">
-              <string>Change project settings…</string>
+              <string>Properties</string>
              </property>
             </widget>
            </item>
