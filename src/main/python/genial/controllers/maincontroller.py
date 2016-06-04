@@ -69,6 +69,10 @@ class MainController(QObject):
             self.on_document_closed
         )
 
+    def quit(self):
+        if document_service.close():
+            self.application.quit()
+
     @pyqtSlot()
     def on_action_new_triggered(self):
         document_service.new()
@@ -87,11 +91,11 @@ class MainController(QObject):
 
     @pyqtSlot()
     def on_action_close_triggered(self):
-        pass
+        document_service.close()
 
     @pyqtSlot()
     def on_action_quit_triggered(self):
-        pass
+        self.quit()
 
     @pyqtSlot()
     def on_action_new_user_triggered(self):
@@ -103,8 +107,7 @@ class MainController(QObject):
 
     @pyqtSlot()
     def on_close_event(self):
-        if document_service.close():
-            self.application.quit()
+        self.quit()
 
     @pyqtSlot()
     def on_document_created(self):
@@ -113,3 +116,6 @@ class MainController(QObject):
     @pyqtSlot()
     def on_document_closed(self):
         self.view.set_document_related_widgets_disabled(True)
+
+from genial.resources import icons_rc
+from genial.resources import locale_rc
