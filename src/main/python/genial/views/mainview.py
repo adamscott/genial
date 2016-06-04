@@ -73,13 +73,13 @@ class MainView(QMainWindow, Ui_MainView):
         self.ui.action_undo.setIcon(
             QIcon.fromTheme(
                 'edit-undo',
-                QIcon(':/icons/document-undo.svg')
+                QIcon(':/icons/edit-undo.svg')
             )
         )
         self.ui.action_redo.setIcon(
             QIcon.fromTheme(
                 'edit-redo',
-                QIcon(':/icons/document-redo.svg')
+                QIcon(':/icons/edit-redo.svg')
             )
         )
         self.ui.action_print.setIcon(
