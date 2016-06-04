@@ -6,7 +6,7 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIcon, QCloseEvent
 from PyQt5.QtWidgets import QMainWindow
 
