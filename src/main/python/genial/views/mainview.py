@@ -43,55 +43,55 @@ class MainView(QMainWindow, Ui_MainView):
         self.ui.action_new.setIcon(
             QIcon.fromTheme(
                 'document-new',
-                QIcon(':/icon/document-new.svg')
+                QIcon(':/icons/document-new.svg')
             )
         )
         self.ui.action_open.setIcon(
             QIcon.fromTheme(
                 'document-open',
-                QIcon(':/icon/document-open.svg')
+                QIcon(':/icons/document-open.svg')
             )
         )
         self.ui.action_save.setIcon(
             QIcon.fromTheme(
                 'document-save',
-                QIcon(':/icon/document-save.svg')
+                QIcon(':/icons/document-save.svg')
             )
         )
         self.ui.action_save_as.setIcon(
             QIcon.fromTheme(
                 'document-save-as',
-                QIcon(':/icon/document-save-as.svg')
+                QIcon(':/icons/document-save-as.svg')
             )
         )
         self.ui.action_quit.setIcon(
             QIcon.fromTheme(
                 'application-exit',
-                QIcon(':/icon/application-exit.svg')
+                QIcon(':/icons/application-exit.svg')
             )
         )
         self.ui.action_undo.setIcon(
             QIcon.fromTheme(
                 'edit-undo',
-                QIcon(':/icon/document-undo.svg')
+                QIcon(':/icons/document-undo.svg')
             )
         )
         self.ui.action_redo.setIcon(
             QIcon.fromTheme(
                 'edit-redo',
-                QIcon(':/icon/document-redo.svg')
+                QIcon(':/icons/document-redo.svg')
             )
         )
         self.ui.action_print.setIcon(
             QIcon.fromTheme(
                 'document-print',
-                QIcon(':/icon/document-print.svg')
+                QIcon(':/icons/document-print.svg')
             )
         )
         self.ui.action_properties.setIcon(
             QIcon.fromTheme(
                 'document-properties',
-                QIcon(':/icon/document-properties.svg')
+                QIcon(':/icons/document-properties.svg')
             )
         )
 
