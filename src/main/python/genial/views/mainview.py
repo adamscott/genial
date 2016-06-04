@@ -11,7 +11,6 @@ from PyQt5.QtGui import QIcon, QCloseEvent
 from PyQt5.QtWidgets import QMainWindow
 
 from genial.views.gen.ui_mainview import Ui_MainView
-from genial.controllers.maincontroller import *
 
 
 class MainView(QMainWindow, Ui_MainView):
@@ -28,7 +27,7 @@ class MainView(QMainWindow, Ui_MainView):
     action_remove_user_triggered = pyqtSignal()
     action_properties_triggered = pyqtSignal()
 
-    def __init__(self, parent: 'MainController'=None):
+    def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
         self.ui = Ui_MainView()
         self.ui.setupUi(self)
