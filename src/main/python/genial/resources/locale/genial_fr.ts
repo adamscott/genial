@@ -60,16 +60,6 @@
         <source>No category is defined.</source>
         <translation type="obsolete">Aucune catégorie n&apos;est définie.</translation>
     </message>
-    <message>
-        <location filename="../../ui/documentview.ui" line="78"/>
-        <source>No question type is defined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/documentview.ui" line="88"/>
-        <source>Properties</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>GamesTreeView</name>

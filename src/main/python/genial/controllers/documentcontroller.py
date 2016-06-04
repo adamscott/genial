@@ -30,14 +30,11 @@ class DocumentController(QObject):
 
     @pyqtSlot()
     def on_document_created(self):
-        if len(document_service.categories) > 0:
-            self.view.show_main()
-        else:
-            self.view.show_no_question_type()
+        pass
 
     @pyqtSlot()
     def on_document_closed(self):
-        self.view.show_no_document()
+        pass
 
 from genial.resources import icons_rc
 from genial.resources import locale_rc
