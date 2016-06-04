@@ -131,7 +131,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources/genial.qrc"/>
+  <include location="../resources/icons.qrc"/>
+  <include location="../resources/locale.qrc"/>
  </resources>
  <connections/>
 </ui>

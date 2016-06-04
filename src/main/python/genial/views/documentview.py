@@ -6,7 +6,7 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtWidgets import QWidget, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QWidget, QMessageBox, QFileDialog, QStackedWidget
 from PyQt5.QtCore import QObject, QCoreApplication, QDir, pyqtSignal, pyqtSlot
 from PyQt5.QtSql import QSqlDatabase, QSqlDriver, QSqlTableModel
 
@@ -31,18 +31,30 @@ class DocumentView(QWidget, Ui_DocumentView):
         self.ui.retranslateUi(self)
         self.file = None
 
+    def show_no_document(self):
+        stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
+        stacked_widget.setCurrentWidget(self.ui.no_document_page)
+
+    def show_main(self):
+        stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
+        stacked_widget.setCurrentWidget(self.ui.main_page)
+
+    def show_no_category(self):
+        stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
+        stacked_widget.setCurrentWidget(self.ui.no_category_page)
+
     def open_file_name(self) -> str:
         _translate = QCoreApplication.translate
         # noinspection PyTypeChecker,PyArgumentList
-        filter_genial_files = _translate('DocumentWidget', 'Génial files (*.gnl)')
+        filter_genial_files = _translate('DocumentView', 'Génial files (*.gnl)')
         # noinspection PyTypeChecker,PyArgumentList
-        filter_all_files = _translate('DocumentWidget', 'All files (*.*)')
+        filter_all_files = _translate('DocumentView', 'All files (*.*)')
         filters = [filter_genial_files, filter_all_files]
         filters_joined = ";;".join(filters)
         # noinspection PyTypeChecker,PyArgumentList
         file_name = QFileDialog.getOpenFileName(
             self,
-            _translate('DocumentWidget', 'Open document…'),
+            _translate('DocumentView', 'Open document…'),
             QDir.homePath(),
             filters_joined,
             filter_genial_files
@@ -52,15 +64,15 @@ class DocumentView(QWidget, Ui_DocumentView):
     def save_file_name(self) -> str:
         _translate = QCoreApplication.translate
         # noinspection PyTypeChecker,PyArgumentList
-        filter_genial_files = _translate('DocumentWidget', 'Génial files (*.gnl)')
+        filter_genial_files = _translate('DocumentView', 'Génial files (*.gnl)')
         # noinspection PyTypeChecker,PyArgumentList
-        filter_all_files = _translate('DocumentWidget', 'All files (*.*)')
+        filter_all_files = _translate('DocumentView', 'All files (*.*)')
         filters = [filter_genial_files, filter_all_files]
         filters_joined = ";;".join(filters)
         # noinspection PyTypeChecker,PyArgumentList
         file_name = QFileDialog.getSaveFileName(
             self,
-            _translate('DocumentWidget', 'Save document as…'),
+            _translate('DocumentView', 'Save document as…'),
             QDir.homePath(),
             filters_joined,
             filter_genial_files
@@ -73,7 +85,7 @@ class DocumentView(QWidget, Ui_DocumentView):
                 return
         self.file = DocumentFile(self)
         self.file.new()
-        self.ui.stacked_widget.setCurrentWidget(self.ui.no_category_page)
+        # self.ui.stacked_widget.setCurrentWidget(self.ui.no_category_page)
         self.document_open.emit()
         self.document_available.emit()
 
@@ -122,7 +134,7 @@ class DocumentView(QWidget, Ui_DocumentView):
                 return self.file.file_name
             else:
                 # noinspection PyArgumentList,PyTypeChecker
-                return _translate("DocumentWidget", "Untitled")
+                return _translate("DocumentView", "Untitled")
         else:
             return ""
 
@@ -139,7 +151,7 @@ class DocumentView(QWidget, Ui_DocumentView):
 class DocumentFile(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        self.document_widget = parent  # type: DocumentWidget
+        self.document_widget = parent  # type: DocumentView
         self.directory = TemporaryDirectory()
         self.dirty = False  # type: bool
         self.database = None  # type: QSqlDatabase
@@ -166,7 +178,7 @@ class DocumentFile(QObject):
                 self.document_widget,
                 "Génial",
                 _translate(
-                    "DocumentWidget",
+                    "DocumentView",
                     "Génial cannot open {}.".format(file_name)
                 )
             )
@@ -195,11 +207,11 @@ class DocumentFile(QObject):
             ret = message_box.warning(
                 self.document_widget,
                 _translate(
-                    "DocumentWidget",
+                    "DocumentView",
                     "Save document?"
                 ),
                 _translate(
-                    "DocumentWidget",
+                    "DocumentView",
                     "Changes will be lost if you don't save."
                 ),
                 buttons=QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel,

@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/locale">
-    <file alias="genial_fr.qm">locale/genial_fr.qm</file>
-    <file alias="qt_fr.qm">locale/qt_fr.qm</file>
-  </qresource>
-</RCC>

@@ -23,6 +23,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/icons.qrc"/>
+  <include location="../resources/locale.qrc"/>
+ </resources>
  <connections/>
 </ui>

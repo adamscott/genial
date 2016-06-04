@@ -7,7 +7,7 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget
-from genial.ui.ui_propertieswidget import Ui_PropertiesWidget
+from genial.views.gen.ui_propertieswidget import Ui_PropertiesWidget
 
 
 class PropertiesWidget(QWidget, Ui_PropertiesWidget):

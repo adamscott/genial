@@ -26,6 +26,8 @@ def initialize(project: Project, logger: Logger):
     project.license = "GPL3"
     project.version = "0.1.0"
     project.build_depends_on('mockito')
+    project.build_depends_on('requests')
+    project.build_depends_on('lxml')
     project.set_property('coverage_exceptions', [
         'genial.ui'
     ])
@@ -63,7 +65,7 @@ def compile_ui(project: Project, logger: Logger):
 
 
 @task
-@depends('compile_ts')
+@depends('generate_locale_qrc', 'generate_icons_qrc')
 @description("Compiles .qrc files using pyrcc5")
 def compile_qrc(project: Project, logger: Logger):
     logger.info("Compiling .qrc files.")
@@ -91,9 +93,70 @@ def compile_qrc(project: Project, logger: Logger):
 
 
 @task
+@depends('compile_ts')
+@description('Generates a .qrc file based on the .qm files in the locale directory')
+def generate_locale_qrc(project: Project, logger: Logger):
+    from os.path import basename
+
+    logger.info("Generating locale .qrc file.")
+    source_dir = "{}/src/main/python".format(project.basedir)
+    resources_dir = "{}/genial/resources".format(source_dir)
+
+    generated_qrc = "<RCC>"
+    generated_qrc += '\n  <qresource prefix="/locale">'
+
+    files = discover_files("{}/locale".format(resources_dir), ".qm")
+    for file in files:
+        base_name = basename(file)
+        generated_qrc += '\n    <file alias="{}">locale/{}</file>'.format(
+            base_name, base_name
+        )
+
+    generated_qrc += "\n  </qresource>"
+    generated_qrc += "\n</RCC>\n"
+
+    with open('{}/locale.qrc'.format(resources_dir), 'w+') as f:
+        f.write(generated_qrc)
+        f.close()
+
+
+@task
+@depends('download_icons')
+@description('Generates a .qrc file based on the icons in the resources directory')
+def generate_icons_qrc(project: Project, logger: Logger):
+    from os.path import basename
+
+    logger.info("Generating locale .qrc file.")
+    source_dir = "{}/src/main/python".format(project.basedir)
+    resources_dir = "{}/genial/resources".format(source_dir)
+
+    generated_qrc = "<RCC>"
+    generated_qrc += '\n  <qresource prefix="/icons">'
+
+    files = discover_files("{}/icons".format(resources_dir), ".svg")
+    number_of_files = 0
+    for file in files:
+        number_of_files += 1
+        base_name = basename(file)
+        generated_qrc += '\n    <file alias="{}">icons/{}</file>'.format(
+            base_name, base_name
+        )
+
+    generated_qrc += "\n  </qresource>"
+    generated_qrc += "\n</RCC>\n"
+
+    # As it's not sure that any icon is there
+    # pyrcc5 doesn't like empty .qrc files
+    if number_of_files > 0:
+        with open('{}/icons.qrc'.format(resources_dir), 'w+') as f:
+            f.write(generated_qrc)
+            f.close()
+
+
+@task
 @depends('update_ts')
 @description('Compiles .ts files to .qm using lrelease')
-def compile_ts(project: Project, logger:Logger):
+def compile_ts(project: Project, logger: Logger):
     logger.info("Compiling .ts files.")
     assert_can_execute(["lrelease", "--version"],
                        prerequisite="lupdate (Qt5)",
@@ -131,7 +194,8 @@ def update_ts(project: Project, logger: Logger):
         for element in elements:
             i += 1
             escape_newline = ""
-            if i < elements_len: escape_newline = '\\\n'
+            if i < elements_len:
+                escape_newline = '\\\n'
             value += "{} {}".format(element, escape_newline)
         value += '\n'
         return value
@@ -157,12 +221,14 @@ def update_ts(project: Project, logger: Logger):
 
     localisations = project.get_property('genial_localisations')
     for localisation in localisations:
-        translations.append(
-            "{}/src/main/python/genial/ui/locale/genial_{}.ts".format(
-                project.basedir,
-                localisation
-            )
+        ts_file_path = "{}/src/main/python/genial/resources/locale/genial_{}.ts".format(
+            project.basedir,
+            localisation
         )
+        translations.append(ts_file_path)
+        # Creates the file if it doesn't not exist.
+        with open(ts_file_path, 'a+') as f:
+            f.close()
 
     tmp_pro_file = NamedTemporaryFile()
     with open(tmp_pro_file.name, 'w') as f:
@@ -172,21 +238,30 @@ def update_ts(project: Project, logger: Logger):
         f.close()
 
     error_file = NamedTemporaryFile()
-    exit_code = execute_command("pylupdate5 {}".format(tmp_pro_file.name),
-                                error_file_name=error_file.name,
-                                shell=True)
+    exit_code = execute_command(
+        "pylupdate5 {} {}".format(
+            "-translate-function _translate",
+            tmp_pro_file.name
+        ),
+        error_file_name=error_file.name,
+        shell=True
+    )
+
     if exit_code != 0:
+        tmp_pro_file.close()
         message = "pylupdate5 failed to create localisation files. It returned this error:"
         raise_error(error_file.name, message)
     else:
         with open(tmp_pro_file.name, 'r') as f:
             logger.info("Here is the generated genial.pro file: \n{}".format(f.read()))
             f.close()
+            tmp_pro_file.close()
 
 
 @task
 @description("Generates a .qm from Qt for each language defined.")
 def generate_qt_qm(project: Project, logger: Logger):
+    import requests
     logger.info("Generating .qm file from Qt.")
     assert_can_execute(["pylupdate5", "--version"],
                        prerequisite="pylupdate5 (PyQt5)",
@@ -201,15 +276,15 @@ def generate_qt_qm(project: Project, logger: Logger):
         files_downloaded = []
         for qt_file_needed in qt_files_needed:
             file = NamedTemporaryFile()
-            downloaded = download_to_file(
-                'l10n-files.qt.io',
+            response = requests.get(
+                'http://l10n-files.qt.io' +
                 '/l10n-files/qt5-current/{}_{}.ts'.format(
                     qt_file_needed,
                     language
-                ),
-                file
+                )
             )
-            if downloaded:
+            if response.status_code == 200:
+                file.write(response.text)
                 files_downloaded.append(file)
 
         error_file = NamedTemporaryFile()
@@ -229,22 +304,51 @@ def generate_qt_qm(project: Project, logger: Logger):
             raise_error(error_file.name, message)
 
 
-def raise_error(error_file_name:str, message:str):
+@task
+@description("Download icons for Windows/Mac from the GNOME desktop icons.")
+def download_icons(project: Project, logger: Logger):
+    from lxml import html
+    import requests
+    logger.info("Downloading icons files from GNOME Desktop icons.")
+    source_dir = "{}/src/main/python".format(project.basedir)
+    icons_dir = "{}/genial/resources/icons".format(source_dir)
+    needed_icons = [
+        'document-new',
+        'document-open',
+        'document-save',
+        'document-save-as',
+        'edit-undo',
+        'edit-redo',
+        'edit-cut',
+        'edit-copy',
+        'edit-paste',
+        'document-properties',
+        'document-print',
+        'document-print-preview',
+        'application-exit'
+    ]
+
+    for needed_icon in needed_icons:
+        logger.info('Downloading "{}" icon.'.format(needed_icon))
+        file_page = requests.get(
+            "https://commons.wikimedia.org/wiki/File:Gnome-{}.svg".format(
+                needed_icon
+            )
+        )
+        file_tree = html.fromstring(file_page.content)
+        svg_url = file_tree.xpath('//div[@class="fullImageLink"]/a/@href')
+        if len(svg_url) > 0:
+            svg_page = requests.get(svg_url[0])
+            with open('{}/{}.svg'.format(icons_dir, needed_icon), '+w') as f:
+                f.write(svg_page.text)
+        else:
+            raise FileNotFoundError("No link was found for '{}'.".format(
+                needed_icon
+            ))
+
+
+def raise_error(error_file_name: str, message: str):
     with open(error_file_name, 'r') as f:
         error_message = f.read()
         f.close()
     raise BuildFailedException(message + "\n" + error_message)
-
-
-def download_to_file(host, path, file) -> bool:
-    from http.client import HTTPConnection
-    connection = HTTPConnection(host)
-    connection.request('GET', path)
-    response = connection.getresponse()
-    if response.status == 200:
-        with open(file.name, 'wb') as f:
-            f.write(response.read())
-            f.close()
-        return True
-    else:
-        return False

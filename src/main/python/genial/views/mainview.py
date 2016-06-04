@@ -39,55 +39,55 @@ class MainView(QMainWindow, Ui_MainView):
         self.ui.action_new.setIcon(
             QIcon.fromTheme(
                 'document-new',
-                QIcon(':/icon/document-new')
+                QIcon(':/icon/document-new.svg')
             )
         )
         self.ui.action_open.setIcon(
             QIcon.fromTheme(
                 'document-open',
-                QIcon(':/icon/document-open')
+                QIcon(':/icon/document-open.svg')
             )
         )
         self.ui.action_save.setIcon(
             QIcon.fromTheme(
                 'document-save',
-                QIcon(':/icon/document-save')
+                QIcon(':/icon/document-save.svg')
             )
         )
         self.ui.action_saveas.setIcon(
             QIcon.fromTheme(
                 'document-save-as',
-                QIcon(':/icon/document-save-as')
+                QIcon(':/icon/document-save-as.svg')
             )
         )
         self.ui.action_quit.setIcon(
             QIcon.fromTheme(
-                'document-quit',
-                QIcon(':/icon/document-quit')
+                'application-quit',
+                QIcon(':/icon/application-quit.svg')
             )
         )
         self.ui.action_undo.setIcon(
             QIcon.fromTheme(
-                'document-undo',
-                QIcon(':/icon/document-undo')
+                'edit-undo',
+                QIcon(':/icon/document-undo.svg')
             )
         )
         self.ui.action_redo.setIcon(
             QIcon.fromTheme(
-                'document-redo',
-                QIcon(':/icon/document-redo')
+                'edit-redo',
+                QIcon(':/icon/document-redo.svg')
             )
         )
         self.ui.action_print.setIcon(
             QIcon.fromTheme(
                 'document-print',
-                QIcon(':/icon/document-print')
+                QIcon(':/icon/document-print.svg')
             )
         )
         self.ui.action_properties.setIcon(
             QIcon.fromTheme(
                 'document-properties',
-                QIcon(':/icon/document-properties')
+                QIcon(':/icon/document-properties.svg')
             )
         )
 
@@ -125,14 +125,6 @@ class MainView(QMainWindow, Ui_MainView):
     def setup_properties(self):
         self.properties_widget = PropertiesWidget()  # type: PropertiesWidget
         self.properties_widget.setObjectName("settings_widget")
-
-    @pyqtSlot()
-    def on_action_new_triggered(self):
-        self.ui.document_view.new_file()
-
-    @pyqtSlot()
-    def on_action_open_triggered(self):
-        self.ui.document_view.open_file()
 
     @pyqtSlot()
     def on_action_save_triggered(self):

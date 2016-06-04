@@ -28,7 +28,7 @@
    </property>
    <item>
     <widget class="QStackedWidget" name="stacked_widget">
-     <widget class="QWidget" name="no_file_page">
+     <widget class="QWidget" name="no_document_page">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(159, 157, 154);</string>
       </property>
@@ -134,7 +134,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_page">
+     <widget class="QWidget" name="main_page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTabWidget" name="tab_widget">
@@ -153,7 +153,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources/genial.qrc"/>
+  <include location="../resources/icons.qrc"/>
+  <include location="../resources/locale.qrc"/>
  </resources>
  <connections/>
 </ui>

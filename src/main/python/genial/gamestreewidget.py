@@ -7,7 +7,7 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget
-from genial.ui.ui_gamestreewidget import Ui_GamesTreeWidget
+from genial.views.gen.ui_gamestreewidget import Ui_GamesTreeWidget
 
 
 class GamesTreeWidget(QWidget, Ui_GamesTreeWidget):
