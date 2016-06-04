@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0">
+<!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
 <context>
     <name>CategoryView</name>
-    <message>
-        <location filename="../../ui/categoryview.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DocumentService</name>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../../services/documentservice.py" line="31"/>
-        <source>Génial files (*.gnl)</source>
-        <translation type="unfinished"></translation>
+        <source>G&#xe9;nial files (*.gnl)</source>
+        <translation type="obsolete">Fichiers Génial (*.gnl)</translation>
     </message>
     <message>
         <location filename="../../services/documentservice.py" line="38"/>
         <source>All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../../services/documentservice.py" line="56"/>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <location filename="../../services/documentservice.py" line="137"/>
         <source>Untitled</source>
+        <translation>Sans titre</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../services/documentservice.py" line="31"/>
+        <source>Génial files (*.gnl)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -36,21 +36,36 @@
     <message>
         <location filename="../../ui/documentview.ui" line="78"/>
         <source>No category is defined in the file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/documentview.ui" line="88"/>
-        <source>Change project settings…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../views/documentview.py" line="67"/>
-        <source>Génial files (*.gnl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Aucune catégorie n&apos;est définie.</translation>
     </message>
     <message>
         <location filename="../../views/documentview.py" line="69"/>
         <source>All files (*.*)</source>
+        <translation type="unfinished">Tous les fichiers (*.*)</translation>
+    </message>
+    <message>
+        <location filename="../../views/documentview.py" line="137"/>
+        <source>Untitled</source>
+        <translation type="unfinished">Sans titre</translation>
+    </message>
+    <message>
+        <location filename="../../views/documentview.py" line="208"/>
+        <source>Save document?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../views/documentview.py" line="208"/>
+        <source>Changes will be lost if you don&apos;t save.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/documentview.ui" line="78"/>
+        <source>No category is defined.</source>
+        <translation type="obsolete">Aucune catégorie n&apos;est définie.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../views/documentview.py" line="67"/>
+        <source>Génial files (*.gnl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
@@ -64,18 +79,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../views/documentview.py" line="137"/>
-        <source>Untitled</source>
+        <location filename="../../ui/documentview.ui" line="78"/>
+        <source>No question type is defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../views/documentview.py" line="208"/>
-        <source>Save document?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../views/documentview.py" line="208"/>
-        <source>Changes will be lost if you don&apos;t save.</source>
+        <location filename="../../ui/documentview.ui" line="88"/>
+        <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -134,19 +144,9 @@
         <source>Games</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="157"/>
-        <source>&amp;New…</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../../ui/mainview.ui" line="160"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="165"/>
-        <source>&amp;Open…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -154,29 +154,9 @@
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="173"/>
-        <source>&amp;Save…</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../../ui/mainview.ui" line="176"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="181"/>
-        <source>Save As…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="186"/>
-        <source>Add a new user…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="191"/>
-        <source>Remove a user…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -214,6 +194,41 @@
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../ui/mainview.ui" line="233"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../ui/mainview.ui" line="157"/>
+        <source>&amp;New…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../ui/mainview.ui" line="165"/>
+        <source>&amp;Open…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../ui/mainview.ui" line="173"/>
+        <source>&amp;Save…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../ui/mainview.ui" line="181"/>
+        <source>Save As…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../ui/mainview.ui" line="186"/>
+        <source>Add a new user…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../../ui/mainview.ui" line="191"/>
+        <source>Remove a user…</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message encoding="UTF-8">
         <location filename="../../ui/mainview.ui" line="225"/>
         <source>Properties…</source>
@@ -224,9 +239,12 @@
         <source>&amp;Print…</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>PropertiesQuestionTypeView</name>
     <message>
-        <location filename="../../ui/mainview.ui" line="233"/>
-        <source>Ctrl+P</source>
+        <location filename="../../ui/propertiesquestiontypeview.ui" line="14"/>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
