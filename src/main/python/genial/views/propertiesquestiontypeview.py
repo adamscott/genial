@@ -11,7 +11,7 @@ from genial.views.gen.ui_propertiesquestiontypeview import Ui_PropertiesQuestion
 
 
 class PropertiesQuestionTypeView(QWidget, Ui_PropertiesQuestionTypeView):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         QWidget.__init__(self, parent)
         self.ui = Ui_PropertiesQuestionTypeView()
         self.ui.setupUi(self)
