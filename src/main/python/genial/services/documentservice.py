@@ -7,7 +7,7 @@
     :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtCore import QCoreApplication, QObject, QFile, QFileInfo, pyqtSignal
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QUndoStack
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from zipfile import ZipFile
 from tempfile import NamedTemporaryFile
@@ -24,6 +24,8 @@ class DocumentService(QObject):
     open_initial_filter = None  # type: str
     open_filters = None  # type: List[str]
 
+    undo_stack = None  # type: QUndoStack
+
     def __init__(self):
         QObject.__init__(self)
         _translate = QCoreApplication.translate
@@ -37,6 +39,7 @@ class DocumentService(QObject):
             self.open_initial_filter,
             _translate("DocumentService", "All files (*.*)")
         ]
+        self.undo_stack = QUndoStack()
 
     def initialize_document(self, path: str = None):
         self.document = Document(path)
@@ -50,8 +53,8 @@ class DocumentService(QObject):
         self.document_created.emit()
 
     def open(self) -> bool:
-        _translate = QCoreApplication.translate
         if self.document is None:
+            _translate = QCoreApplication.translate
             # noinspection PyTypeChecker
             file_name = QFileDialog.getOpenFileName(
                 caption=_translate("DocumentService", "Open File"),
@@ -60,6 +63,52 @@ class DocumentService(QObject):
             )
             if file_name[0] != '':
                 self.initialize_document(file_name[0])
+        else:
+            self.close()
+
+    def close(self) -> bool:
+        if self.document is not None:
+            if self.document.is_modified:
+                _translate = QCoreApplication.translate
+                message_box = QMessageBox()
+                # noinspection PyTypeChecker
+                message_box.setText(
+                    _translate(
+                        "DocumentService",
+                        "The document has been modified."
+                    )
+                )
+                # noinspection PyTypeChecker
+                message_box.setInformativeText(
+                    _translate(
+                        "DocumentService",
+                        "Do you want to save your changes?"
+                    )
+                )
+                message_box.setStandardButtons(
+                    QMessageBox.Save |
+                    QMessageBox.Discard |
+                    QMessageBox.Cancel
+                )
+                result = message_box.exec()
+                if result == QMessageBox.Save:
+                    self.save()
+                    return True
+                elif result == QMessageBox.Discard:
+                    self.document.dispose()
+                    self.document = None
+                    self.document_closed.emit()
+                    return True
+                else:  # result == QMessageBox.Cancel
+                    return False
+        else:
+            return True
+
+    def undo(self):
+        pass
+
+    def redo(self):
+        pass
 
     @property
     def is_loaded(self) -> bool:
@@ -120,6 +169,12 @@ class Document(QObject):
         if not query.exec(query_command):
             raise ConnectionError(query.lastError().text())
 
+    def dispose(self):
+        self.file = None
+        if self.database:
+            self.database.close()
+        self.database = None
+
     @property
     def path(self) -> str:
         if self.file is None:
@@ -158,7 +213,7 @@ class Document(QObject):
 
     @property
     def is_modified(self) -> bool:
-        pass
+        return True
 
 
 class ZippedDocument():

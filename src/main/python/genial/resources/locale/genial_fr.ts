@@ -8,23 +8,33 @@
         <translation type="obsolete">Fichiers Génial (*.gnl)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="38"/>
+        <location filename="../../services/documentservice.py" line="40"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="56"/>
+        <location filename="../../services/documentservice.py" line="59"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="137"/>
+        <location filename="../../services/documentservice.py" line="192"/>
         <source>Untitled</source>
         <translation>Sans titre</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../services/documentservice.py" line="31"/>
+        <location filename="../../services/documentservice.py" line="33"/>
         <source>Génial files (*.gnl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="75"/>
+        <source>The document has been modified.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="82"/>
+        <source>Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -38,42 +48,17 @@
     <message>
         <location filename="../../views/documentview.py" line="69"/>
         <source>All files (*.*)</source>
-        <translation type="unfinished">Tous les fichiers (*.*)</translation>
+        <translation type="obsolete">Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../../views/documentview.py" line="137"/>
         <source>Untitled</source>
-        <translation type="unfinished">Sans titre</translation>
-    </message>
-    <message>
-        <location filename="../../views/documentview.py" line="208"/>
-        <source>Save document?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../views/documentview.py" line="208"/>
-        <source>Changes will be lost if you don&apos;t save.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Sans titre</translation>
     </message>
     <message>
         <location filename="../../ui/documentview.ui" line="78"/>
         <source>No category is defined.</source>
         <translation type="obsolete">Aucune catégorie n&apos;est définie.</translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../views/documentview.py" line="67"/>
-        <source>Génial files (*.gnl)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../views/documentview.py" line="55"/>
-        <source>Open document…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../../views/documentview.py" line="73"/>
-        <source>Save document as…</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ui/documentview.ui" line="78"/>

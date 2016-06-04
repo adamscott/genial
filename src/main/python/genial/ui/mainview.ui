@@ -55,7 +55,7 @@
     <addaction name="action_open"/>
     <addaction name="separator"/>
     <addaction name="action_save"/>
-    <addaction name="action_saveas"/>
+    <addaction name="action_save_as"/>
     <addaction name="separator"/>
     <addaction name="action_properties"/>
     <addaction name="separator"/>
@@ -91,8 +91,8 @@
     <property name="title">
      <string>&amp;Users</string>
     </property>
-    <addaction name="action_newuser"/>
-    <addaction name="action_removeuser"/>
+    <addaction name="action_new_user"/>
+    <addaction name="action_remove_user"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menu_file"/>
@@ -176,17 +176,17 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="action_saveas">
+  <action name="action_save_as">
    <property name="text">
     <string>Save As…</string>
    </property>
   </action>
-  <action name="action_newuser">
+  <action name="action_new_user">
    <property name="text">
     <string>Add a new user…</string>
    </property>
   </action>
-  <action name="action_removeuser">
+  <action name="action_remove_user">
    <property name="text">
     <string>Remove a user…</string>
    </property>
