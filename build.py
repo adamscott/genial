@@ -3,9 +3,8 @@ from pybuilder.utils import assert_can_execute, execute_command, discover_files
 from pybuilder.errors import BuildFailedException
 
 from tempfile import NamedTemporaryFile
-from os.path import basename
-
 import re
+import os
 
 use_plugin("python.core")
 use_plugin("python.unittest")
@@ -49,7 +48,7 @@ def compile_ui(project: Project, logger: Logger):
 
     files_names = discover_files("{}/genial/ui".format(source_dir), ".ui")
     for file_name in files_names:
-        base_name = basename(file_name)
+        base_name = os.path.basename(file_name)
         output_base_name = re.sub(r'(.*)\.ui', r'ui_\1\.py', base_name)
         exit_code = execute_command(
             "pyuic5 {} {} -o {}".format(
@@ -78,7 +77,7 @@ def compile_qrc(project: Project, logger: Logger):
 
     files_names = discover_files("{}/genial/resources".format(source_dir), ".qrc")
     for file_name in files_names:
-        base_name = basename(file_name)
+        base_name = os.path.basename(file_name)
         output_base_name = re.sub(r'(.*)\.qrc', r'\1_rc\.py', base_name)
         exit_code = execute_command(
             "pyrcc5 {} -o {}".format(
@@ -96,8 +95,6 @@ def compile_qrc(project: Project, logger: Logger):
 @depends('compile_ts')
 @description('Generates a .qrc file based on the .qm files in the locale directory')
 def generate_locale_qrc(project: Project, logger: Logger):
-    from os.path import basename
-
     logger.info("Generating locale .qrc file.")
     source_dir = "{}/src/main/python".format(project.basedir)
     resources_dir = "{}/genial/resources".format(source_dir)
@@ -107,7 +104,7 @@ def generate_locale_qrc(project: Project, logger: Logger):
 
     files = discover_files("{}/locale".format(resources_dir), ".qm")
     for file in files:
-        base_name = basename(file)
+        base_name = os.path.basename(file)
         generated_qrc += '\n    <file alias="{}">locale/{}</file>'.format(
             base_name, base_name
         )
@@ -124,8 +121,6 @@ def generate_locale_qrc(project: Project, logger: Logger):
 @depends('download_icons')
 @description('Generates a .qrc file based on the icons in the resources directory')
 def generate_icons_qrc(project: Project, logger: Logger):
-    from os.path import basename
-
     logger.info("Generating locale .qrc file.")
     source_dir = "{}/src/main/python".format(project.basedir)
     resources_dir = "{}/genial/resources".format(source_dir)
@@ -137,7 +132,7 @@ def generate_icons_qrc(project: Project, logger: Logger):
     number_of_files = 0
     for file in files:
         number_of_files += 1
-        base_name = basename(file)
+        base_name = os.path.basename(file)
         generated_qrc += '\n    <file alias="{}">icons/{}</file>'.format(
             base_name, base_name
         )
@@ -167,7 +162,7 @@ def compile_ts(project: Project, logger: Logger):
 
     files_names = discover_files("{}/genial/resources/locale".format(source_dir), ".ts")
     for file_name in files_names:
-        base_name = basename(file_name)
+        base_name = os.path.basename(file_name)
         output_base_name = re.sub(r'(.*)\.ts', r'\1\.qm', base_name)
         exit_code = execute_command(
             "lrelease {} -qm {}".format(
