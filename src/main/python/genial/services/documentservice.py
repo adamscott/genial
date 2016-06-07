@@ -72,19 +72,23 @@ class DocumentService(QObject):
                 _translate = QCoreApplication.translate
                 message_box = QMessageBox()
                 # noinspection PyTypeChecker
-                message_box.setText(
-                    _translate(
-                        "DocumentService",
-                        "The document has been modified."
-                    )
+                save_document = _translate(
+                    "DocumentService",
+                    "Save document \"{}\"?".format(self.document.name)
                 )
                 # noinspection PyTypeChecker
-                message_box.setInformativeText(
-                    _translate(
-                        "DocumentService",
-                        "Do you want to save your changes?"
-                    )
+                document_modified = _translate(
+                    "DocumentService",
+                    "The document has been modified."
                 )
+                # noinspection PyTypeChecker
+                save_changes = _translate(
+                    "DocumentService",
+                    "Do you want to save your changes?"
+                )
+                message_box.setWindowTitle(save_document)
+                message_box.setText(document_modified)
+                message_box.setInformativeText(save_changes)
                 message_box.setStandardButtons(
                     QMessageBox.Save |
                     QMessageBox.Discard |
