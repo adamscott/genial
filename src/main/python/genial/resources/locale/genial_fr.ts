@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
 <context>
+    <name>DocumentController</name>
+    <message>
+        <location filename="../../controllers/documentcontroller.py" line="41"/>
+        <source>Questions</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DocumentService</name>
     <message>
         <location filename="../../services/documentservice.py" line="31"/>
@@ -8,32 +16,32 @@
         <translation type="obsolete">Fichiers Génial (*.gnl)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="40"/>
+        <location filename="../../services/documentservice.py" line="41"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="59"/>
+        <location filename="../../services/documentservice.py" line="60"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="192"/>
+        <location filename="../../services/documentservice.py" line="197"/>
         <source>Untitled</source>
         <translation>Sans titre</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../services/documentservice.py" line="33"/>
+        <location filename="../../services/documentservice.py" line="34"/>
         <source>Génial files (*.gnl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="75"/>
+        <location filename="../../services/documentservice.py" line="81"/>
         <source>The document has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="82"/>
+        <location filename="../../services/documentservice.py" line="86"/>
         <source>Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -243,7 +251,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertiesview.ui" line="107"/>
+        <location filename="../../ui/propertiesview.ui" line="110"/>
         <source>No category set.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -251,13 +259,13 @@
 <context>
     <name>QuestionsView</name>
     <message>
-        <location filename="../../ui/questionsview.ui" line="14"/>
-        <source>Form</source>
+        <location filename="../../ui/questionsview.ui" line="77"/>
+        <source>No question type set.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/questionsview.ui" line="40"/>
-        <source>Search …</source>
+    <message>
+        <location filename="../../ui/questionsview.ui" line="90"/>
+        <source>Edit properties</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

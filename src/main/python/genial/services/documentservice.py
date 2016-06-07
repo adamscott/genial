@@ -119,9 +119,9 @@ class DocumentService(QObject):
         return self.document is not None
 
     @property
-    def categories(self) -> List[str]:
+    def question_types(self) -> List[str]:
         if self.document is not None:
-            return self.document.categories
+            return self.document.question_types
         else:
             return []
 
@@ -166,7 +166,7 @@ class Document(QObject):
             raise ConnectionError(self.database.lastError().text())
 
         query = QSqlQuery(self.database)
-        query_command = "CREATE TABLE IF NOT EXISTS 'category' ({}{})".format(
+        query_command = "CREATE TABLE IF NOT EXISTS 'question_type' ({}{})".format(
             'id integer primary key,',
             'name text'
         )
@@ -198,18 +198,18 @@ class Document(QObject):
     pass
 
     @property
-    def categories(self) -> List[str]:
-        category_list = []  # type: List[str]
-        query_command = "SELECT * FROM 'category'"
+    def question_types(self) -> List[str]:
+        question_type_list = []  # type: List[str]
+        query_command = "SELECT * FROM 'question_type'"
         query = QSqlQuery(self.database)
         if not query.exec(query_command):
             raise ConnectionError(query.lastError().text())
-        category_field_id = query.record().indexOf('category')
+        question_type_field_id = query.record().indexOf('name')
         while query.next():
-            category_list.append(
-                query.value(category_field_id)
+            question_type_list.append(
+                query.value(question_type_field_id)
             )
-        return category_list
+        return question_type_list
 
     @property
     def properties(self) -> Dict[str, str]:

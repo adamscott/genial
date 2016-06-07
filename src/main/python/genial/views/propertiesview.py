@@ -25,5 +25,18 @@ class PropertiesView(QDialog, Ui_PropertiesView):
     def setup_categories_tab(self):
         pass
 
+    def set_tab(self, tab_name):
+        if tab_name == 'question_types':
+            self.ui.tab_widget.setCurrentWidget(
+                self.ui.question_types_tab
+            )
+        else:
+            self.ui.tab_widget.setCurrentWidget(
+                self.ui.general_tab
+            )
+
+    def show_question_types(self):
+        self.ui.tab_widget.setCurrentWidget(self.ui.question_types_tab)
+
 from genial.resources import icons_rc
 from genial.resources import locale_rc

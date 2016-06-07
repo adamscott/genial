@@ -8,16 +8,27 @@
 """
 from PyQt5.QtCore import QObject
 
+from genial.views.propertiesview import PropertiesView
+
 from genial.services.documentservice import document_service
 
 
 class PropertiesService(QObject):
-    def __init__(self, parent=None):
-        QObject.__init__(parent)
+    window = None  # type: PropertiesView
 
-    def open(self):
-        if document_service.is_loaded:
-            self.load_properties(document_service.properties)
+    def __init__(self, parent=None):
+        QObject.__init__(self, parent)
+
+    def show(self, tab_wanted: str = 'general'):
+        if self.window is None:
+            self.window = PropertiesView()
+            self.window.hide()
+        if tab_wanted == 'question_types':
+            self.window.set_tab('question_types')
+        else:
+            self.window.set_tab('general')
+        self.window.exec()
+
 
 properties_service = PropertiesService()
 
