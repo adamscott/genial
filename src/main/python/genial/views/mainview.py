@@ -64,6 +64,12 @@ class MainView(QMainWindow, Ui_MainView):
                 QIcon(':/icons/document-save-as.svg')
             )
         )
+        self.ui.action_close.setIcon(
+            QIcon.fromTheme(
+                'window-close',
+                QIcon(':/icons/window-close.svg')
+            )
+        )
         self.ui.action_quit.setIcon(
             QIcon.fromTheme(
                 'application-exit',

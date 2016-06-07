@@ -320,7 +320,8 @@ def download_icons(project: Project, logger: Logger):
         'document-properties',
         'document-print',
         'document-print-preview',
-        'application-exit'
+        'application-exit',
+        'window-close'
     ]
 
     for needed_icon in needed_icons:
