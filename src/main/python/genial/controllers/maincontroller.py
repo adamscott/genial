@@ -59,8 +59,8 @@ class MainController(QObject):
         self.view.action_remove_user_triggered.connect(
             self.on_action_remove_user_triggered
         )
-        self.view.close_event.connect(
-            self.on_close_event
+        self.view.action_properties_triggered.connect(
+            self.on_action_properties_triggered
         )
         document_service.document_created.connect(
             self.on_document_created
@@ -69,9 +69,9 @@ class MainController(QObject):
             self.on_document_closed
         )
 
-    def quit(self):
-        if document_service.close():
-            self.application.quit()
+    @staticmethod
+    def request_quit() -> bool:
+        return document_service.close()
 
     @pyqtSlot()
     def on_action_new_triggered(self):
@@ -95,7 +95,7 @@ class MainController(QObject):
 
     @pyqtSlot()
     def on_action_quit_triggered(self):
-        self.quit()
+        self.application.quit()
 
     @pyqtSlot()
     def on_action_new_user_triggered(self):
@@ -106,8 +106,9 @@ class MainController(QObject):
         pass
 
     @pyqtSlot()
-    def on_close_event(self):
-        self.quit()
+    def on_action_properties_triggered(self):
+        from genial.services.propertiesservices import properties_service
+        properties_service.show()
 
     @pyqtSlot()
     def on_document_created(self):

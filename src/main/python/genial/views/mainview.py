@@ -14,9 +14,6 @@ from genial.views.gen.ui_mainview import Ui_MainView
 
 
 class MainView(QMainWindow, Ui_MainView):
-
-    close_event = pyqtSignal()
-
     action_new_triggered = pyqtSignal()
     action_open_triggered = pyqtSignal()
     action_save_triggered = pyqtSignal()
@@ -35,8 +32,11 @@ class MainView(QMainWindow, Ui_MainView):
         self.set_icons()
 
     def closeEvent(self, event: QCloseEvent):
-        self.close_event.emit()
-        event.ignore()
+        from genial.controllers.maincontroller import MainController
+        if MainController.request_quit():
+            event.accept()
+        else:
+            event.ignore()
 
     # noinspection PyCallByClass,PyTypeChecker
     def set_icons(self):
@@ -64,6 +64,12 @@ class MainView(QMainWindow, Ui_MainView):
                 QIcon(':/icons/document-save-as.svg')
             )
         )
+        self.ui.action_close.setIcon(
+            QIcon.fromTheme(
+                'window-close',
+                QIcon(':/icons/window-close.svg')
+            )
+        )
         self.ui.action_quit.setIcon(
             QIcon.fromTheme(
                 'application-exit',
@@ -73,13 +79,13 @@ class MainView(QMainWindow, Ui_MainView):
         self.ui.action_undo.setIcon(
             QIcon.fromTheme(
                 'edit-undo',
-                QIcon(':/icons/document-undo.svg')
+                QIcon(':/icons/edit-undo.svg')
             )
         )
         self.ui.action_redo.setIcon(
             QIcon.fromTheme(
                 'edit-redo',
-                QIcon(':/icons/document-redo.svg')
+                QIcon(':/icons/edit-redo.svg')
             )
         )
         self.ui.action_print.setIcon(
@@ -95,7 +101,7 @@ class MainView(QMainWindow, Ui_MainView):
             )
         )
 
-    def set_document_related_widgets_disabled(self, disabled:bool):
+    def set_document_related_widgets_disabled(self, disabled: bool):
         self.ui.action_save.setDisabled(disabled)
         self.ui.action_save_as.setDisabled(disabled)
         self.ui.action_new_user.setDisabled(disabled)

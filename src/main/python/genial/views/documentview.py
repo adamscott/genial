@@ -6,17 +6,16 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtWidgets import QWidget, QMessageBox, QFileDialog, QStackedWidget
-from PyQt5.QtCore import QObject, QCoreApplication, QDir, pyqtSignal, pyqtSlot
-from PyQt5.QtSql import QSqlDatabase, QSqlDriver, QSqlTableModel
+from PyQt5.QtWidgets import QWidget, QMdiSubWindow
+from PyQt5.QtCore import pyqtSignal
 
 from genial.views.gen.ui_documentview import Ui_DocumentView
 
-from zipfile import ZipFile
-from tempfile import TemporaryDirectory, TemporaryFile
-
 
 class DocumentView(QWidget, Ui_DocumentView):
+
+    subwindows = None  # type: Dict[QWidget, QMdiSubWindow]
+
     document_available = pyqtSignal()
     document_unavailable = pyqtSignal()
     document_was_modified = pyqtSignal()
@@ -29,19 +28,16 @@ class DocumentView(QWidget, Ui_DocumentView):
         self.ui = Ui_DocumentView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
-        self.file = None
+        self.subwindows = {}
 
-    def show_no_document(self):
-        stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
-        stacked_widget.setCurrentWidget(self.ui.no_document_page)
+    def add_window(self, widget: QWidget, tab_name: str = None):
+        sub_window = QMdiSubWindow()
+        sub_window.setWidget(widget)
+        if tab_name is not None:
+            sub_window.setWindowTitle(tab_name)
+        self.subwindows[widget] = sub_window
+        self.ui.mdi_area.addSubWindow(sub_window)
 
-    def show_main(self):
-        stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
-        stacked_widget.setCurrentWidget(self.ui.main_page)
-
-    def show_no_question_type(self):
-        stacked_widget = self.ui.stacked_widget  # type: QStackedWidget
-        stacked_widget.setCurrentWidget(self.ui.no_question_type_page)
 
 from genial.resources import icons_rc
 from genial.resources import locale_rc

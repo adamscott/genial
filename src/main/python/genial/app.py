@@ -6,7 +6,7 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtCore import QCoreApplication, QTranslator, QLocale, QLibraryInfo
+from PyQt5.QtCore import QCoreApplication, QTranslator, QLocale
 from PyQt5.QtWidgets import QApplication
 
 from genial.controllers.maincontroller import MainController
@@ -35,7 +35,7 @@ def run():
     main_controller = MainController(app)
     main_controller.start()
 
-    return app.exec()
+    app.exec()
 
 from genial.resources import icons_rc
 from genial.resources import locale_rc

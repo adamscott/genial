@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
 <context>
+    <name>DocumentController</name>
+    <message>
+        <location filename="../../controllers/documentcontroller.py" line="41"/>
+        <source>Questions</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DocumentService</name>
     <message>
         <location filename="../../services/documentservice.py" line="31"/>
@@ -18,7 +26,7 @@
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="192"/>
+        <location filename="../../services/documentservice.py" line="214"/>
         <source>Untitled</source>
         <translation>Sans titre</translation>
     </message>
@@ -28,12 +36,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="75"/>
+        <location filename="../../services/documentservice.py" line="80"/>
         <source>The document has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="82"/>
+        <location filename="../../services/documentservice.py" line="85"/>
         <source>Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -59,16 +67,6 @@
         <location filename="../../ui/documentview.ui" line="78"/>
         <source>No category is defined.</source>
         <translation type="obsolete">Aucune catégorie n&apos;est définie.</translation>
-    </message>
-    <message>
-        <location filename="../../ui/documentview.ui" line="78"/>
-        <source>No question type is defined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/documentview.ui" line="88"/>
-        <source>Properties</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -223,6 +221,14 @@
     </message>
 </context>
 <context>
+    <name>PropertiesController</name>
+    <message>
+        <location filename="../../controllers/propertiescontroller.py" line="73"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PropertiesQuestionTypeView</name>
     <message>
         <location filename="../../ui/propertiesquestiontypeview.ui" line="14"/>
@@ -253,7 +259,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertiesview.ui" line="107"/>
+        <location filename="../../ui/propertiesview.ui" line="125"/>
         <source>No category set.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -261,13 +267,13 @@
 <context>
     <name>QuestionsView</name>
     <message>
-        <location filename="../../ui/questionsview.ui" line="14"/>
-        <source>Form</source>
+        <location filename="../../ui/questionsview.ui" line="77"/>
+        <source>No question type set.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../../ui/questionsview.ui" line="40"/>
-        <source>Search …</source>
+    <message>
+        <location filename="../../ui/questionsview.ui" line="90"/>
+        <source>Edit properties</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
