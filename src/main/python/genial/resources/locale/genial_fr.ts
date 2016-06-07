@@ -16,32 +16,32 @@
         <translation type="obsolete">Fichiers Génial (*.gnl)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="41"/>
+        <location filename="../../services/documentservice.py" line="40"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="60"/>
+        <location filename="../../services/documentservice.py" line="59"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="197"/>
+        <location filename="../../services/documentservice.py" line="214"/>
         <source>Untitled</source>
         <translation>Sans titre</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../services/documentservice.py" line="34"/>
+        <location filename="../../services/documentservice.py" line="33"/>
         <source>Génial files (*.gnl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="81"/>
+        <location filename="../../services/documentservice.py" line="80"/>
         <source>The document has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="86"/>
+        <location filename="../../services/documentservice.py" line="85"/>
         <source>Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -221,6 +221,14 @@
     </message>
 </context>
 <context>
+    <name>PropertiesController</name>
+    <message>
+        <location filename="../../controllers/propertiescontroller.py" line="73"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PropertiesQuestionTypeView</name>
     <message>
         <location filename="../../ui/propertiesquestiontypeview.ui" line="14"/>
@@ -251,7 +259,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/propertiesview.ui" line="110"/>
+        <location filename="../../ui/propertiesview.ui" line="125"/>
         <source>No category set.</source>
         <translation type="unfinished"></translation>
     </message>

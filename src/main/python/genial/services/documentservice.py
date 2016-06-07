@@ -6,9 +6,9 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtCore import QCoreApplication, QObject, QFile, QFileInfo, pyqtSignal
+from PyQt5.QtCore import QCoreApplication, QObject, QFile, QFileInfo, Qt, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QUndoStack
-from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 from zipfile import ZipFile
 from tempfile import NamedTemporaryFile
 from typing import List, Dict
@@ -125,16 +125,29 @@ class DocumentService(QObject):
             return []
 
     @property
+    def question_type_model(self) -> QSqlTableModel:
+        return self.document.question_type_model
+
+    @property
     def properties(self) -> Dict[str, str]:
         if self.document is not None:
             return self.document.properties
         else:
             return []
 
+    @property
+    def database(self) -> QSqlDatabase:
+        if self.document is not None:
+            if self.document.database is not None:
+                return self.document.database
+        return None
+
 
 class Document(QObject):
     file = None  # type: QFile
     database = None  # type: QSqlDatabase
+
+    question_type_model_instance = None  # type: QSqlTableModel
 
     def __init__(self, path: QFile = None):
         QObject.__init__(self)
@@ -165,12 +178,18 @@ class Document(QObject):
             raise ConnectionError(self.database.lastError().text())
 
         query = QSqlQuery(self.database)
-        query_command = "CREATE TABLE IF NOT EXISTS 'question_type' ({}{})".format(
+        query_command = "CREATE TABLE IF NOT EXISTS 'question_type' ({}{}{})".format(
             'id integer primary key,',
-            'name text'
+            'name text,',
+            'position integer'
         )
         if not query.exec(query_command):
             raise ConnectionError(query.lastError().text())
+
+        #query = QSqlQuery(self.database)
+        #query_command = "INSERT INTO 'question_type' VALUES (null, 'Général', 0)"
+        #if not query.exec(query_command):
+        #    raise ConnectionError(query.lastError().text())
 
     def dispose(self):
         self.file = None
@@ -216,7 +235,7 @@ class Document(QObject):
 
     @property
     def is_modified(self) -> bool:
-        return True
+        return False
 
 
 class ZippedDocument():
