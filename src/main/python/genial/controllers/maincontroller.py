@@ -59,6 +59,9 @@ class MainController(QObject):
         self.view.action_remove_user_triggered.connect(
             self.on_action_remove_user_triggered
         )
+        self.view.action_properties_triggered.connect(
+            self.on_action_properties_triggered
+        )
         document_service.document_created.connect(
             self.on_document_created
         )
@@ -101,6 +104,11 @@ class MainController(QObject):
     @pyqtSlot()
     def on_action_remove_user_triggered(self):
         pass
+
+    @pyqtSlot()
+    def on_action_properties_triggered(self):
+        from genial.services.propertiesservices import properties_service
+        properties_service.show()
 
     @pyqtSlot()
     def on_document_created(self):
