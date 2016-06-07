@@ -105,8 +105,7 @@ class DocumentService(QObject):
                     return True
                 else:  # result == QMessageBox.Cancel
                     return False
-        else:
-            return True
+        return True
 
     def undo(self):
         pass
