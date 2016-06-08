@@ -6,22 +6,28 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
+import sys
+
 from PyQt5.QtCore import QCoreApplication, QTranslator, QLocale
 from PyQt5.QtWidgets import QApplication
 
-from genial.resources import icons_rc
-from genial.resources import locale_rc
-from genial.resources import plugins_rc
-
-from genial.controllers.maincontroller import MainController
 
 def run():
-    import sys
+    global app
 
+    # Imports .qrc resources even if it is "unused"
+    from genial.resources import icons_rc
+    from genial.resources import locale_rc
+    from genial.resources import plugins_rc
+
+    # Initializes the app variable
     app = QApplication(sys.argv)
     app.setApplicationName("Génial")
     app.setApplicationDisplayName("Génial")
     app.setProperty("AA_EnableHighDpiScaling", True)
+    # Importing here makes available PyQt5.QtWidgets.QApplication.instance()
+    # for each of these modules (and for their imports too.)
+    from genial.controllers.maincontroller import MainController
 
     # Qt translation
     qt_translator = QTranslator()
@@ -39,3 +45,6 @@ def run():
     main_controller.start()
 
     app.exec()
+
+
+app = None  # type: QApplication
