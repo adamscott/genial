@@ -329,6 +329,8 @@ def download_icons(project: Project, logger: Logger):
     ]
 
     for needed_icon in needed_icons:
+        if os.path.isfile('{}/{}.svg'.format(icons_dir, needed_icon)):
+            continue
         logger.info('Downloading "{}" icon.'.format(needed_icon))
         file_page = requests.get(
             "https://commons.wikimedia.org/wiki/File:Gnome-{}.svg".format(
