@@ -9,8 +9,11 @@
 from PyQt5.QtCore import QCoreApplication, QTranslator, QLocale
 from PyQt5.QtWidgets import QApplication
 
-from genial.controllers.maincontroller import MainController
+from genial.resources import icons_rc
+from genial.resources import locale_rc
+from genial.resources import plugins_rc
 
+from genial.controllers.maincontroller import MainController
 
 def run():
     import sys
@@ -36,6 +39,3 @@ def run():
     main_controller.start()
 
     app.exec()
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

@@ -16,6 +16,3 @@ class PropertiesQuestionTypeView(QWidget, Ui_PropertiesQuestionTypeView):
         self.ui = Ui_PropertiesQuestionTypeView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

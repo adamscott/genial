@@ -36,6 +36,3 @@ class QuestionsController(QObject):
     @pyqtSlot()
     def on_properties_button_triggered(self):
         properties_service.show('question_types')
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

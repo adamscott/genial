@@ -208,7 +208,3 @@ class PropertiesController(QObject):
     @pyqtSlot()
     def on_button_cancel_clicked(self):
         self.hide()
-
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

@@ -160,7 +160,3 @@ class PropertiesView(QDialog, Ui_PropertiesView):
     @pyqtSlot()
     def on_button_box_button_apply_clicked(self):
         self.button_apply_clicked.emit()
-
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

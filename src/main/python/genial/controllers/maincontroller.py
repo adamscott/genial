@@ -117,6 +117,3 @@ class MainController(QObject):
     @pyqtSlot()
     def on_document_closed(self):
         self.view.set_document_related_widgets_disabled(True)
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

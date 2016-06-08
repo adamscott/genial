@@ -53,6 +53,3 @@ class QuestionTypeFilterProxyModel (QSortFilterProxyModel):
     pass
 
 properties_service = PropertiesService()
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc
