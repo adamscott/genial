@@ -66,7 +66,7 @@ def compile_ui(project: Project, logger: Logger):
 
 
 @task
-@depends('generate_locale_qrc', 'generate_icons_qrc')
+@depends('generate_locale_qrc', 'generate_icons_qrc', 'generate_plugins_qrc')
 @description("Compiles .qrc files using pyrcc5")
 def compile_qrc(project: Project, logger: Logger):
     logger.info("Compiling .qrc files.")
@@ -148,6 +148,36 @@ def generate_icons_qrc(project: Project, logger: Logger):
         with open('{}/icons.qrc'.format(resources_dir), 'w+') as f:
             f.write(generated_qrc)
             f.close()
+
+
+@task
+@description('Generates a .qrc file based on the files in the plugins directory')
+def generate_plugins_qrc(project: Project, logger: Logger):
+    logger.info("Generating plugins .qrc file.")
+    source_dir = "{}/src/main/python".format(project.basedir)
+    resources_dir = "{}/genial/resources".format(source_dir)
+
+    generated_qrc = "<RCC>"
+    generated_qrc += '\n  <qresource prefix="/plugins">'
+
+    # config plugin files
+    files = list(discover_files("{}/plugins".format(resources_dir), ".genial-plugin"))
+    files += list(discover_files("{}/plugins".format(resources_dir), ".py"))
+    for file in files:
+        relative_path = file.replace(
+            "{}/plugins/".format(resources_dir),
+            ""
+        )
+        generated_qrc += '\n    <file alias="{}">plugins/{}</file>'.format(
+            relative_path, relative_path
+        )
+
+    generated_qrc += "\n  </qresource>"
+    generated_qrc += "\n</RCC>\n"
+
+    with open('{}/plugins.qrc'.format(resources_dir), 'w+') as f:
+        f.write(generated_qrc)
+        f.close()
 
 
 @task

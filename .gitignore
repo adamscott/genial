@@ -9,6 +9,7 @@ ui_*.py
 # Generated .qrc files
 locale.qrc
 icons.qrc
+plugins.qrc
 # Downloaded icons from GNOME Desktop
 *.svg
 
