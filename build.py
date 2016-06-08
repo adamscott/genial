@@ -27,6 +27,8 @@ def initialize(project: Project, logger: Logger):
     project.build_depends_on('mockito')
     project.build_depends_on('requests')
     project.build_depends_on('lxml')
+    project.build_depends_on('yapsy')
+    project.build_depends_on('appdirs')
     project.set_property('coverage_exceptions', [
         'genial.ui'
     ])
