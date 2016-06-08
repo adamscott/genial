@@ -55,20 +55,20 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="question_types_tab">
+     <widget class="QWidget" name="question_type_tab">
       <attribute name="title">
        <string>Categories</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <layout class="QHBoxLayout" name="question_types_layout" stretch="2,3">
+        <layout class="QHBoxLayout" name="question_type_layout" stretch="2,3">
          <item>
-          <layout class="QVBoxLayout" name="question_types_list_vertical_layout">
+          <layout class="QVBoxLayout" name="question_type_list_vertical_layout">
            <property name="spacing">
             <number>0</number>
            </property>
            <item>
-            <widget class="QListView" name="question_types_list_view">
+            <widget class="QListView" name="question_type_list_view">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -87,7 +87,7 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="question_types_list_horizontal_layout">
+            <layout class="QHBoxLayout" name="question_type_list_horizontal_layout">
              <item>
               <widget class="QPushButton" name="remove_question_type_button"/>
              </item>
@@ -113,7 +113,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QStackedWidget" name="question_types_stacked_widget">
+          <widget class="QStackedWidget" name="question_type_stacked_widget">
            <property name="currentIndex">
             <number>0</number>
            </property>

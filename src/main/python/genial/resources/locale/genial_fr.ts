@@ -223,7 +223,7 @@
 <context>
     <name>PropertiesController</name>
     <message>
-        <location filename="../../controllers/propertiescontroller.py" line="73"/>
+        <location filename="../../controllers/propertiescontroller.py" line="77"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
