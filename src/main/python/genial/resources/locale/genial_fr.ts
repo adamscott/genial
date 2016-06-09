@@ -16,33 +16,68 @@
         <translation type="obsolete">Fichiers Génial (*.gnl)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="40"/>
+        <location filename="../../services/documentservice.py" line="65"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="59"/>
+        <location filename="../../services/documentservice.py" line="150"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="214"/>
+        <location filename="../../services/documentservice.py" line="263"/>
         <source>Untitled</source>
         <translation>Sans titre</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../services/documentservice.py" line="33"/>
+        <location filename="../../services/documentservice.py" line="58"/>
         <source>Génial files (*.gnl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="80"/>
+        <location filename="../../services/documentservice.py" line="172"/>
         <source>The document has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="85"/>
+        <location filename="../../services/documentservice.py" line="177"/>
         <source>Do you want to save your changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="209"/>
+        <source>An error occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="211"/>
+        <source>An error occurred while handling the document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="366"/>
+        <source>The file ({}) is not a valid .gnl file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="378"/>
+        <source>The file ({}) is too big.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="402"/>
+        <source>An unhandled error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="319"/>
+        <source>The selected file ({}) does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../services/documentservice.py" line="390"/>
+        <source>The internal database of the file ({}) is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -255,12 +290,12 @@
     </message>
     <message>
         <location filename="../../ui/propertiesview.ui" line="60"/>
-        <source>Categories</source>
+        <source>Question Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ui/propertiesview.ui" line="125"/>
-        <source>No category set.</source>
+        <source>No question type selected.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
