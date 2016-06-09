@@ -11,7 +11,8 @@ from PyQt5.QtWidgets import QApplication
 
 from genial.views.mainview import MainView
 from genial.controllers.documentcontroller import DocumentController
-from genial.services.documentservice import document_service
+from genial.services import document_service
+from genial.services import plugin_service
 
 
 class MainController(QObject):
@@ -107,7 +108,7 @@ class MainController(QObject):
 
     @pyqtSlot()
     def on_action_properties_triggered(self):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         properties_service.show()
 
     @pyqtSlot()

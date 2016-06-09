@@ -11,8 +11,6 @@ from PyQt5.QtSql import QSqlTableModel
 
 from genial.controllers.propertiescontroller import PropertiesController
 
-from genial.services.documentservice import document_service
-
 
 class PropertiesService(QObject):
     controller = None  # type: PropertiesController
@@ -23,6 +21,7 @@ class PropertiesService(QObject):
         QObject.__init__(self, parent)
 
     def show(self, tab_wanted: str = 'general'):
+        from genial.services import document_service
         if document_service.database is not None:
             if self.question_type_model is None:
                 self.question_type_model = QSqlTableModel(
@@ -52,4 +51,3 @@ class PropertiesService(QObject):
 class QuestionTypeFilterProxyModel (QSortFilterProxyModel):
     pass
 
-properties_service = PropertiesService()

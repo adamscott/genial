@@ -8,8 +8,8 @@
 """
 from PyQt5.QtCore import QObject, pyqtSlot
 from genial.views.questionsview import QuestionsView
-from genial.services.documentservice import document_service
-from genial.services.propertiesservices import properties_service
+from genial.services import document_service
+from genial.services import properties_service
 
 
 class QuestionsController(QObject):

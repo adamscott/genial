@@ -15,7 +15,7 @@ class PropertiesController(QObject):
     view = None  # type: PropertiesView
 
     def start(self):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         if self.view is None:
             self.view = PropertiesView()
             self.view.set_model(
@@ -52,11 +52,11 @@ class PropertiesController(QObject):
         )
 
     def apply_changes(self):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         properties_service.question_type_model.submitAll()
 
     def show(self, tab_wanted: str):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         properties_service.question_type_model.select()
         self.view.selected_question_type = properties_service.question_type_filter_proxy_model.index(
             0,
@@ -69,7 +69,7 @@ class PropertiesController(QObject):
         self.view.hide()
 
     def add_question_type(self):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         from PyQt5.QtCore import QCoreApplication
         _translate = QCoreApplication.translate
 
@@ -96,7 +96,7 @@ class PropertiesController(QObject):
         )
 
     def move_selected_question_type(self, direction: str):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         current_name_index = self.view.selected_question_type
         current_position_index = current_name_index.sibling(
             current_name_index.row(),
@@ -146,7 +146,7 @@ class PropertiesController(QObject):
 
     @staticmethod
     def get_new_type_name(name: str) -> str:
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         if properties_service.question_type_model.rowCount() == 0:
             # There's no row. No need to check.
             return name
