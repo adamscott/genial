@@ -9,3 +9,11 @@
 __author__ = 'Adam Scott'
 __author_email__ = "ascott.ca@gmail.com"
 __license__ = 'GPL3'
+
+from .documentservice import DocumentService
+from .pluginservice import PluginService
+from .propertiesservices import PropertiesService
+
+document_service = DocumentService()  # type: DocumentService
+plugin_service = PluginService()  # type: PluginService
+properties_service = PropertiesService()  # type: PropertiesService

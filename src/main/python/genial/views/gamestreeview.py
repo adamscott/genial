@@ -16,6 +16,3 @@ class GamesTreeView(QWidget, Ui_GamesTreeView):
         self.ui = Ui_GamesTreeView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

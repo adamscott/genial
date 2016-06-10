@@ -6,12 +6,11 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtCore import Qt, QObject, QSortFilterProxyModel
+from PyQt5.QtCore import Qt, QObject, QSortFilterProxyModel, pyqtSlot
+from PyQt5.QtWidgets import qApp
 from PyQt5.QtSql import QSqlTableModel
 
 from genial.controllers.propertiescontroller import PropertiesController
-
-from genial.services.documentservice import document_service
 
 
 class PropertiesService(QObject):
@@ -21,8 +20,18 @@ class PropertiesService(QObject):
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
+        self.connect_slots()
+
+    def connect_slots(self):
+        qApp.aboutToQuit.connect(
+            self.on_about_to_quit
+        )
+
+    def dispose(self):
+        pass
 
     def show(self, tab_wanted: str = 'general'):
+        from genial.services import document_service
         if document_service.database is not None:
             if self.question_type_model is None:
                 self.question_type_model = QSqlTableModel(
@@ -48,11 +57,11 @@ class PropertiesService(QObject):
             self.controller.start()
         self.controller.show(tab_wanted)
 
+    @pyqtSlot()
+    def on_about_to_quit(self):
+        self.dispose()
+
 
 class QuestionTypeFilterProxyModel (QSortFilterProxyModel):
     pass
 
-properties_service = PropertiesService()
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

@@ -8,7 +8,7 @@
 """
 from PyQt5.QtCore import QObject, pyqtSlot
 from genial.views.documentview import DocumentView
-from genial.services.documentservice import document_service
+from genial.services import document_service
 from genial.controllers.questionscontroller import QuestionsController
 from genial.views.questionsview import QuestionsView
 
@@ -52,6 +52,3 @@ class DocumentController(QObject):
     @pyqtSlot()
     def on_document_closed(self):
         pass
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

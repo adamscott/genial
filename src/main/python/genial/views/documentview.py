@@ -37,7 +37,3 @@ class DocumentView(QWidget, Ui_DocumentView):
             sub_window.setWindowTitle(tab_name)
         self.subwindows[widget] = sub_window
         self.ui.mdi_area.addSubWindow(sub_window)
-
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

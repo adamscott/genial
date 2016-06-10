@@ -6,8 +6,7 @@
     :copyright: (c) 2015, Adam Scott.
     :license: GPL3, see LICENSE for more details.
 """
-from PyQt5.QtCore import QObject, pyqtSlot
-from PyQt5.QtSql import QSqlRecord
+from PyQt5.QtCore import QObject, QModelIndex, pyqtSlot
 
 from genial.views.propertiesview import PropertiesView
 
@@ -16,13 +15,14 @@ class PropertiesController(QObject):
     view = None  # type: PropertiesView
 
     def start(self):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         if self.view is None:
             self.view = PropertiesView()
             self.view.set_model(
                 properties_service.question_type_filter_proxy_model,
-                1
+                properties_service.question_type_model.fieldIndex("name")
             )
+            self.view.update_question_type_tools()
             self.connect_slots()
 
     def connect_slots(self):
@@ -38,6 +38,9 @@ class PropertiesController(QObject):
         self.view.button_move_down_question_type_clicked.connect(
             self.on_button_move_down_question_type_clicked
         )
+        self.view.question_type_list_view_current_changed.connect(
+            self.on_question_type_list_view_current_changed
+        )
         self.view.button_ok_clicked.connect(
             self.on_button_ok_clicked
         )
@@ -49,11 +52,11 @@ class PropertiesController(QObject):
         )
 
     def apply_changes(self):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         properties_service.question_type_model.submitAll()
 
     def show(self, tab_wanted: str):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         properties_service.question_type_model.select()
         self.view.selected_question_type = properties_service.question_type_filter_proxy_model.index(
             0,
@@ -66,26 +69,34 @@ class PropertiesController(QObject):
         self.view.hide()
 
     def add_question_type(self):
+        from genial.services import properties_service
         from PyQt5.QtCore import QCoreApplication
-        from genial.services.propertiesservices import properties_service
         _translate = QCoreApplication.translate
+
         # noinspection PyTypeChecker,PyArgumentList
         new_type_name = self.get_new_type_name(
             _translate("PropertiesController", "Default")
         )
         record = properties_service.question_type_model.record()
         record.setValue('name', new_type_name)
+        row_count = properties_service.question_type_model.rowCount()
         record.setValue(
             'position',
-            properties_service.question_type_model.rowCount()
+            row_count
         )
         properties_service.question_type_model.insertRecord(
-            properties_service.question_type_model.rowCount(),
+            row_count,
             record
+        )
+        self.view.selected_question_type = properties_service.question_type_filter_proxy_model.mapFromSource(
+            properties_service.question_type_model.index(
+                row_count,
+                properties_service.question_type_model.fieldIndex("name")
+            )
         )
 
     def move_selected_question_type(self, direction: str):
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         current_name_index = self.view.selected_question_type
         current_position_index = current_name_index.sibling(
             current_name_index.row(),
@@ -135,7 +146,7 @@ class PropertiesController(QObject):
 
     @staticmethod
     def get_new_type_name(name: str) -> str:
-        from genial.services.propertiesservices import properties_service
+        from genial.services import properties_service
         if properties_service.question_type_model.rowCount() == 0:
             # There's no row. No need to check.
             return name
@@ -161,6 +172,13 @@ class PropertiesController(QObject):
             else:
                 name_i += 1
         return final_name
+
+    @pyqtSlot(QModelIndex, QModelIndex)
+    def on_question_type_list_view_current_changed(self,
+                                                   current: QModelIndex,
+                                                   previous: QModelIndex):
+        if current is not None:
+            pass
 
     @pyqtSlot()
     def on_button_add_question_type_clicked(self):
@@ -190,7 +208,3 @@ class PropertiesController(QObject):
     @pyqtSlot()
     def on_button_cancel_clicked(self):
         self.hide()
-
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

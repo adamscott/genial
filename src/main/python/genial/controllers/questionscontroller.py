@@ -8,8 +8,8 @@
 """
 from PyQt5.QtCore import QObject, pyqtSlot
 from genial.views.questionsview import QuestionsView
-from genial.services.documentservice import document_service
-from genial.services.propertiesservices import properties_service
+from genial.services import document_service
+from genial.services import properties_service
 
 
 class QuestionsController(QObject):
@@ -36,6 +36,3 @@ class QuestionsController(QObject):
     @pyqtSlot()
     def on_properties_button_triggered(self):
         properties_service.show('question_types')
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

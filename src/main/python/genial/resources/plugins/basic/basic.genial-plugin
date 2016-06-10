@@ -1,0 +1,9 @@
+[Core]
+Name = Basic
+Module = basic
+
+[Documentation]
+Description = Basic questions plugin.
+Author = Génial
+Version = 0.1.0
+Website = https://github.com/adamscott/genial

@@ -32,7 +32,3 @@ class QuestionsView(QWidget, Ui_QuestionsView):
     @pyqtSlot()
     def on_properties_button_clicked(self):
         self.properties_button_triggered.emit()
-
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc

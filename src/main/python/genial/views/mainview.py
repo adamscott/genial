@@ -150,6 +150,3 @@ class MainView(QMainWindow, Ui_MainView):
     @pyqtSlot()
     def on_action_properties_triggered(self):
         self.action_properties_triggered.emit()
-
-from genial.resources import icons_rc
-from genial.resources import locale_rc
