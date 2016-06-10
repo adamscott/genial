@@ -1,10 +1,5 @@
 """
-    Génial
-    ================================================
-    A "Génies en herbe" questions manager.
 
-    :copyright: (c) 2015, Adam Scott.
-    :license: GPL3, see LICENSE for more details.
 """
 from typing import List, Dict, Optional, Union
 

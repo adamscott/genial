@@ -1,10 +1,5 @@
 """
-    Génial
-    ================================================
-    A "Génies en herbe" questions manager.
 
-    :copyright: (c) 2015, Adam Scott.
-    :license: GPL3, see LICENSE for more details.
 """
 from PyQt5.QtWidgets import QWidget
 from genial.views.gen.ui_gamestreeview import Ui_GamesTreeView

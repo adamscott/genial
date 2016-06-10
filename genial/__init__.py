@@ -1,10 +1,5 @@
 """
-    Génial
-    ================================================
-    A "Génies en herbe" questions manager.
 
-    :copyright: (c) 2015, Adam Scott.
-    :license: GPL3, see LICENSE for more details.
 """
 import os
 import sys
@@ -13,9 +8,6 @@ from logging.handlers import RotatingFileHandler
 
 from appdirs import *
 
-__author__ = 'Adam Scott'
-__author_email__ = "ascott.ca@gmail.com"
-__license__ = 'GPL3'
 __all__ = ['app_name', 'app_author', 'logging_level', 'debug', 'logger']
 
 
