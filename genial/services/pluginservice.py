@@ -14,7 +14,7 @@ from yapsy.PluginManager import PluginManager
 from yapsy.VersionedPluginManager import VersionedPluginManager, VersionedPluginInfo
 from yapsy.PluginInfo import PluginInfo
 
-from genial import debug, logger, logging_level
+from genial.utils import debug, logger, logging_level
 from genial.plugins import IQuestionPlugin
 
 

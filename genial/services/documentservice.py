@@ -12,7 +12,7 @@ from PyQt5.QtCore import QCoreApplication, QObject, QFile, QFileInfo, \
 from PyQt5.QtWidgets import qApp, QFileDialog, QMessageBox, QUndoStack
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel, QSqlError
 
-from genial import logger
+from genial.utils import logger
 
 
 class DocumentError(Exception):
