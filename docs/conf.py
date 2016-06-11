@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Génial documentation build configuration file, created by
-# sphinx-quickstart on Sat Jun 11 16:13:14 2016.
+# sphinx-quickstart on Sat Jun 11 16:21:08 2016.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -33,6 +33,7 @@
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
+    'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
@@ -40,7 +41,7 @@ extensions = [
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['.templates']
+templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -65,7 +66,7 @@ author = 'Adam Scott'
 # built documents.
 #
 # The short X.Y version.
-version = '0.1'
+version = '0.1.0'
 # The full version, including alpha/beta/rc tags.
 release = '0.1.0'
 
@@ -88,7 +89,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -119,7 +120,7 @@ pygments_style = 'sphinx'
 # keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
+todo_include_todos = True
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -161,7 +162,7 @@ html_theme = 'alabaster'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['.static']
+html_static_path = ['_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
