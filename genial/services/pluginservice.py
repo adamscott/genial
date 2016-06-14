@@ -7,7 +7,6 @@ import shutil
 import logging
 
 from PyQt5.QtCore import QObject, QFile, QIODevice, QTextStream, pyqtSlot
-from PyQt5.QtWidgets import qApp
 from appdirs import *
 from yapsy.AutoInstallPluginManager import AutoInstallPluginManager
 from yapsy.PluginManager import PluginManager
@@ -16,6 +15,7 @@ from yapsy.PluginInfo import PluginInfo
 
 from genial.utils import debug, logger, logging_level
 from genial.plugins import IQuestionPlugin
+from genial import application
 
 
 class PluginService(QObject):
@@ -26,7 +26,7 @@ class PluginService(QObject):
 
     def _connect_slots(self):
         from genial.services import document_service
-        qApp.aboutToQuit.connect(
+        application.app.aboutToQuit.connect(
             self.dispose
         )
         document_service.document_created.connect(

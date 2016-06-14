@@ -7,39 +7,44 @@ from PyQt5.QtCore import QCoreApplication, QTranslator, QLocale
 from PyQt5.QtWidgets import QApplication
 
 
-def run():
-    global app
+class Application:
+    _app = None  # type: QApplication
 
-    # Imports .qrc resources even if it is "unused"
-    from genial.resources import icons_rc
-    from genial.resources import locale_rc
-    from genial.resources import plugins_rc
+    @property
+    def app(self) -> QApplication:
+        if self._app is None:
+            self.setup()
+        return self._app
 
-    # Initializes the app variable
-    app = QApplication(sys.argv)
-    app.setApplicationName("Génial")
-    app.setApplicationDisplayName("Génial")
-    app.setProperty("AA_EnableHighDpiScaling", True)
-    # Importing here makes available PyQt5.QtWidgets.QApplication.instance()
-    # for each of these modules (and for their imports too.)
-    from genial.controllers.maincontroller import MainController
+    def setup(self) -> None:
+        # Imports .qrc resources even if it is "unused"
+        from genial.resources import icons_rc
+        from genial.resources import locale_rc
+        from genial.resources import plugins_rc
 
-    # Qt translation
-    qt_translator = QTranslator()
-    if qt_translator.load(QLocale(), "qt", "_", ":/locale"):
-        # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
-        QCoreApplication.installTranslator(qt_translator)
+        # Initializes the app variable
+        self._app = QApplication(sys.argv)
+        self._app.setApplicationName("Génial")
+        self._app.setApplicationDisplayName("Génial")
+        self._app.setProperty("AA_EnableHighDpiScaling", True)
 
-    # App translation
-    genial_translator = QTranslator()
-    if genial_translator.load(QLocale(), "genial", "_", ":/locale"):
-        # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
-        QCoreApplication.installTranslator(genial_translator)
+        # Qt translation
+        qt_translator = QTranslator()
+        if qt_translator.load(QLocale(), "qt", "_", ":/locale"):
+            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+            QCoreApplication.installTranslator(qt_translator)
 
-    main_controller = MainController(app)
-    main_controller.start()
+        # App translation
+        genial_translator = QTranslator()
+        if genial_translator.load(QLocale(), "genial", "_", ":/locale"):
+            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+            QCoreApplication.installTranslator(genial_translator)
 
-    app.exec()
+    def run(self) -> int:
+        # Importing here makes available PyQt5.QtWidgets.QApplication.instance()
+        # for each of these modules (and for their imports too.)
+        from genial.controllers.maincontroller import MainController
+        main_controller = MainController(self.app)
+        main_controller.start()
+        return self.app.exec()
 
-
-app = None  # type: QApplication

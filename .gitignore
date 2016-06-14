@@ -12,6 +12,12 @@ icons.qrc
 plugins.qrc
 # Downloaded icons from GNOME Desktop
 *.svg
+# _api directory in docs
+docs/_api
+# CHANGES.rst
+CHANGES.rst
+# README.rst
+README*.rst
 
 # ---------------------------------------------------------------------
 

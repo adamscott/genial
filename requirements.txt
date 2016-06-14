@@ -1,0 +1,6 @@
+--index-url https://pypi.io/simple
+PyQt5 == 5.6
+appdirs == 1.4.0
+yapsy == 1.11.223
+
+-e .

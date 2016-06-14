@@ -9,10 +9,11 @@ import shutil
 
 from PyQt5.QtCore import QCoreApplication, QObject, QFile, QFileInfo, \
     pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import qApp, QFileDialog, QMessageBox, QUndoStack
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QUndoStack
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel, QSqlError
 
 from genial.utils import logger
+from genial import application
 
 
 class DocumentError(Exception):
@@ -101,7 +102,7 @@ class DocumentService(QObject):
         return None
 
     def connect_slots(self):
-        qApp.aboutToQuit.connect(
+        application.app.aboutToQuit.connect(
             self.dispose
         )
 

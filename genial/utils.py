@@ -24,6 +24,7 @@ def _setup_logging_level() -> int:
 def _setup_logger() -> logging.Logger:
     global app_name, app_author, log_name, debug, logging_level
     log_dir = user_log_dir(appname=app_name, appauthor=app_author)
+
     os.makedirs(log_dir, exist_ok=True)
     log_file = "{}/{}.log".format(log_dir, log_name)
     formatter = logging.Formatter('[%(asctime)s] (%(levelname)s) %(filename)s:%(lineno)d :: %(message)s')

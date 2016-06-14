@@ -11,7 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-
+   installation.rst
+   _api/modules.rst
 
 Indices and tables
 ==================

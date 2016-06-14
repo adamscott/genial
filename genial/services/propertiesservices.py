@@ -2,10 +2,10 @@
 
 """
 from PyQt5.QtCore import Qt, QObject, QSortFilterProxyModel, pyqtSlot
-from PyQt5.QtWidgets import qApp
 from PyQt5.QtSql import QSqlTableModel
 
 from genial.controllers.propertiescontroller import PropertiesController
+from genial import application
 
 
 class PropertiesService(QObject):
@@ -18,7 +18,7 @@ class PropertiesService(QObject):
         self.connect_slots()
 
     def connect_slots(self):
-        qApp.aboutToQuit.connect(
+        application.app.aboutToQuit.connect(
             self.on_about_to_quit
         )
 
