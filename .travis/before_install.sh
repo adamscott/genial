@@ -9,7 +9,6 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 else
     # Install some custom requirements on Linux
     sudo add-apt-repository ppa:ubuntu-sdk-team/ppa -y
-    sudo apt update
     sudo apt-get update
     sudo apt-get install -y qt5-default
     sudo apt-get install -y qt5-qmake
