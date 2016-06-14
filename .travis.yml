@@ -16,7 +16,7 @@ matrix:
       sudo: required
       env: TOXENV=py35-64-pyqt5
     - os: linux
-      sudo: false
+      sudo: required
       python: 3.5
       env: TOXENV=docs
 addons:
