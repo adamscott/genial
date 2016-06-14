@@ -8,7 +8,8 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew install pandoc
 else
     # Install some custom requirements on Linux
-    sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+    sudo add-apt-repository ppa:ubuntu-sdk-team/ppa -y
+    sudo apt update
     sudo apt-get update
     sudo apt-get install -y qt5-default
     sudo apt-get install -y qt5-qmake
