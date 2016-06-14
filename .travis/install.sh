@@ -2,7 +2,7 @@
 
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     # Install some custom requirements on OS X
-    brew install pyenv-virtualenv
+
 else
     # Install some custom requirements on Linux
     case "${TOXENV}" in
@@ -17,8 +17,6 @@ else
                     sudo apt-get install -y python3.5:i386
                     ;;
             esac
-            pip install virtualenv
-            pip install virtualenvwrapper
             curl -O http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
             tar zxvf sip-4.18.tar.gz
             curl -O http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
@@ -31,4 +29,11 @@ else
 fi
 
 # Install tox for every target
+sudo pip install --upgrade pip
+sudo pip install virtualenv
+sudo pip install virtualenvwrapper
+mkdir ~/.virtualenvs/genial/
+source /urs/local/bin/virtualenvwrapper.sh
+mkvirtualenv work_env
+workon work_env
 pip install tox
