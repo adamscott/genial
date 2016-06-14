@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     # Install some custom requirements on OS X
