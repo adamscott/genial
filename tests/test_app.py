@@ -12,6 +12,6 @@ def test_application_display_name(app: QApplication):
     assert app.applicationDisplayName() == "Génial"
 
 
-def test_application_has_high_dpi_scaling(app:QApplication):
+def test_application_has_high_dpi_scaling(app: QApplication):
     assert app is not None
     assert app.property("AA_EnableHighDpiScaling") == True
