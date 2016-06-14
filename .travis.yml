@@ -4,7 +4,7 @@ language: python
 matrix:
   include:
     - os: linux
-      sudo: false
+      sudo: required
       python: 3.5
       env: TOXENV=py35-64-pyqt5
     - os: linux
@@ -22,7 +22,6 @@ matrix:
 addons:
   apt:
     packages:
-      - qt5-default
       - pandoc
 before_install:
   - ./.travis/before_install.sh

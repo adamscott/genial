@@ -8,13 +8,13 @@ else
     case "${TOXENV}" in
         py34-32-pyqt5 | py35-32-pyqt5)
             sudo dpkg --add-architecture i386
-            sudo apt-get update
+            sudo apt-get -qq update
             case "${TOXENV}" in
                 py34-32-pyqt5)
-                    sudo apt-get install python3.4:i386
+                    sudo apt-get install -y python3.4:i386
                     ;;
                 py35-32-pyqt5)
-                    sudo apt-get install python3.5:i386
+                    sudo apt-get install -y python3.5:i386
                     ;;
             esac
             pip install virtualenv

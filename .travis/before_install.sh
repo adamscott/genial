@@ -7,15 +7,18 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew install pandoc
 else
     # Install some custom requirements on Linux
+    sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+    sudo apt-get -qq update
+    sudo apt-get install -y qt5-default
+    sudo apt-get install -y qt5-qmake
     case "${TOXENV}" in
         py34-32-pyqt5 | py35-32-pyqt5)
-            sudo apt-get update
-            sudo apt-get install qt5-default
-            sudo apt-get install qt5-qmake
-            sudo apt-get install pandoc
+            sudo apt-get install -y pandoc
+            export QMAKE=/usr/lib/i686-linux-gnu/qt5/bin/qmake
             ;;
         py34-64-pyqt5 | py35-64-pyqt5)
-            # Do not need to install anything, the image is already ready.
+            # Pandoc is handled by Travis
+            export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
             ;;
     esac
 fi
