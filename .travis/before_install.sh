@@ -9,7 +9,9 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 else
     # Install some custom requirements on Linux
     sudo add-apt-repository ppa:ubuntu-sdk-team/ppa -y
+    ls -l /etc/apt/sources.list.d/
     sudo apt-get update
+    apt-cache pkgnames | sort
     sudo apt-get install -y qt5-default
     sudo apt-get install -y qt5-qmake
     case "${TOXENV}" in
