@@ -4,7 +4,6 @@ set -ex
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     # Install some custom requirements on OS X
     eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
     pyenv install 3.5.2
     pyenv global 3.5.2
 
