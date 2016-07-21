@@ -22,21 +22,15 @@ else
                     sudo apt-get install -y python3.5:i386
                     ;;
             esac
-
-
             ;;
         py34-64-pyqt5 | py35-64-pyqt5)
             pip install --upgrade pip
-            pip install virtualenv
-            pip install virtualenvwrapper
             pip install tox
             ;;
     esac
 fi
 
 sudo pip install --upgrade pip
-sudo pip install virtualenv
-sudo pip install virtualenvwrapper
 sudo pip install tox
 
 wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
