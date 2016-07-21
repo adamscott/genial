@@ -6,6 +6,7 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew update
     brew install qt5
     brew install pandoc
+    brew upgrade pyenv
 else
     # Install some custom requirements on Linux
     case "${TOXENV}" in
