@@ -11,7 +11,7 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 
 else
     # Install some custom requirements on Linux
-    export QMAKE=/usr/local/Cellar/qt5/5.6.1-1/bin/qmake
+    export QMAKE=~/.linuxbrew/Cellar/qt5/5.6.1-1/bin/qmake
     eval "$(pyenv init -)"
     case "${TOXENV}" in
         py35-32-pyqt5)
