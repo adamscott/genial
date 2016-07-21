@@ -31,34 +31,40 @@ fi
 sudo pip install --upgrade pip
 sudo pip install tox
 
+pushd ~
 SIP_DIR="sip-4.18"
 if [ ! -d "${SIP_DIR}" ]; then
     CACHED_SIP=false
     wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
     tar -zxf sip-4.18.tar.gz
+    mv sip-4.18 sip
 else
     CACHED_SIP=true
 fi
-pushd sip-4.18
+pushd sip
 if [ ! "${CACHED_SIP}" = true ]; then
     python configure.py
     make -j3
 fi
 make install -j3
-popd
+popd # sip
+popd # ~
 
+pushd ~
 PYQT5_DIR="PyQt5_gpl-5.6"
 if [ ! -d "${PYQT5_DIR}" ]; then
     CACHED_PYQT5=false
     wget http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
     tar -zxf PyQt5_gpl-5.6.tar.gz
+    mv PyQt5_gpl-5.6.tar.gz PyQt5_gpl
 else
     CACHED_PYQT5=true
 fi
-pushd PyQt5_gpl-5.6
+pushd PyQt5_gpl
 if [ ! "${CACHED_PYQT5}" = true ]; then
     python configure.py --qmake $QMAKE --confirm-license
     make -j3
 fi
 make install -j3
-popd
+popd # PyQt5
+popd # ~
