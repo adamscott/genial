@@ -24,6 +24,7 @@ class MainView(QMainWindow, Ui_MainView):
         self.ui = Ui_MainView()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
+        self.ui.menubar.setNativeMenuBar(False)
         self.set_icons()
 
     def closeEvent(self, event: QCloseEvent):
