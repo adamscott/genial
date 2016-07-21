@@ -19,7 +19,7 @@ else
             echo "" > /dev/null
             ;;
     esac
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+    git clone https://github.com/Linuxbrew/brew.git ~/.linuxbrew
     export PATH="$HOME/.linuxbrew/bin:$PATH"
     export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
     export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
