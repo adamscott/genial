@@ -5,23 +5,20 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     # Install some custom requirements on OS X
     brew update
     brew install qt5
+    export QMAKE=/usr/local/Cellar/qt5/5.6.1-1/bin/qmake
     brew install pandoc
+    brew install pyenv
+    brew install pyenv-virtualenv
 else
     # Install some custom requirements on Linux
-    sudo add-apt-repository ppa:ubuntu-sdk-team/ppa -y
-    ls -l /etc/apt/sources.list.d/
-    sudo apt-get update
-    apt-cache pkgnames | sort
-    sudo apt-get install -y qt5-default
-    sudo apt-get install -y qt5-qmake
     case "${TOXENV}" in
-        py34-32-pyqt5 | py35-32-pyqt5)
-            sudo apt-get install -y pandoc
-            export QMAKE=/usr/lib/i686-linux-gnu/qt5/bin/qmake
+        py35-32-pyqt5)
+            export CONFIGURE_OPTS="--with-arch=i386"
+            export CFLAGS="-arch i386"
+            export LDFLAGS="-arch i386"
             ;;
-        py34-64-pyqt5 | py35-64-pyqt5)
-            # Pandoc is handled by Travis
-            export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+        py35-64-pyqt5)
+
             ;;
     esac
 fi

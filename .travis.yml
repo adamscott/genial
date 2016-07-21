@@ -3,22 +3,22 @@ sudo: false
 language: python
 matrix:
   include:
-    - os: linux
-      sudo: required
-      python: 3.5
-      env: TOXENV=py35-64-pyqt5
-    - os: linux
-      language: generic
-      sudo: required
-      env: TOXENV=py35-32-pyqt5
+    #- os: linux
+    #  language: generic
+    #  sudo: false
+    #  env: TOXENV=py35-64-pyqt5
+    #- os: linux
+    #  language: generic
+    #  sudo: false
+    #  env: TOXENV=py35-32-pyqt5
     - os: osx
       language: generic
-      sudo: required
+      sudo: false
       env: TOXENV=py35-64-pyqt5
-    - os: linux
-      sudo: required
-      python: 3.5
-      env: TOXENV=docs
+    #- os: linux
+    #  sudo: false
+    #  python: 3.5
+    #  env: TOXENV=docs
 addons:
   apt:
     packages:
