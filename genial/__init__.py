@@ -10,6 +10,3 @@ def main():
     sys.exit(application.run())
 
 application = app.Application()
-
-if __name__ == '__main__':
-    main()

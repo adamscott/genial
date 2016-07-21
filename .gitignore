@@ -12,6 +12,8 @@ icons.qrc
 plugins.qrc
 # Downloaded icons from GNOME Desktop
 *.svg
+# Downloaded qtbase_*.ts
+qtbase_*.ts
 # _api directory in docs
 docs/_api
 # CHANGES.rst

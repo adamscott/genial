@@ -3,7 +3,7 @@
 <context>
     <name>DocumentController</name>
     <message>
-        <location filename="../../controllers/documentcontroller.py" line="41"/>
+        <location filename="../../controllers/documentcontroller.py" line="36"/>
         <source>Questions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16,67 +16,67 @@
         <translation type="obsolete">Fichiers Génial (*.gnl)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="65"/>
+        <location filename="../../services/documentservice.py" line="61"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="150"/>
+        <location filename="../../services/documentservice.py" line="146"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="263"/>
+        <location filename="../../services/documentservice.py" line="259"/>
         <source>Untitled</source>
         <translation>Sans titre</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../services/documentservice.py" line="58"/>
+        <location filename="../../services/documentservice.py" line="54"/>
         <source>Génial files (*.gnl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="172"/>
+        <location filename="../../services/documentservice.py" line="168"/>
         <source>The document has been modified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="177"/>
+        <location filename="../../services/documentservice.py" line="173"/>
         <source>Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="209"/>
+        <location filename="../../services/documentservice.py" line="205"/>
         <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="211"/>
+        <location filename="../../services/documentservice.py" line="207"/>
         <source>An error occurred while handling the document.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="366"/>
+        <location filename="../../services/documentservice.py" line="362"/>
         <source>The file ({}) is not a valid .gnl file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="378"/>
+        <location filename="../../services/documentservice.py" line="374"/>
         <source>The file ({}) is too big.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="402"/>
+        <location filename="../../services/documentservice.py" line="398"/>
         <source>An unhandled error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="319"/>
+        <location filename="../../services/documentservice.py" line="315"/>
         <source>The selected file ({}) does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../services/documentservice.py" line="390"/>
+        <location filename="../../services/documentservice.py" line="386"/>
         <source>The internal database of the file ({}) is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -115,142 +115,142 @@
 <context>
     <name>MainView</name>
     <message>
-        <location filename="../../ui/mainview.ui" line="52"/>
+        <location filename="../../ui/mainview.ui" line="57"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="69"/>
+        <location filename="../../ui/mainview.ui" line="74"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="77"/>
+        <location filename="../../ui/mainview.ui" line="82"/>
         <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="82"/>
+        <location filename="../../ui/mainview.ui" line="87"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="87"/>
+        <location filename="../../ui/mainview.ui" line="92"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="92"/>
+        <location filename="../../ui/mainview.ui" line="97"/>
         <source>&amp;Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="108"/>
+        <location filename="../../ui/mainview.ui" line="113"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="127"/>
+        <location filename="../../ui/mainview.ui" line="132"/>
         <source>Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="142"/>
+        <location filename="../../ui/mainview.ui" line="147"/>
         <source>Games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="160"/>
+        <location filename="../../ui/mainview.ui" line="165"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="168"/>
+        <location filename="../../ui/mainview.ui" line="173"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="176"/>
+        <location filename="../../ui/mainview.ui" line="181"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="196"/>
+        <location filename="../../ui/mainview.ui" line="201"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="199"/>
+        <location filename="../../ui/mainview.ui" line="204"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="204"/>
+        <location filename="../../ui/mainview.ui" line="209"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="207"/>
+        <location filename="../../ui/mainview.ui" line="212"/>
         <source>Ctrl+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="212"/>
+        <location filename="../../ui/mainview.ui" line="217"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="215"/>
+        <location filename="../../ui/mainview.ui" line="220"/>
         <source>Ctrl+Shift+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="220"/>
+        <location filename="../../ui/mainview.ui" line="225"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="233"/>
+        <location filename="../../ui/mainview.ui" line="238"/>
         <source>Ctrl+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="157"/>
+        <location filename="../../ui/mainview.ui" line="162"/>
         <source>&amp;New…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="165"/>
+        <location filename="../../ui/mainview.ui" line="170"/>
         <source>&amp;Open…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="173"/>
+        <location filename="../../ui/mainview.ui" line="178"/>
         <source>&amp;Save…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="181"/>
+        <location filename="../../ui/mainview.ui" line="186"/>
         <source>Save As…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="186"/>
+        <location filename="../../ui/mainview.ui" line="191"/>
         <source>Add a new user…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="191"/>
+        <location filename="../../ui/mainview.ui" line="196"/>
         <source>Remove a user…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="225"/>
+        <location filename="../../ui/mainview.ui" line="230"/>
         <source>Properties…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="230"/>
+        <location filename="../../ui/mainview.ui" line="235"/>
         <source>&amp;Print…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -258,7 +258,7 @@
 <context>
     <name>PropertiesController</name>
     <message>
-        <location filename="../../controllers/propertiescontroller.py" line="77"/>
+        <location filename="../../controllers/propertiescontroller.py" line="72"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
