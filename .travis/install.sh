@@ -34,8 +34,8 @@ sudo pip install --upgrade pip
 sudo pip install tox
 
 wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
-tar -zxvf sip-4.18.tar.gz
+tar -zxf sip-4.18.tar.gz
 pushd sip-4.18 && python configure.py && make && sudo make install && popd
 wget http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
-tar -zxvf PyQt5_gpl-5.6.tar.gz
+tar -zxf PyQt5_gpl-5.6.tar.gz
 pushd PyQt5_gpl-5.6 && python configure.py --qmake $QMAKE && make && sudo make install && popd
