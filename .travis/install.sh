@@ -3,6 +3,7 @@ set -ex
 
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     # Install some custom requirements on OS X
+    export QMAKE=/usr/local/Cellar/qt5/5.6.1-1/bin/qmake
     eval "$(pyenv init -)"
     pyenv install 3.5.2
     pyenv global 3.5.2

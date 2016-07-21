@@ -5,7 +5,6 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     # Install some custom requirements on OS X
     brew update
     brew install qt5
-    export QMAKE=/usr/local/Cellar/qt5/5.6.1-1/bin/qmake
     brew install pandoc
 else
     # Install some custom requirements on Linux
