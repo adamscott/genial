@@ -13,9 +13,13 @@ else
     sudo apt-get update
     case "${TOXENV}" in
         py35-32-pyqt5)
+            sudo apt-get install qt56-meta-full:i386
+            sudo apt-get install qt56-meta-dbg-full:i386
             sudo apt-get install qt-latest:i386
             ;;
         py35-64-pyqt5)
+            sudo apt-get install qt56-meta-full
+            sudo apt-get install qt56-meta-dbg-full
             sudo apt-get install qt-latest
             ;;
     esac
