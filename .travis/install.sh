@@ -11,7 +11,7 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 
 else
     # Install some custom requirements on Linux
-    export QMAKE=~/.linuxbrew/Cellar/qt5/5.6.1-1/bin/qmake
+    source /opt/qt56/bin/qt56-env.sh
     eval "$(pyenv init -)"
     case "${TOXENV}" in
         py35-32-pyqt5)
@@ -42,6 +42,7 @@ else
     CACHED_SIP=true
 fi
 pushd sip
+ls -l
 if [ ! "${CACHED_SIP}" = true ]; then
     python configure.py
     make -j3

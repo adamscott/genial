@@ -9,19 +9,15 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew upgrade pyenv
 else
     # Install some custom requirements on Linux
+    sudo apt-add-repository ppa:beineri/opt-qt561 -y
+    sudo apt-get update
     case "${TOXENV}" in
         py35-32-pyqt5)
-            export CONFIGURE_OPTS="--with-arch=i386"
-            export CFLAGS="-arch i386"
-            export LDFLAGS="-arch i386"
+            sudo apt-get install qt-latest:i386
             ;;
         py35-64-pyqt5)
-            echo "" > /dev/null
+            sudo apt-get install qt-latest
             ;;
     esac
-    git clone https://github.com/Linuxbrew/brew.git ~/.linuxbrew
-    export PATH="$HOME/.linuxbrew/bin:$PATH"
-    export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
-    export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
-    brew install qt5
+    source /opt/qt56/bin/qt56-env.sh
 fi

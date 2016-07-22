@@ -5,11 +5,11 @@ matrix:
   include:
     - os: linux
       language: generic
-      sudo: false
+      sudo: true
       env: TOXENV=py35-64-pyqt5
     - os: linux
       language: generic
-      sudo: false
+      sudo: true
       env: TOXENV=py35-32-pyqt5
     - os: osx
       language: generic
