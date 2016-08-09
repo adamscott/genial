@@ -4,6 +4,7 @@ set -ex
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     # Install some custom requirements on OS X
     export QMAKE=/usr/local/Cellar/qt5/5.6.1-1/bin/qmake
+    # Initialize pyenv
     eval "$(pyenv init -)"
     pyenv install 3.5.2
     pyenv global 3.5.2
@@ -11,7 +12,12 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
 
 else
     # Install some custom requirements on Linux
+    # Disable temporarily exit on error
+    set +e
     source /opt/qt56/bin/qt56-env.sh
+    # Reenable exit on error
+    set -e
+    # Initialize pyenv
     eval "$(pyenv init -)"
     case "${TOXENV}" in
         py35-32-pyqt5)
