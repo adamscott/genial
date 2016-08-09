@@ -57,7 +57,7 @@ if [ ! -d "${PYQT5_DIR}" ]; then
     CACHED_PYQT5=false
     wget http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
     tar -zxf PyQt5_gpl-5.6.tar.gz
-    mv PyQt5_gpl-5.6.tar.gz PyQt5_gpl
+    mv PyQt5_gpl-5.6 PyQt5_gpl
 else
     CACHED_PYQT5=true
 fi
