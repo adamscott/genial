@@ -38,7 +38,9 @@ sudo pip install --upgrade pip
 sudo pip install tox
 
 pushd ~
-SIP_DIR="sip"
+mkdir -p build
+pushd build # ~ -> ~/build
+SIP_DIR="./sip"
 if [ ! -d "${SIP_DIR}" ]; then
     CACHED_SIP=false
     wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
@@ -48,18 +50,16 @@ if [ ! -d "${SIP_DIR}" ]; then
 else
     CACHED_SIP=true
 fi
-pushd sip
+pushd sip # ~/build -> ~/build/sip
 ls -l
 if [ ! "${CACHED_SIP}" = true ]; then
     python configure.py
     make -j3
 fi
 make install -j3
-popd # sip
-popd # ~
+popd # ~/build/sip -> ~/build
 
-pushd ~
-PYQT5_DIR="PyQt5_gpl"
+PYQT5_DIR="./PyQt5_gpl"
 if [ ! -d "${PYQT5_DIR}" ]; then
     CACHED_PYQT5=false
     wget http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
@@ -69,11 +69,12 @@ if [ ! -d "${PYQT5_DIR}" ]; then
 else
     CACHED_PYQT5=true
 fi
-pushd PyQt5_gpl
+pushd PyQt5_gpl # ~/build -> ~/build/PyQt5_gpl
 if [ ! "${CACHED_PYQT5}" = true ]; then
     python configure.py --qmake $QMAKE --confirm-license
     make -j3
 fi
 make install -j3
-popd # PyQt5
-popd # ~
+popd # ~/build/PyQt5_gpl -> ~/build
+popd # ~/build -> ~
+popd
