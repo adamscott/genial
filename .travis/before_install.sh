@@ -24,7 +24,7 @@ else
     esac
     # Disable temporarily exit on error
     set +e
-    source /opt/qt56/bin/qt56-env.sh
+    source ~/build/adamscott/genial/.travis/qt56-env.sh
     # Reenable exit on error
     set -e
 fi
