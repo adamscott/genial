@@ -36,11 +36,8 @@ SIP_DIR="sip-4.18"
 if [ ! -d "${SIP_DIR}" ]; then
     CACHED_SIP=false
     wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
-    sleep 1
     tar -zxf sip-4.18.tar.gz
-    sleep 1
     mv sip-4.18 sip
-    sleep 1
 else
     CACHED_SIP=true
 fi
@@ -59,11 +56,8 @@ PYQT5_DIR="PyQt5_gpl-5.6"
 if [ ! -d "${PYQT5_DIR}" ]; then
     CACHED_PYQT5=false
     wget http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
-    sleep 1
     tar -zxf PyQt5_gpl-5.6.tar.gz
-    sleep 1
     mv PyQt5_gpl-5.6 PyQt5_gpl
-    sleep 1
 else
     CACHED_PYQT5=true
 fi
