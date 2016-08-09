@@ -27,4 +27,6 @@ else
     source ~/build/adamscott/genial/.travis/qt56-env.sh
     # Reenable exit on error
     set -e
+    # Install pyenv
+    wget -qO- https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 fi
