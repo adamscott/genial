@@ -22,5 +22,9 @@ else
             sudo apt-get install qt56-meta-full
             ;;
     esac
+    # Disable temporarily exit on error
+    set +e
     source /opt/qt56/bin/qt56-env.sh
+    # Reenable exit on error
+    set -e
 fi
