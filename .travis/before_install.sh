@@ -10,7 +10,8 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
 else
     # Install some custom requirements on Linux
     if [[ "${TOXENV}" == 'py35-32-pyqt5' ]]; then
-        echo "foreign-architecture i386" >> /etc/dpkg/dpkg.cfg.d/architectures
+        # Adds i386 packages
+        echo "foreign-architecture i386" | sudo tee --append /etc/dpkg/dpkg.cfg.d/architectures > /dev/null
     fi
     sudo apt-add-repository ppa:beineri/opt-qt561 -y
     sudo apt-get update
