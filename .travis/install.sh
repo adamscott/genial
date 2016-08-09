@@ -38,12 +38,13 @@ sudo pip install --upgrade pip
 sudo pip install tox
 
 pushd ~
-SIP_DIR="sip-4.18"
+SIP_DIR="sip"
 if [ ! -d "${SIP_DIR}" ]; then
     CACHED_SIP=false
     wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.18/sip-4.18.tar.gz
     tar -zxvf sip-4.18.tar.gz
-    mv -v sip-4.18 sip
+    mkdir -p sip
+    mv -v sip-4.18/* sip/
 else
     CACHED_SIP=true
 fi
@@ -58,12 +59,13 @@ popd # sip
 popd # ~
 
 pushd ~
-PYQT5_DIR="PyQt5_gpl-5.6"
+PYQT5_DIR="PyQt5_gpl"
 if [ ! -d "${PYQT5_DIR}" ]; then
     CACHED_PYQT5=false
     wget http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
     tar -zxvf PyQt5_gpl-5.6.tar.gz
-    mv -v PyQt5_gpl-5.6 PyQt5_gpl
+    mkdir -p PyQt5_gpl
+    mv -v PyQt5_gpl-5.6/* PyQt5_gpl/
 else
     CACHED_PYQT5=true
 fi
