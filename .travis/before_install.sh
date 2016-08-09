@@ -9,6 +9,9 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     brew upgrade pyenv
 else
     # Install some custom requirements on Linux
+    if [[ "${TOXENV}" == 'py35-32-pyqt5' ]]; then
+        echo "foreign-architecture i386" >> /etc/dpkg/dpkg.cfg.d/architectures
+    fi
     sudo apt-add-repository ppa:beineri/opt-qt561 -y
     sudo apt-get update
     case "${TOXENV}" in
