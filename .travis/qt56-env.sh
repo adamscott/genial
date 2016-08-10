@@ -12,6 +12,8 @@ fi
 
 export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
 
+export QMAKE=$QT_BASE_DIR/bin/qmake
+
 TEST=`echo $0 | grep wrapper`
 if [ "$TEST" != "" ]; then
    exec `echo $0 | sed s/-wrapper//` $*
