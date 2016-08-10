@@ -7,10 +7,10 @@ matrix:
       language: generic
       sudo: true
       env: TOXENV=py35-64-pyqt5
-    - os: linux
-      language: generic
-      sudo: true
-      env: TOXENV=py35-32-pyqt5
+    #- os: linux
+    #  language: generic
+    #  sudo: true
+    #  env: TOXENV=py35-32-pyqt5
     - os: osx
       language: generic
       sudo: false
