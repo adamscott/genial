@@ -25,35 +25,6 @@ def read(*file_names, **kwargs):
 long_description = read('README.rst', 'CHANGES.rst')
 
 
-class ConvertMD(Command):
-    user_options = [('pandoc=', 'b', 'Alternate path for "pandoc"')]
-
-    def initialize_options(self):
-        self.pandoc = None
-
-    def finalize_options(self):
-        if not self.pandoc:
-            self.pandoc = "pandoc"
-        if not shutil.which(self.pandoc):
-            sys.exit("'{}' command not found. Is pandoc well installed?".format(self.pandoc))
-
-    def run(self):
-        root_dir = os.path.dirname(os.path.realpath(__file__))
-        for file in os.listdir(root_dir):
-            if file.endswith(".md"):
-                output_file = re.sub(r'(.*)\.md', r'\1.rst', file)
-                command = " ".join([
-                    "pandoc",
-                    "-s",
-                    "-S",
-                    "{}/{}".format(root_dir, file),
-                    "-o {}/{}".format(root_dir, output_file)
-                ])
-                ret_code = subprocess.call(command, shell=True)
-                if ret_code != 0:
-                    sys.exit("'pandoc' command failed. ({})".format(command))
-
-
 class CompileUI(Command):
     user_options = [('pyuic5=', 'b', 'Alternate path for "pyuic5"')]
 
@@ -404,7 +375,6 @@ class DownloadIcons(Command):
 
 class Bootstrap(Command):
     user_options = [
-        ('pandoc=', None, 'Alternate path for "pandoc"'),
         ('pyuic5=', None, 'Alternate path for "pyuic5"'),
         ('pyrcc5=', None, 'Alternate path for "pyrcc5"'),
         ('lrelease=', None, 'Alternate path for "lrelease"'),
@@ -415,7 +385,6 @@ class Bootstrap(Command):
     ]
 
     def initialize_options(self):
-        ConvertMD.initialize_options(self)
         CompileUI.initialize_options(self)
         CompileQRC.initialize_options(self)
         GenerateLocale.initialize_options(self)
@@ -428,7 +397,6 @@ class Bootstrap(Command):
         self.python = None
 
     def finalize_options(self):
-        ConvertMD.finalize_options(self)
         CompileUI.finalize_options(self)
         CompileQRC.finalize_options(self)
         GenerateLocale.finalize_options(self)
