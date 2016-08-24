@@ -71,7 +71,7 @@ else
 fi
 pushd PyQt5_gpl # ~/build -> ~/build/PyQt5_gpl
 if [ ! "${CACHED_PYQT5}" = true ]; then
-    python configure.py --qmake $QMAKE --confirm-license
+    python configure.py --qmake $QMAKE --confirm-license --no-designer-plugin --no-qml-plugin
     make -j3
 fi
 make install -j3
