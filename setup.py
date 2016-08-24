@@ -451,9 +451,6 @@ class Bootstrap(Command):
         # Compile .ui
         pyuic5_param = "--pyuic5=" + self.pyuic5
         self.launch_subprocess("compile_ui", [pyuic5_param])
-        # Convert .md
-        pandoc_param = "--pandoc=" + self.pandoc
-        self.launch_subprocess("convert_md", [pandoc_param])
 
 
 class Tox(TestCommand):
@@ -510,7 +507,6 @@ setup(
     setup_requires=['lxml'],
     cmdclass={
         'test': Tox,
-        'convert_md': ConvertMD,
         'compile_ui': CompileUI,
         'compile_qrc': CompileQRC,
         'generate_locale': GenerateLocale,
