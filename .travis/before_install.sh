@@ -8,7 +8,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     pushd /tmp
     wget https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
     gunzip qt-everywhere-opensource-src-5.7.0.tar.gz
-    tar xvf qt-everywhere-opensource-src-5.7.0.tar
+    tar xf qt-everywhere-opensource-src-5.7.0.tar
     pushd qt-everywhere-opensource-src-5.7.0
     QT_BASE_DIR=/opt/qt57
     sudo mkdir -p "$QT_BASE_DIR"
