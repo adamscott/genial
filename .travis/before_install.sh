@@ -25,7 +25,7 @@ else
     esac
     # Disable temporarily exit on error
     set +e
-    source ~/build/adamscott/genial/.travis/qt56-env.sh
+    source ~/build/adamscott/genial/.travis/qt5-env.sh
     # Reenable exit on error
     set -e
     # Install pyenv
