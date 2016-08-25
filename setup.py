@@ -504,7 +504,6 @@ setup(
     ],
     tests_require=['tox'],
     install_requires=['PyQt5', 'yapsy', 'appdirs'],
-    setup_requires=['lxml'],
     cmdclass={
         'test': Tox,
         'compile_ui': CompileUI,
