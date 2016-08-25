@@ -3,7 +3,6 @@ set -ex
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     # Install some custom requirements on OS X
-    export QMAKE=/usr/local/Cellar/qt5/5.6.1-1/bin/qmake
     # Initialize pyenv
     eval "$(pyenv init -)"
     pyenv install 3.5.2
@@ -34,6 +33,6 @@ else
     pyenv versions
 fi
 
-sudo pip install --upgrade pip
-sudo pip install tox
-sudo pip install -r setup_requirements.txt
+pip install --upgrade pip
+pip install tox
+pip install -r setup_requirements.txt
