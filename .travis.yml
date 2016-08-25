@@ -15,10 +15,6 @@ matrix:
       language: generic
       sudo: false
       env: TOXENV=py35-64-pyqt5
-      cache:
-        directories:
-          - $HOME/build/sip
-          - $HOME/build/PyQt5_gpl
     #- os: linux
     #  sudo: false
     #  python: 3.5
