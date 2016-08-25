@@ -36,3 +36,4 @@ fi
 pip install --upgrade pip
 pip install tox
 pip install -r setup_requirements.txt
+pip install -r test_requirements.txt
