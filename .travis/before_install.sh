@@ -45,10 +45,10 @@ else
     sudo apt-get update
     case "${TOXENV}" in
         py35-32-pyqt5)
-            sudo apt-get install qt57-meta:i386
+            sudo apt-get install qt57-meta-full:i386
             ;;
         py35-64-pyqt5)
-            sudo apt-get install qt57-meta
+            sudo apt-get install qt57-meta-full
             ;;
     esac
     # Disable temporarily exit on error
