@@ -36,5 +36,4 @@ install:
 before_script:
   - source ./.travis/before_script.sh
 script:
-  - "python setup.py bootstrap"
-  - "python setup.py test"
+  - source ./.travis/script.sh
