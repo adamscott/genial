@@ -115,142 +115,142 @@
 <context>
     <name>MainView</name>
     <message>
-        <location filename="../../ui/mainview.ui" line="57"/>
+        <location filename="../../ui/mainview.ui" line="52"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="74"/>
+        <location filename="../../ui/mainview.ui" line="69"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="82"/>
+        <location filename="../../ui/mainview.ui" line="77"/>
         <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="87"/>
+        <location filename="../../ui/mainview.ui" line="82"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="92"/>
+        <location filename="../../ui/mainview.ui" line="87"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="97"/>
+        <location filename="../../ui/mainview.ui" line="92"/>
         <source>&amp;Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="113"/>
+        <location filename="../../ui/mainview.ui" line="108"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="132"/>
+        <location filename="../../ui/mainview.ui" line="127"/>
         <source>Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="147"/>
+        <location filename="../../ui/mainview.ui" line="142"/>
         <source>Games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="165"/>
+        <location filename="../../ui/mainview.ui" line="160"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="173"/>
+        <location filename="../../ui/mainview.ui" line="168"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="181"/>
+        <location filename="../../ui/mainview.ui" line="176"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="201"/>
+        <location filename="../../ui/mainview.ui" line="196"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="204"/>
+        <location filename="../../ui/mainview.ui" line="199"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="209"/>
+        <location filename="../../ui/mainview.ui" line="204"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="212"/>
+        <location filename="../../ui/mainview.ui" line="207"/>
         <source>Ctrl+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="217"/>
+        <location filename="../../ui/mainview.ui" line="212"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="220"/>
+        <location filename="../../ui/mainview.ui" line="215"/>
         <source>Ctrl+Shift+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="225"/>
+        <location filename="../../ui/mainview.ui" line="220"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/mainview.ui" line="238"/>
+        <location filename="../../ui/mainview.ui" line="233"/>
         <source>Ctrl+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="162"/>
+        <location filename="../../ui/mainview.ui" line="157"/>
         <source>&amp;New…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="170"/>
+        <location filename="../../ui/mainview.ui" line="165"/>
         <source>&amp;Open…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="178"/>
+        <location filename="../../ui/mainview.ui" line="173"/>
         <source>&amp;Save…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="186"/>
+        <location filename="../../ui/mainview.ui" line="181"/>
         <source>Save As…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="191"/>
+        <location filename="../../ui/mainview.ui" line="186"/>
         <source>Add a new user…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="196"/>
+        <location filename="../../ui/mainview.ui" line="191"/>
         <source>Remove a user…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="230"/>
+        <location filename="../../ui/mainview.ui" line="225"/>
         <source>Properties…</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../../ui/mainview.ui" line="235"/>
+        <location filename="../../ui/mainview.ui" line="230"/>
         <source>&amp;Print…</source>
         <translation type="unfinished"></translation>
     </message>
