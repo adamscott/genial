@@ -1,5 +1,5 @@
-PyQt5 >= 5.7
-appdirs >= 1.4.0
-yapsy >= 1.11.223
+PyQt5 == 5.7.0
+appdirs == 1.4.0
+yapsy == 1.11.223
 
 -e .
