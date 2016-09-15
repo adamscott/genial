@@ -7,7 +7,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
 
     # install gist package
     brew install gist
-    cat "${GITHUB_GIST_TOKEN}" >"~/.gist"
+    echo "${GITHUB_GIST_TOKEN}" >"~/.gist"
 
     pushd /tmp
     wget https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
