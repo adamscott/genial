@@ -5,6 +5,10 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     # Install some custom requirements on OS X
     brew update
 
+    # install gist package
+    brew install gist
+    cat "${GITHUB_GIST_TOKEN}" >"~/.gist"
+
     pushd /tmp
     wget https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
     gunzip qt-everywhere-opensource-src-5.7.0.tar.gz
@@ -57,8 +61,15 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
         -skip qtwinextras \
         -skip qtx11extras \
         -skip qtxmlpatterns
-    make -j3
-    sudo make -j3 install
+    set +e # Disable temporarily exit on error
+    make -j3 &> genial-travis-qt5.7-1_make.log
+    sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log
+    gist \
+        -u b1f0f29a43cc76a36c8f5fdc10528a25 \
+        genial-travis-qt5.7-1_make.log \
+        genial-travis-qt5.7-2_make_install.log
+    set -e # Reenable exit on error
+    gist b1f0f29a43cc76a36c8f5fdc10528a25
     export PATH=$QT_BASE_DIR/bin:$PATH
     popd # /tmp/qt-everywhere-opensource-src-5.7.0
     popd # /tmp
