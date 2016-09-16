@@ -73,7 +73,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     nohup make -j3 &> genial-travis-qt5.7-1_make.log &
     make_pid=$(lsof -t 'genial-travis-qt5.7-1_make.log')
     dots=0
-    while $(ps cax | grep "${make_pid}"); do
+    while [[ ! -z "$(ps cax | grep \'${make_pid}\')" ]]; do
         columns=$(tput cols)
         if [[ "$dots" -gt "$columns" ]]; then
             dots=0
@@ -89,7 +89,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log
     make_pid=$(lsof -t 'genial-travis-qt5.7-1_make.log')
     dots=0
-    while $(ps cax | grep "${make_pid}"); do
+    while [[ ! -z "$(ps cax | grep \'${make_pid}\')" ]]; do
         columns=$(tput cols)
         if [[ "$dots" -gt "$columns" ]]; then
             dots=0
