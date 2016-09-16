@@ -10,7 +10,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
 
     # write gist token to ~/.gist
     pushd ~
-    echo "${GITHUB_GIST_TOKEN}" >".gist"
+    echo "${GITHUB_GIST_TOKEN}" &>".gist"
     popd # ~
 
     pushd /tmp
@@ -66,8 +66,39 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
         -skip qtx11extras \
         -skip qtxmlpatterns
     set +e # Disable temporarily exit on error
-    make -j3 &> genial-travis-qt5.7-1_make.log
+
+    # puts make to the background
+    echo "Begining make"
+    echo ""
+    nohup make -j3 &> genial-travis-qt5.7-1_make.log &
+    make_pid=$(lsof -t 'genial-travis-qt5.7-1_make.log')
+    dots=0
+    while $(ps cax | grep "${make_pid}"); do
+        columns=$(tput cols)
+        if [[ "$dots" -gt "$columns" ]]; then
+            dots=0
+        fi
+        python -c "print('\r' + ('.' * ${dots}) + (' ' * (${columns} - ${dots})), end='')"
+        let dots+=1
+        sleep 5
+    done
+
+    # puts make to the background
+    echo "Begining make install"
+    echo ""
     sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log
+    make_pid=$(lsof -t 'genial-travis-qt5.7-1_make.log')
+    dots=0
+    while $(ps cax | grep "${make_pid}"); do
+        columns=$(tput cols)
+        if [[ "$dots" -gt "$columns" ]]; then
+            dots=0
+        fi
+        python -c "print('\r' + ('.' * ${dots}) + (' ' * (${columns} - ${dots})), end='')"
+        let dots+=1
+        sleep 5
+    done
+
     gist \
         -u b1f0f29a43cc76a36c8f5fdc10528a25 \
         genial-travis-qt5.7-1_make.log \
