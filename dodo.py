@@ -1,5 +1,6 @@
 import glob
 import os
+import platform
 import re
 import shutil
 import tempfile
@@ -26,7 +27,12 @@ DOIT_CONFIG = {
         'download_icons',
         'download_qtbase_ts',
         'update_ts',
-        'generate_qm'
+        'generate_qm',
+        'generate_locale',
+        'generate_icons',
+        'generate_plugins',
+        'compile_qrc',
+        'compile_ui'
     ]
 }
 
@@ -282,3 +288,164 @@ def task_generate_qm():
             'targets': [qtbase_qm_file],
             'task_dep': ['update_ts']
         }
+
+
+def task_generate_locale():
+
+    def create_rcc():
+        if files_found:
+            with open(target, 'w+') as f:
+                f.write(qrc_content)
+
+    resources_dir = "genial/resources"
+    locale_dir = os.path.join(resources_dir, "locale")
+    target = os.path.join(resources_dir, 'locale.qrc')
+    qrc_content = "<RCC>"
+    qrc_content += '\n  <qresource prefix="/locale">'
+    files_found = []
+    for file in os.listdir(locale_dir):
+        if file.endswith(".qm"):
+            files_found.append(os.path.join(locale_dir, file))
+            qrc_content += "\n    <file alias='{}'>locale/{}</file>".format(file, file)
+    qrc_content += "\n  </qresource>"
+    qrc_content += "\n</RCC>\n"
+
+    return {
+        'task_dep': ['generate_qm'],
+        'file_dep': files_found,
+        'actions': [create_rcc],
+        'targets': [target],
+        'verbosity': 2
+    }
+
+
+def task_generate_icons():
+
+    def create_rcc():
+        if files_found:
+            with open(target, 'w+') as f:
+                f.write(qrc_content)
+
+    resources_dir = "genial/resources"
+    icons_dir = os.path.join(resources_dir, "icons")
+    target = os.path.join(resources_dir, 'icons.qrc')
+    qrc_content = "<RCC>"
+    qrc_content += '\n  <qresource prefix="/icons">'
+    files_found = []
+    for file in os.listdir(icons_dir):
+        if file.endswith(".svg"):
+            files_found.append(os.path.join(icons_dir, file))
+            qrc_content += "\n    <file alias='{}'>icons/{}</file>".format(file, file)
+    qrc_content += "\n  </qresource>"
+    qrc_content += "\n</RCC>\n"
+
+    return {
+        'task_dep': ['download_icons'],
+        'file_dep': files_found,
+        'actions': [create_rcc],
+        'targets': [target],
+        'verbosity': 2
+    }
+
+
+def task_generate_plugins():
+
+    def create_rcc():
+        if files_found:
+            with open(target, 'w+') as f:
+                f.write(qrc_content)
+
+    resources_dir = "genial/resources"
+    plugins_dir = os.path.join(resources_dir, "plugins")
+    target = os.path.join(resources_dir, 'plugins.qrc')
+    qrc_content = "<RCC>"
+    qrc_content += '\n  <qresource prefix="/icons">'
+    files_found = []
+
+    current_dir = os.getcwd()
+    os.chdir(resources_dir)
+    for root, dirs, files in os.walk("plugins"):
+        for file in files:
+            if file.endswith(".genial-plugin") or file.endswith(".py"):
+                if platform.system() != "Windows":
+                    plugin_dir = root.replace("plugins/", "")
+                else:
+                    plugin_dir = root.replace("plugins\\", "")
+                files_found.append(os.path.join(plugins_dir, plugin_dir, file))
+                qrc_content += "\n    <file alias='{}'>{}</file>".format(
+                    os.path.join(plugin_dir, file),
+                    os.path.join(root, file)
+                )
+    os.chdir(current_dir)
+
+    qrc_content += "\n  </qresource>"
+    qrc_content += "\n</RCC>\n"
+
+    return {
+        'file_dep': files_found,
+        'actions': [create_rcc],
+        'targets': [target],
+        'verbosity': 2
+    }
+
+
+def task_compile_qrc():
+
+    def check_pyrcc5():
+        if not shutil.which(config['pyrcc5']):
+            return TaskFailed("'{}' not found.".format(config['pyrcc5']))
+
+    resources_dir = "genial/resources"
+
+    yield {
+        'basename': 'compile_qrc',
+        'name': None,
+        'watch': [resources_dir],
+        'doc': 'Compiles *.qrc files to *_rc.py',
+        'task_dep': ['generate_locale', 'generate_icons', 'generate_plugins']
+    }
+
+    for file in os.listdir(resources_dir):
+        if file.endswith(".qrc"):
+            output_file = re.sub(r'(.*)\.qrc', r'\1_rc.py', file)
+            file_full_path = os.path.join(resources_dir, file)
+            output_file_full_path = os.path.join(resources_dir, output_file)
+
+            yield {
+                'name': file,
+                'actions': [(check_pyrcc5),
+                            CmdAction('{} {} -o {}'.format(config['pyrcc5'], file_full_path, output_file_full_path))],
+                'file_dep': [file_full_path],
+                'targets': [output_file_full_path]
+            }
+
+
+def task_compile_ui():
+
+    def check_pyuic5():
+        if not shutil.which(config['pyuic5']):
+            return TaskFailed("'{}' not found.".format(config['pyuic5']))
+
+    ui_dir = "genial/ui"
+    gen_dir = "genial/views/gen"
+
+    yield {
+        'basename': 'compile_ui',
+        'name': None,
+        'watch': [ui_dir],
+        'doc': 'Compiles *.ui files to ui_*.py'
+    }
+
+    for file in os.listdir(ui_dir):
+        if file.endswith(".ui"):
+            output_file = re.sub(r'(.*)\.ui', r'ui_\1.py', file)
+            file_full_path = os.path.join(ui_dir, file)
+            output_file_full_path = os.path.join(gen_dir, output_file)
+
+            yield {
+                'name': file,
+                'actions': [(check_pyuic5),
+                            CmdAction('{} --import-from=genial.resources {} -o {}'.format(config['pyuic5'], file_full_path, output_file_full_path))],
+                'file_dep': [file_full_path],
+                'targets': [output_file_full_path]
+            }
