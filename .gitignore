@@ -21,7 +21,7 @@ CHANGES.rst
 # README.rst
 README*.rst
 # Doit db
-.doit.db
+.doit.db*
 # Generated genial.pro
 genial.pro
 
