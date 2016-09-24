@@ -30,6 +30,7 @@ addons:
       - python-setuptools
       - ruby
 before_install:
+  - source ./.travis/helper.sh
   - source ./.travis/update_packages.sh
   - source ./.travis/qt.sh
   - source ./.travis/pandoc.sh
