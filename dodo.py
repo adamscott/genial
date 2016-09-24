@@ -237,7 +237,6 @@ def task_update_ts():
 
     return {
         'task_dep': ['download_qtbase_ts'],
-        'file_dep': sources + forms,
         'actions': [check_pylupdate5, CmdAction(generate_pylupdate5_cmd, [pro_file_content])],
         'targets': [genial_pro_path] + translations,
         'verbosity': 2
