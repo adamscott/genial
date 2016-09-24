@@ -66,7 +66,8 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OSX
         -skip qtxmlpatterns
 
     set +e # Disable temporarily exit on error
-    travis_wait make -j3 &> genial-travis-qt5.7-1_make.log
+    LOG_FILE_NAME="genial-travis-qt5.7-1_make.log"
+    build_wait make -j3 &> genial-travis-qt5.7-1_make.log
     sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log
     gist \
         -u b1f0f29a43cc76a36c8f5fdc10528a25 \
