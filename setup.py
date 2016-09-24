@@ -18,7 +18,7 @@ def read(*file_names, **kwargs):
     sep = kwargs.get('sep', '\n')
     buf = []
     for filename in file_names:
-        with io.open(filename) as f:
+        with io.open(filename, encoding="utf-8") as f:
             buf.append(f.read())
     return sep.join(buf)
 
