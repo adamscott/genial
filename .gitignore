@@ -24,6 +24,8 @@ README*.rst
 .doit.db*
 # Generated genial.pro
 genial.pro
+# .DS_Store files (OSX)
+.DS_Store
 
 # ---------------------------------------------------------------------
 
