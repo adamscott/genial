@@ -67,8 +67,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
         -skip qtxmlpatterns
 
     set +e # Disable temporarily exit on error
-    travis_wait # Will output a log output every minute for 20 minutes
-    make -j3 &> genial-travis-qt5.7-1_make.log # Logs to file, as it fills up the log limit.
+    travis_wait make -j3 &> genial-travis-qt5.7-1_make.log
     sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log # Logs to file, as it fills up the log limit.
     gist \
         -u b1f0f29a43cc76a36c8f5fdc10528a25 \
