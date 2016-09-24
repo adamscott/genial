@@ -30,8 +30,12 @@ addons:
       - python-setuptools
       - ruby
 before_install:
-  - source ./.travis/before_install.sh
+  - source ./.travis/update_packages.sh
+  - source ./.travis/qt.sh
+  - source ./.travis/pandoc.sh
+  - source ./.travis/pyenv.sh
 install:
-  - source ./.travis/install.sh
+  - pip install doit
+  - doit
 script:
-  - source ./.travis/script.sh
+  - tox
