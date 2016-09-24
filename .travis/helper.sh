@@ -42,10 +42,10 @@ build_wait() {
 
   # Do not want to bust the whole log
   #echo -e "\n${ANSI_GREEN}Log:${ANSI_RESET}\n"
-
   #cat $log_file
 
   # Copy log to the determined log file name
+  echo -e "\n${ANSI_GREEN}Writing log to file '${LOG_FILE_NAME}'.${ANSI_RESET}\n"
   cp $log_file $LOG_FILE_NAME
 
   return $result
