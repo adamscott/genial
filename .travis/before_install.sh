@@ -65,46 +65,17 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
         -skip qtwinextras \
         -skip qtx11extras \
         -skip qtxmlpatterns
+
     set +e # Disable temporarily exit on error
-
-    # puts make to the background
-    echo "Begining make"
-    echo ""
-    nohup make -j3 &> genial-travis-qt5.7-1_make.log &
-    make_pid=$(lsof -t 'genial-travis-qt5.7-1_make.log')
-    dots=0
-    while [[ ! -z "$(ps cax | grep \'${make_pid}\')" ]]; do
-        columns=$(tput cols)
-        if [[ "$dots" -gt "$columns" ]]; then
-            dots=0
-        fi
-        python -c "print('\r' + ('.' * ${dots}) + (' ' * (${columns} - ${dots})), end='')"
-        let dots+=1
-        sleep 5
-    done
-
-    # puts make to the background
-    echo "Begining make install"
-    echo ""
-    sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log
-    make_pid=$(lsof -t 'genial-travis-qt5.7-1_make.log')
-    dots=0
-    while [[ ! -z "$(ps cax | grep \'${make_pid}\')" ]]; do
-        columns=$(tput cols)
-        if [[ "$dots" -gt "$columns" ]]; then
-            dots=0
-        fi
-        python -c "print('\r' + ('.' * ${dots}) + (' ' * (${columns} - ${dots})), end='')"
-        let dots+=1
-        sleep 5
-    done
-
+    travis_wait # Will output a log output every minute for 20 minutes
+    make -j3 &> genial-travis-qt5.7-1_make.log # Logs to file, as it fills up the log limit.
+    sudo make -j3 install &> genial-travis-qt5.7-2_make_install.log # Logs to file, as it fills up the log limit.
     gist \
         -u b1f0f29a43cc76a36c8f5fdc10528a25 \
         genial-travis-qt5.7-1_make.log \
         genial-travis-qt5.7-2_make_install.log
     set -e # Reenable exit on error
-    gist b1f0f29a43cc76a36c8f5fdc10528a25
+
     export PATH=$QT_BASE_DIR/bin:$PATH
     popd # /tmp/qt-everywhere-opensource-src-5.7.0
     popd # /tmp
