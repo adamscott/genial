@@ -9,7 +9,11 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OSX
 
     # write gist token to ~/.gist
     pushd ~
-    python -c """with open('.gist', 'w') as f: f.write('${GITHUB_GIST_TOKEN}')"""
+    python -c """
+import os
+with open('.gist', 'w') as f:
+    f.write(os.environ['GITHUB_GIST_TOKEN'])
+"""
     popd # ~
 
     pushd /tmp
