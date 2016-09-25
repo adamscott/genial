@@ -712,7 +712,7 @@ def task_make_install_qt_source():
         current_path = os.getcwd()
         os.chdir(source_path)
 
-        command = ['make', 'install', '-j{}'.format((multiprocessing.cpu_count() + 1))]
+        command = ['make', 'install', '-j{}'.format(multiprocessing.cpu_count() + 1)]
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
