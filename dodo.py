@@ -3,7 +3,6 @@ import os
 import platform
 import re
 import shutil
-import tempfile
 from urllib import request
 
 from doit.action import CmdAction
