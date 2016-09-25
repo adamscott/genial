@@ -105,13 +105,12 @@ def update_gist(step, file):
         if platform_system == 'Linux': platform_system = 'linux'
         if platform_system == 'Windows': platform_system = 'windows'
 
-        command = ['gist', '-f', '{}-{}.log'.format(step, platform_system), '-u', 'a9ada04ad9ee0b1920994b7a55f22774']
+        command = ['gist', '-f', '{}-{}.log'.format(step, platform_system), '-u', gist_id]
 
         p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.communicate(file)
-        p.wait()
+        out, err = p.communicate(file)
         if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), out))
 
 
 def do_nothing():
@@ -635,12 +634,14 @@ def task_configure_qt_source():
         with open(log_path, 'w') as f:
             f.write(out)
 
+        update_gist('configure', log_path)
+
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
         'task_dep': ['extract_qt_source'],
-        'actions': [configure, (update_gist, ['configure', log_path])],
+        'actions': [configure],
         'file_dep': [source_path],
         'verbosity': 2
     }
@@ -684,12 +685,14 @@ def task_make_qt_source():
         with open(log_path, 'w') as f:
             f.write(out)
 
+        update_gist('make', log_path)
+
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
         'task_dep': ['configure_qt_source'],
-        'actions': [make, (update_gist, ['make', log_path])],
+        'actions': [make],
         'file_dep': [source_path],
         'verbosity': 2
     }
@@ -735,12 +738,14 @@ def task_make_install_qt_source():
         with open(log_path, 'w') as f:
             f.write(out)
 
+        update_gist('make_install', log_path)
+
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
         'task_dep': ['make_qt_source'],
-        'actions': [make_install, (update_gist, ['make_install', log_path])],
+        'actions': [make_install],
         'file_dep': [source_path],
         'verbosity': 2
     }
