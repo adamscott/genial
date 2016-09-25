@@ -36,6 +36,51 @@ DOIT_CONFIG = {
 }
 
 
+''' ============== '''
+''' === CHECKS === '''
+''' ============== '''
+
+
+def check_lxml():
+    try:
+        import lxml
+    except ImportError:
+        return TaskFailed("'lxml' package not found. Please install it. (pip install lxml)")
+
+
+def check_pandoc():
+    if not shutil.which(config['pandoc']):
+        return TaskFailed("'{}' not found.".format(config['pandoc']))
+
+
+def check_pylupdate5():
+    if not shutil.which(config['pylupdate5']):
+        return TaskFailed("'{}' not found.".format(config['pylupdate5']))
+
+
+def check_lrelease():
+    if not shutil.which(config['lrelease']):
+        return TaskFailed("'{}' not found.".format(config['lrelease']))
+
+
+def check_pyrcc5():
+    if not shutil.which(config['pyrcc5']):
+        return TaskFailed("'{}' not found.".format(config['pyrcc5']))
+
+
+def check_pyuic5():
+    if not shutil.which(config['pyuic5']):
+        return TaskFailed("'{}' not found.".format(config['pyuic5']))
+
+
+def do_nothing():
+    pass
+
+
+''' ============= '''
+''' === TASKS === '''
+''' ============= '''
+
 def task_install_dependencies():
     return {
         'file_dep': ['doit_requirements.txt'],
@@ -48,9 +93,6 @@ def task_install_dependencies():
 
 
 def task_rehash_pyenv():
-    def do_nothing():
-        pass
-
     if not shutil.which(config['pyenv']):
         return {
             'actions': [do_nothing]
@@ -64,10 +106,6 @@ def task_rehash_pyenv():
 
 def task_convert_md():
     files = glob.glob("**.md", recursive=True)
-
-    def check_pandoc():
-        if not shutil.which(config['pandoc']):
-            return TaskFailed("'{}' not found.".format(config['pandoc']))
 
     yield {
         'basename': 'convert_md',
@@ -110,12 +148,6 @@ def task_download_icons():
         'go-down'
     ]
     icons_dir = "genial/resources/icons"
-
-    def check_lxml():
-        try:
-            import lxml
-        except ImportError:
-            return TaskFailed("'lxml' package not found. Please install it. (pip install lxml)")
 
     def download_icon(icon):
         from lxml import html
@@ -202,10 +234,6 @@ def task_download_qtbase_ts():
 def task_update_ts():
     genial_pro_path = "genial.pro"
 
-    def check_pylupdate5():
-        if not shutil.which(config['pylupdate5']):
-            return TaskFailed("'{}' not found.".format(config['pylupdate5']))
-
     def generate_pylupdate5_cmd():
         with open(genial_pro_path, 'w+') as pro_file:
             pro_file.write(pro_file_content)
@@ -243,11 +271,6 @@ def task_update_ts():
 
 
 def task_generate_qm():
-
-    def check_lrelease():
-        if not shutil.which(config['lrelease']):
-            return TaskFailed("'{}' not found.".format(config['lrelease']))
-
     locale_dir = "genial/resources/locale"
     languages = []
 
@@ -388,11 +411,6 @@ def task_generate_plugins():
 
 
 def task_compile_qrc():
-
-    def check_pyrcc5():
-        if not shutil.which(config['pyrcc5']):
-            return TaskFailed("'{}' not found.".format(config['pyrcc5']))
-
     resources_dir = "genial/resources"
 
     yield {
@@ -419,11 +437,6 @@ def task_compile_qrc():
 
 
 def task_compile_ui():
-
-    def check_pyuic5():
-        if not shutil.which(config['pyuic5']):
-            return TaskFailed("'{}' not found.".format(config['pyuic5']))
-
     ui_dir = "genial/ui"
     gen_dir = "genial/views/gen"
 
