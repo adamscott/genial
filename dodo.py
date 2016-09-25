@@ -557,13 +557,15 @@ def task_download_qt_source():
                     f.write(chunk)
                     downloaded_size += len(chunk)
                 now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=10) < now:
+                if moment_ago + datetime.timedelta(seconds=1) < now:
                     print(
-                        "Downloaded {}%".format(
-                            math.floor(downloaded_size/int(r.headers['content-length']) * 100) / 100
-                        )
+                        "\rDownloaded {}%".format(
+                            math.floor(downloaded_size/int(r.headers['content-length']) * 100)
+                        ),
+                        end=""
                     )
                     moment_ago = now
+        print("Finished downloading '{}'.".format(qt_url))
 
     return {
         'actions': [(check_module, ['requests']), download_file],
