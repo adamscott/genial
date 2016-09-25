@@ -124,6 +124,7 @@ def do_nothing():
 ''' === TASKS === '''
 ''' ============= '''
 
+
 def task_install_dependencies():
     return {
         'file_dep': ['doit_requirements.txt'],
