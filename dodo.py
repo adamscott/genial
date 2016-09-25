@@ -565,6 +565,7 @@ def task_download_qt_source():
                         end=""
                     )
                     moment_ago = now
+        print("")
         print("Finished downloading '{}'.".format(qt_url))
 
     return {
