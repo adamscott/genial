@@ -16,7 +16,8 @@ config = {
     'pyrcc5': get_var('pyrcc5', 'pyrcc5'),
     'pyuic5': get_var('pyuic5', 'pyuic5'),
     'pip': get_var('pip', 'pip'),
-    'pyenv': get_var('pyenv', 'pyenv')
+    'pyenv': get_var('pyenv', 'pyenv'),
+    'pyqtdeploycli': get_var('pyqtdeploycli', 'pyqtdeploycli')
 }
 
 DOIT_CONFIG = {
@@ -71,6 +72,11 @@ def check_pyrcc5():
 def check_pyuic5():
     if not shutil.which(config['pyuic5']):
         return TaskFailed("'{}' not found.".format(config['pyuic5']))
+
+
+def check_pyqtdeploycli():
+    if not shutil.which(config['pyqtdeploycli']):
+        return TaskFailed("'{}' not found.".format(config['pyqtdeploycli']))
 
 
 def do_nothing():
@@ -462,3 +468,196 @@ def task_compile_ui():
                 'file_dep': [file_full_path],
                 'targets': [output_file_full_path]
             }
+
+
+def task_create_pdy():
+    target_pdy = 'genial.pdy'
+
+    default_python_major = 3
+    default_python_minor = 5
+    default_python_patch = 2
+    default_source_dir = os.path.join(
+        os.path.expanduser('~'),
+        '.pyenv/sources/{}.{}.{}/Python'.format(
+            default_python_major, default_python_minor, default_python_patch
+        )
+    )
+    default_include_dir = os.path.join(
+        os.path.expanduser('~'),
+        '.pyenv/versions/{}.{}.{}/include/python{}.{}m'.format(
+            default_python_major, default_python_minor, default_python_patch,
+            default_python_major, default_python_minor
+        )
+    )
+    default_python_library = os.path.join(
+        os.path.expanduser('~'),
+        '.pyenv/versions/{}.{}.{}/lib/libpython{}.{}m.a'.format(
+            default_python_major, default_python_minor, default_python_patch,
+            default_python_major, default_python_minor
+        )
+    )
+    default_standard_library_dir = os.path.join(
+        os.path.expanduser('~'),
+        '.pyenv/versions/{}.{}.{}/lib/python{}.{}'.format(
+            default_python_major, default_python_minor, default_python_patch,
+            default_python_major, default_python_minor
+        )
+    )
+
+    exclusion_list = [
+        re.compile('.*\.pyc$'), re.compile('.*\.pyd$'), re.compile('.*\.pyo$'),
+        re.compile('.*\.pyx$'), re.compile('.*\.pxi$'), re.compile('^__pycache__$'),
+        re.compile('.*-info$'), re.compile('.*-info$'), re.compile('^EGG_INFO$'),
+        re.compile('.*\.so$'), re.compile('^\.DS_Store$')
+    ]
+
+    def write_pdy_to_file(python_major, python_minor, python_patch, source_dir,
+                          include_dir, python_library, standard_library_dir):
+        from lxml import etree
+
+        def package_content(path):
+            def is_excluded(x):
+                for exclusion_element in exclusion_list:
+                    if exclusion_element.search(x):
+                        return True
+
+            name = os.path.basename(os.path.normpath(path))
+            node = etree.Element('PackageContent')
+            node.set('name', name)
+            node.set('included', "1")
+            if os.path.isfile(path):
+                node.set('isdirectory', '0')
+            else:
+                node.set('isdirectory', '1')
+                for file in os.listdir(path):
+                    if not is_excluded(file):
+                        node.append(package_content(os.path.join(path, file)))
+            return node
+
+        project = etree.Element("Project")
+        project.set('version', "6")
+
+        python = etree.SubElement(project, "Python")
+        python.set('hostinterpreter', '')
+        python.set('major', '{}'.format(python_major))
+        python.set('minor', '{}'.format(python_minor))
+        python.set('patch', '{}'.format(python_patch))
+        python.set('platformpython', "linux-* macx win32")
+        python.set('sourcedir', source_dir)
+        python.set('ssl', "0")
+        python.set('targetincludedir', include_dir)
+        python.set('targetlibrary', python_library)
+        python.set('targetstdlibdir', standard_library_dir)
+
+        application = etree.SubElement(project, "Application")
+        application.set('entrypoint', "")
+        application.set('isbundle', "1")
+        application.set('isconsole', "0")
+        application.set('ispyqt5', "1")
+        application.set('name', "Genial")
+        application.set('script', "genial.py")
+        application.set('syspath', "")
+
+        package = etree.SubElement(application, "Package")
+        package.set('name', ".")
+        package.append(package_content('genial'))
+        genial_py_file = etree.SubElement(package, "PackageContent")
+        genial_py_file.set('name', 'genial.py')
+        genial_py_file.set('included', "1")
+        genial_py_file.set('isdirectory', "0")
+        license_file = etree.SubElement(package, "PackageContent")
+        license_file.set('name', 'LICENSE')
+        license_file.set('included', "1")
+        license_file.set('isdirectory', "0")
+
+        exclude_pyc = etree.SubElement(package, "Exclude")
+        exclude_pyc.set('name', "*.pyc")
+        exclude_pyd = etree.SubElement(package, "Exclude")
+        exclude_pyd.set('name', "*.pyd")
+        exclude_pyo = etree.SubElement(package, "Exclude")
+        exclude_pyo.set('name', "*.pyo")
+        exclude_pyx = etree.SubElement(package, "Exclude")
+        exclude_pyx.set('name', "*.pyx")
+        exclude_pxi = etree.SubElement(package, "Exclude")
+        exclude_pxi.set('name', "*.pxi")
+        exclude_pycache = etree.SubElement(package, "Exclude")
+        exclude_pycache.set('name', "__pycache__")
+        exclude_info = etree.SubElement(package, "Exclude")
+        exclude_info.set('name', "*-info")
+        exclude_egginfo = etree.SubElement(package, "Exclude")
+        exclude_egginfo.set('name', "EGG_INFO")
+        exclude_so = etree.SubElement(package, "Exclude")
+        exclude_so.set('name', "*.so")
+
+        pyqtmodule_sip = etree.SubElement(project, "PyQtModule")
+        pyqtmodule_sip.set('name', "sip")
+        pyqtmodule_qtcore = etree.SubElement(project, "PyQtModule")
+        pyqtmodule_qtcore.set('name', "QtCore")
+        pyqtmodule_qtwidgets = etree.SubElement(project, "PyQtModule")
+        pyqtmodule_qtwidgets.set('name', "QtWidgets")
+        pyqtmodule_qtgui = etree.SubElement(project, "PyQtModule")
+        pyqtmodule_qtgui.set('name', "QtGui")
+
+        others = etree.SubElement(project, "Others")
+        others.set('builddir', "build")
+        others.set('qmake', "$SYSROOT/qt-5.5.1/bin/qmake")
+
+        with open(target_pdy, 'wb') as f:
+            f.write(etree.tostring(project, pretty_print=True, xml_declaration=True, encoding='utf-8'))
+
+    return {
+        'actions': [check_lxml, check_pyqtdeploycli, write_pdy_to_file],
+        'params': [
+            {
+                'name': 'python_major',
+                'long': 'python-major',
+                'type': int,
+                'default': default_python_major,
+                'help': 'Python major release to use.'
+            },
+            {
+                'name': 'python_minor',
+                'long': 'python-minor',
+                'type': int,
+                'default': default_python_minor,
+                'help': 'Python minor release to use.'
+            },
+            {
+                'name': 'python_patch',
+                'long': 'python-patch',
+                'type': int,
+                'default': default_python_patch,
+                'help': 'Python patch release to use.'
+            },
+            {
+                'name': 'source_dir',
+                'long': 'source-dir',
+                'type': str,
+                'default': default_source_dir,
+                'help': 'Python source directory.'
+            },
+            {
+                'name': 'include_dir',
+                'long': 'include-dir',
+                'type': str,
+                'default': default_include_dir,
+                'help': 'Target include directory.'
+            },
+            {
+                'name': 'python_library',
+                'long': 'python-library',
+                'type': str,
+                'default': default_python_library,
+                'help': 'Target Python library.'
+            },
+            {
+                'name': 'standard_library_dir',
+                'long': 'standard-library-dir',
+                'type': str,
+                'default': default_standard_library_dir,
+                'help': 'Target standard library directory.'
+            }
+        ],
+        'targets': [target_pdy],
+        'verbosity': 2
+    }

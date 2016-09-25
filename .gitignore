@@ -26,6 +26,8 @@ README*.rst
 genial.pro
 # .DS_Store files (OSX)
 .DS_Store
+# Generated genial.pdy
+genial.pdy
 
 # ---------------------------------------------------------------------
 
