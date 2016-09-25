@@ -608,7 +608,8 @@ def task_configure_qt_source():
         command = ['./configure', '-prefix', config['qt-install-dir'], '-static', '-release', '-nomake', 'examples']
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
         except FileNotFoundError as e:
             raise e
 
@@ -654,7 +655,8 @@ def task_make_qt_source():
         command = ['make', '-j{}'.format((multiprocessing.cpu_count() + 1))]
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
         except FileNotFoundError as e:
             raise e
 
@@ -702,7 +704,8 @@ def task_make_install_qt_source():
         command = ['make', 'install', '-j{}'.format((multiprocessing.cpu_count() + 1))]
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
         except FileNotFoundError as e:
             raise e
 
