@@ -38,14 +38,14 @@ default = {
     'python-install-dir': os.path.join('pyqtdeploy', 'Python-3.5.2')
 }
 
-system_platform = platform.platform()
-system_arch = platform.architecture()[0][:2]
-if system_platform == "Linux":
-    default['python-target'] = 'linux-{}'.format(system_arch)
-elif system_platform == "Darwin":
+platform_system = platform.system()
+platform_arch = platform.architecture()[0][:2]
+if platform_system == "Linux":
+    default['python-target'] = 'linux-{}'.format(platform_arch)
+elif platform_system == "Darwin":
     default['python-target'] = 'osx-64'
-elif system_platform == "Windows":
-    default['python-target'] = 'win-{}'.format(system_arch)
+elif platform_system == "Windows":
+    default['python-target'] = 'win-{}'.format(platform_arch)
 
 config = {
     'pandoc': get_var('pandoc', default['pandoc']),
