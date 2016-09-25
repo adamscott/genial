@@ -3,7 +3,6 @@ import os
 import platform
 import re
 import shutil
-from urllib import request
 
 from doit.action import CmdAction
 from doit.exceptions import TaskFailed
@@ -47,6 +46,13 @@ def check_lxml():
         import lxml
     except ImportError:
         return TaskFailed("'lxml' package not found. Please install it. (pip install lxml)")
+
+
+def check_requests():
+    try:
+        import requests
+    except ImportError:
+        return TaskFailed("'requests' package not found. Please install it. (pip install requests)")
 
 
 def check_pandoc():
@@ -156,19 +162,19 @@ def task_download_icons():
     icons_dir = "genial/resources/icons"
 
     def download_icon(icon):
+        import requests
         from lxml import html
+
         if not os.path.isfile(get_icon_path(icon)):
             download_page_url = "https://commons.wikimedia.org/wiki/File:Gnome-{}.svg".format(icon)
-            with request.urlopen(download_page_url) as download_page_response:
-                download_page_content = download_page_response.read()
-                download_page_tree = html.fromstring(download_page_content)
-                icon_urls = download_page_tree.xpath('//div[@class="fullImageLink"]/a/@href')
-                if len(icon_urls) > 0:
-                    with request.urlopen(icon_urls[0]) as icon_response:
-                        icon_content = icon_response.read()
-                        os.makedirs(icons_dir, exist_ok=True)
-                        with open(os.path.join(icons_dir, icon + '.svg'), '+wb') as f:
-                            f.write(icon_content)
+            download_page_response = requests.get(download_page_url)
+            download_page_tree = html.fromstring(download_page_response.text)
+            icon_urls = download_page_tree.xpath('//div[@class="fullImageLink"]/a/@href')
+            if len(icon_urls) > 0:
+                icon_response = requests.get(icon_urls[0])
+                os.makedirs(icons_dir, exist_ok=True)
+                with open(os.path.join(icons_dir, icon + '.svg'), '+wb') as f:
+                    f.write(icon_response.content)
 
     def get_icon_path(icon):
         return os.path.join(icons_dir, '{}.svg'.format(icon))
@@ -189,7 +195,7 @@ def task_download_icons():
         icon_path = get_icon_path(icon)
         yield {
             'name': icon,
-            'actions': [(check_lxml), (download_icon, [icon])],
+            'actions': [(check_requests), (check_lxml), (download_icon, [icon])],
             'targets': [icon_path],
             'uptodate': [(check_outdated, [icon], {})]
         }
@@ -205,14 +211,14 @@ def task_download_qtbase_ts():
                 languages.append(match.group(1))
 
     def download_qtbase_ts(language):
+        import requests
+
         language_qtbase_ts_path = get_language_qtbase_ts_path(language)
         if not os.path.isfile(language_qtbase_ts_path):
             url = "http://l10n-files.qt.io/l10n-files/qt5-old/qtbase_{}.ts".format(language)
-            with request.urlopen(url) as response:
-                content = response.read()
-                with open(language_qtbase_ts_path, "wb+") as f:
-                    f.write(content)
-                    f.close()
+            response = requests.get(url)
+            with open(language_qtbase_ts_path, "wb+") as f:
+                f.write(response.content)
 
     def get_language_qtbase_ts_path(language):
         return os.path.join(locale_dir, 'qtbase_{}.ts'.format(language))
@@ -233,7 +239,7 @@ def task_download_qtbase_ts():
         language_qtbase_ts_path = get_language_qtbase_ts_path(language)
         yield {
             'name': language,
-            'actions': [(download_qtbase_ts, [language])],
+            'actions': [check_requests, (download_qtbase_ts, [language])],
             'targets': [language_qtbase_ts_path],
             'uptodate': [(check_outdated, [language])]
         }
