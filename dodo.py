@@ -8,15 +8,36 @@ from doit.action import CmdAction
 from doit.exceptions import TaskFailed
 from doit import get_var
 
+
+
+default = {
+    'pandoc': 'pandoc',
+    'pylupdate5': 'pylupdate5',
+    'lrelease': 'lrelease',
+    'pyrcc5': 'pyrcc5',
+    'pyuic5': 'pyuic5',
+    'pip': 'pip',
+    'pyenv': 'pyenv',
+    'pyqtdeploycli': 'pyqtdeploycli',
+    'sysroot-dir': 'pyqtdeploy',
+    'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
+    'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.zip',
+    'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0')
+}
+
 config = {
-    'pandoc': get_var('pandoc', 'pandoc'),
-    'pylupdate5': get_var('pylupdate5', 'pylupdate5'),
-    'lrelease': get_var('lrelease', 'lrelease'),
-    'pyrcc5': get_var('pyrcc5', 'pyrcc5'),
-    'pyuic5': get_var('pyuic5', 'pyuic5'),
-    'pip': get_var('pip', 'pip'),
-    'pyenv': get_var('pyenv', 'pyenv'),
-    'pyqtdeploycli': get_var('pyqtdeploycli', 'pyqtdeploycli')
+    'pandoc': get_var('pandoc', default['pandoc']),
+    'pylupdate5': get_var('pylupdate5', default['pylupdate5']),
+    'lrelease': get_var('lrelease', default['lrelease']),
+    'pyrcc5': get_var('pyrcc5', default['pyrcc5']),
+    'pyuic5': get_var('pyuic5', default['pyuic5']),
+    'pip': get_var('pip', default['pip']),
+    'pyenv': get_var('pyenv', default['pyenv']),
+    'pyqtdeploycli': get_var('pyqtdeploycli', default['pyqtdeploycli']),
+    'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
+    'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
+    'qt-source-url': get_var('qt-source-url', default['qt-source-url']),
+    'qt-install-dir': get_var('qt-install-dir', default['qt-install-dir'])
 }
 
 DOIT_CONFIG = {
