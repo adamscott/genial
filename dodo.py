@@ -671,7 +671,7 @@ def task_make_install_qt_source():
 
     os.makedirs(config['qt-install-dir'], exist_ok=True)
 
-    def make():
+    def make_install():
         current_path = os.getcwd()
         os.chdir(source_path)
 
@@ -703,7 +703,7 @@ def task_make_install_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
-        'actions': [make],
+        'actions': [make_install],
         'file_dep': [source_path],
         'verbosity': 2
     }
