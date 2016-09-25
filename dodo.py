@@ -1,5 +1,6 @@
 import datetime
 import glob
+import importlib
 import math
 import multiprocessing
 import os
@@ -27,6 +28,8 @@ default = {
     'pip': 'pip',
     'pyenv': 'pyenv',
     'pyqtdeploycli': 'pyqtdeploycli',
+    'make': 'make',
+    'gist': 'gist',
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
     'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.zip',
@@ -42,6 +45,7 @@ config = {
     'pip': get_var('pip', default['pip']),
     'pyenv': get_var('pyenv', default['pyenv']),
     'pyqtdeploycli': get_var('pyqtdeploycli', default['pyqtdeploycli']),
+    'gist': get_var('gist', default['gist']),
     'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
     'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
     'qt-source-url': get_var('qt-source-url', default['qt-source-url']),
@@ -72,48 +76,42 @@ DOIT_CONFIG = {
 ''' ============== '''
 
 
-def check_lxml():
+def is_continuous_integration():
+    return os.environ.get('CONTINUOUS_INTEGRATION') is not None
+
+
+def check_cmd(command):
+    if not shutil.which(command):
+        return TaskFailed("'{}' not found.".format(command))
+
+
+def check_module(module):
     try:
-        import lxml
+        importlib.import_module(module)
     except ImportError:
-        return TaskFailed("'lxml' package not found. Please install it. (pip install lxml)")
+        return TaskFailed("'{}' module not found.")
 
 
-def check_requests():
-    try:
-        import requests
-    except ImportError:
-        return TaskFailed("'requests' package not found. Please install it. (pip install requests)")
+''' ================= '''
+''' === UTILITIES === '''
+''' ================= '''
 
 
-def check_pandoc():
-    if not shutil.which(config['pandoc']):
-        return TaskFailed("'{}' not found.".format(config['pandoc']))
+def update_gist(step, file):
+    if is_continuous_integration() and check_cmd('gist') is not TaskFailed:
+        gist_id = 'a9ada04ad9ee0b1920994b7a55f22774'
+        platform_system = platform.system()
+        if platform_system == 'Darwin': platform_system = 'osx'
+        if platform_system == 'Linux': platform_system = 'linux'
+        if platform_system == 'Windows': platform_system = 'windows'
 
+        command = ['gist', '-f', '{}-{}.log'.format(step, platform_system), '-u', 'a9ada04ad9ee0b1920994b7a55f22774']
 
-def check_pylupdate5():
-    if not shutil.which(config['pylupdate5']):
-        return TaskFailed("'{}' not found.".format(config['pylupdate5']))
-
-
-def check_lrelease():
-    if not shutil.which(config['lrelease']):
-        return TaskFailed("'{}' not found.".format(config['lrelease']))
-
-
-def check_pyrcc5():
-    if not shutil.which(config['pyrcc5']):
-        return TaskFailed("'{}' not found.".format(config['pyrcc5']))
-
-
-def check_pyuic5():
-    if not shutil.which(config['pyuic5']):
-        return TaskFailed("'{}' not found.".format(config['pyuic5']))
-
-
-def check_pyqtdeploycli():
-    if not shutil.which(config['pyqtdeploycli']):
-        return TaskFailed("'{}' not found.".format(config['pyqtdeploycli']))
+        p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.communicate(file)
+        p.wait()
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
 
 def do_nothing():
@@ -162,10 +160,11 @@ def task_convert_md():
         file_name = os.path.splitext(os.path.basename(file))
         dir_name = os.path.dirname(file)
         rst_file_path = os.path.join(dir_name, file_name[0] + ".rst")
+        pandoc = config['pandoc']
         yield {
             'name': file,
             'file_dep': [file],
-            'actions': [(check_pandoc), '{} -s -S {} -o {}'.format(config['pandoc'], file, rst_file_path)],
+            'actions': [(check_cmd, [pandoc]), '{} -s -S {} -o {}'.format(pandoc, file, rst_file_path)],
             'targets': [rst_file_path]
         }
 
@@ -227,7 +226,7 @@ def task_download_icons():
         icon_path = get_icon_path(icon)
         yield {
             'name': icon,
-            'actions': [(check_requests), (check_lxml), (download_icon, [icon])],
+            'actions': [(check_module, ['requests']), (check_module, ['lxml']), (download_icon, [icon])],
             'targets': [icon_path],
             'uptodate': [(check_outdated, [icon], {})]
         }
@@ -271,7 +270,7 @@ def task_download_qtbase_ts():
         language_qtbase_ts_path = get_language_qtbase_ts_path(language)
         yield {
             'name': language,
-            'actions': [check_requests, (download_qtbase_ts, [language])],
+            'actions': [(check_module, ['requests']), (download_qtbase_ts, [language])],
             'targets': [language_qtbase_ts_path],
             'uptodate': [(check_outdated, [language])]
         }
@@ -310,7 +309,7 @@ def task_update_ts():
 
     return {
         'task_dep': ['download_qtbase_ts'],
-        'actions': [check_pylupdate5, CmdAction(generate_pylupdate5_cmd, [pro_file_content])],
+        'actions': [(check_cmd, ['pylupdate5']), CmdAction(generate_pylupdate5_cmd, [pro_file_content])],
         'targets': [genial_pro_path] + translations,
         'verbosity': 2
     }
@@ -340,9 +339,14 @@ def task_generate_qm():
         qtbase_ts_file = os.path.join(locale_dir, "qtbase_{}.ts".format(language))
         qtbase_qm_file = os.path.join(locale_dir, "qtbase_{}.qm".format(language))
 
+        lrelease = config['lrelease']
+
         yield {
             'name': 'genial_' + language,
-            'actions': [(check_lrelease), CmdAction('{} {} -qm {}'.format(config['lrelease'], genial_ts_file, genial_qm_file))],
+            'actions': [
+                (check_cmd, [lrelease]),
+                CmdAction('{} {} -qm {}'.format(lrelease, genial_ts_file, genial_qm_file))
+            ],
             'file_dep': [genial_ts_file],
             'targets': [genial_qm_file],
             'task_dep': ['update_ts']
@@ -350,7 +354,10 @@ def task_generate_qm():
 
         yield {
             'name': 'qtbase_' + language,
-            'actions': [(check_lrelease), CmdAction('{} {} -qm {}'.format(config['lrelease'], qtbase_ts_file, qtbase_qm_file))],
+            'actions': [
+                (check_cmd, [lrelease]),
+                CmdAction('{} {} -qm {}'.format(config['lrelease'], qtbase_ts_file, qtbase_qm_file))
+            ],
             'file_dep': [qtbase_ts_file],
             'targets': [qtbase_qm_file],
             'task_dep': ['update_ts']
@@ -473,10 +480,12 @@ def task_compile_qrc():
             file_full_path = os.path.join(resources_dir, file)
             output_file_full_path = os.path.join(resources_dir, output_file)
 
+            pyrcc5 = config['pyrcc5']
+
             yield {
                 'name': file,
-                'actions': [(check_pyrcc5),
-                            CmdAction('{} {} -o {}'.format(config['pyrcc5'], file_full_path, output_file_full_path))],
+                'actions': [(check_cmd, [pyrcc5]),
+                            CmdAction('{} {} -o {}'.format(pyrcc5, file_full_path, output_file_full_path))],
                 'file_dep': [file_full_path],
                 'targets': [output_file_full_path]
             }
@@ -499,10 +508,18 @@ def task_compile_ui():
             file_full_path = os.path.join(ui_dir, file)
             output_file_full_path = os.path.join(gen_dir, output_file)
 
+            pyuic5 = config['pyuic5']
+
             yield {
                 'name': file,
-                'actions': [(check_pyuic5),
-                            CmdAction('{} --import-from=genial.resources {} -o {}'.format(config['pyuic5'], file_full_path, output_file_full_path))],
+                'actions': [
+                    (check_cmd, [pyuic5]),
+                    CmdAction(
+                        '{} --import-from=genial.resources {} -o {}'.format(
+                            pyuic5, file_full_path, output_file_full_path
+                        )
+                    )
+                ],
                 'file_dep': [file_full_path],
                 'targets': [output_file_full_path]
             }
@@ -549,7 +566,7 @@ def task_download_qt_source():
                     moment_ago = now
 
     return {
-        'actions': [check_requests, download_file],
+        'actions': [(check_module, ['requests']), download_file],
         'targets': [target_file_path],
         'verbosity': 2
     }
@@ -580,6 +597,7 @@ def task_configure_qt_source():
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
+    log_path = ""
 
     def configure():
         current_path = os.getcwd()
@@ -604,6 +622,7 @@ def task_configure_qt_source():
 
         os.chdir(current_path)
 
+        nonlocal log_path
         log_path = os.path.join(source_path, 'configure.log')
         print('Configure log written to {}'.format(log_path))
         with open(log_path, 'w') as f:
@@ -613,7 +632,7 @@ def task_configure_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
-        'actions': [configure],
+        'actions': [configure, (update_gist, ['configure', log_path])],
         'file_dep': [source_path],
         'verbosity': 2
     }
@@ -624,6 +643,7 @@ def task_make_qt_source():
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
+    log_path = ""
 
     def make():
         current_path = os.getcwd()
@@ -648,6 +668,7 @@ def task_make_qt_source():
 
         os.chdir(current_path)
 
+        nonlocal log_path
         log_path = os.path.join(source_path, 'make.log')
         print('Make log written to {}'.format(log_path))
         with open(log_path, 'w') as f:
@@ -657,7 +678,7 @@ def task_make_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
-        'actions': [make],
+        'actions': [make, (update_gist, ['make', log_path])],
         'file_dep': [source_path],
         'verbosity': 2
     }
@@ -668,6 +689,7 @@ def task_make_install_qt_source():
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
+    log_path = ""
 
     os.makedirs(config['qt-install-dir'], exist_ok=True)
 
@@ -694,6 +716,7 @@ def task_make_install_qt_source():
 
         os.chdir(current_path)
 
+        nonlocal log_path
         log_path = os.path.join(source_path, 'make_install.log')
         print('Make install log written to {}'.format(log_path))
         with open(log_path, 'w') as f:
@@ -703,7 +726,7 @@ def task_make_install_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
-        'actions': [make_install],
+        'actions': [make_install, (update_gist, ['make_install', log_path])],
         'file_dep': [source_path],
         'verbosity': 2
     }
@@ -845,7 +868,7 @@ def task_create_pdy():
             f.write(etree.tostring(project, pretty_print=True, xml_declaration=True, encoding='utf-8'))
 
     return {
-        'actions': [check_lxml, check_pyqtdeploycli, write_pdy_to_file],
+        'actions': [(check_module, ['lxml']), (check_cmd, ['pyqtdeploycli']), write_pdy_to_file],
         'params': [
             {
                 'name': 'python_major',
