@@ -585,7 +585,7 @@ def task_extract_qt_source():
 
     def unzip_file():
         with zipfile.ZipFile(zip_file_path) as zf:
-            zf.extractall(path=target_path)
+            zf.extractall()
 
     return {
         'task_dep': ['download_qt_source'],
