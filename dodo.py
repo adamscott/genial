@@ -586,7 +586,7 @@ def task_extract_qt_source():
 
     def unzip_file():
         with zipfile.ZipFile(zip_file_path) as zf:
-            zf.extractall()
+            zf.extractall(path=config['sysroot-cache-dir'])
 
     return {
         'task_dep': ['download_qt_source'],
