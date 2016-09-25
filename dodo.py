@@ -188,6 +188,7 @@ def task_download_icons():
             'uptodate': [(check_outdated, [icon], {})]
         }
 
+
 def task_download_qtbase_ts():
     locale_dir = "genial/resources/locale"
     languages = []
@@ -230,6 +231,7 @@ def task_download_qtbase_ts():
             'targets': [language_qtbase_ts_path],
             'uptodate': [(check_outdated, [language])]
         }
+
 
 def task_update_ts():
     genial_pro_path = "genial.pro"
