@@ -107,7 +107,8 @@ def update_gist(step, file):
 
         command = ['gist', '-f', '{}-{}.log'.format(step, platform_system), '-u', gist_id]
 
-        p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
+                             universal_newlines=True)
         out, err = p.communicate(file)
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), out))
