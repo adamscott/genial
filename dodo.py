@@ -80,16 +80,18 @@ def is_continuous_integration():
     return os.environ.get('CONTINUOUS_INTEGRATION') is not None
 
 
-def check_cmd(command):
-    if not shutil.which(command):
-        return TaskFailed("'{}' not found.".format(command))
+def check_cmd(*commands):
+    for command in commands:
+        if not shutil.which(command):
+            return TaskFailed("'{}' not found.".format(command))
 
 
-def check_module(module):
-    try:
-        importlib.import_module(module)
-    except ImportError:
-        return TaskFailed("'{}' module not found.")
+def check_module(*modules):
+    for module in modules:
+        try:
+            importlib.import_module(module)
+        except ImportError:
+            return TaskFailed("'{}' module not found.")
 
 
 ''' ================= '''
