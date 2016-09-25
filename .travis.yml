@@ -41,5 +41,6 @@ install:
   - pip install doit
   - doit
   - doit make_install_qt_source
+  - doit make_install_python_source
 script:
   - tox

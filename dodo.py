@@ -18,7 +18,6 @@ from doit.exceptions import TaskFailed, TaskError
 from doit import get_var
 
 
-
 default = {
     'pandoc': 'pandoc',
     'pylupdate5': 'pylupdate5',
@@ -30,11 +29,23 @@ default = {
     'pyqtdeploycli': 'pyqtdeploycli',
     'make': 'make',
     'gist': 'gist',
+    'tar': 'tar',
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
     'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.zip',
-    'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0')
+    'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
+    'python-source-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
+    'python-install-dir': os.path.join('pyqtdeploy', 'Python-3.5.2')
 }
+
+system_platform = platform.platform()
+system_arch = platform.architecture()[0][:2]
+if system_platform == "Linux":
+    default['python-target'] = 'linux-{}'.format(system_arch)
+elif system_platform == "Darwin":
+    default['python-target'] = 'osx-64'
+elif system_platform == "Windows":
+    default['python-target'] = 'win-{}'.format(system_arch)
 
 config = {
     'pandoc': get_var('pandoc', default['pandoc']),
@@ -46,10 +57,14 @@ config = {
     'pyenv': get_var('pyenv', default['pyenv']),
     'pyqtdeploycli': get_var('pyqtdeploycli', default['pyqtdeploycli']),
     'gist': get_var('gist', default['gist']),
+    'tar': get_var('tar', default['tar']),
     'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
     'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
     'qt-source-url': get_var('qt-source-url', default['qt-source-url']),
-    'qt-install-dir': get_var('qt-install-dir', default['qt-install-dir'])
+    'qt-install-dir': get_var('qt-install-dir', default['qt-install-dir']),
+    'python-source-url': get_var('python-source-url', default['python-source-url']),
+    'python-install-dir': get_var('python-install-dir', default['python-install-dir']),
+    'python-target': get_var('python-target', default['python-target'])
 }
 
 DOIT_CONFIG = {
@@ -114,6 +129,47 @@ def update_gist(step, file):
         out, err = p.communicate(file)
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), out))
+
+
+def download_file(url, target_path):
+    import requests
+
+    r = requests.get(url, stream=True)
+    start = datetime.datetime.now()
+    moment_ago = start
+    downloaded_size = 0
+    print("Downloading {}:".format(url))
+    with open(target_path, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+                downloaded_size += len(chunk)
+            now = datetime.datetime.now()
+            if moment_ago + datetime.timedelta(seconds=1) < now:
+                print(
+                    "\rDownloaded {}%".format(
+                        math.floor(downloaded_size / int(r.headers['content-length']) * 100)
+                    ),
+                    end=""
+                )
+                moment_ago = now
+    print("")
+    print("Finished downloading '{}'.".format(url))
+
+
+def extract_zip(zip_path, extract_path):
+    with zipfile.ZipFile(zip_path) as zf:
+        zf.extractall(path=extract_path)
+
+
+def extract_xz(xz_path, extract_path):
+    current_path = os.getcwd()
+    xz_parent_dir = os.path.dirname(xz_path)
+    xz_basename = os.path.basename(xz_path)
+
+    cp = subprocess.run(['tar', 'zxvf', xz_basename, '-C', extract_path])
+    if cp.returncode > 0:
+        return TaskFailed('tar extraction failed. \n{}'.format(cp.stderr))
 
 
 def do_nothing():
@@ -545,34 +601,9 @@ def task_download_qt_source():
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
     os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
 
-    def download_file():
-        import requests
-
-        r = requests.get(qt_url, stream=True)
-        start = datetime.datetime.now()
-        moment_ago = start
-        downloaded_size = 0
-        print("Downloading {}:".format(qt_url))
-        with open(target_file_path, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-                    downloaded_size += len(chunk)
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=1) < now:
-                    print(
-                        "\rDownloaded {}%".format(
-                            math.floor(downloaded_size/int(r.headers['content-length']) * 100)
-                        ),
-                        end=""
-                    )
-                    moment_ago = now
-        print("")
-        print("Finished downloading '{}'.".format(qt_url))
-
     return {
         'task_dep': ['create_sysroot'],
-        'actions': [(check_module, ['requests']), download_file],
+        'actions': [(check_module, ['requests']), (download_file, [qt_url, target_file_path])],
         'targets': [target_file_path],
         'verbosity': 2
     }
@@ -586,13 +617,11 @@ def task_extract_qt_source():
     target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
     os.makedirs(target_path, exist_ok=True)
 
-    def unzip_file():
-        with zipfile.ZipFile(zip_file_path) as zf:
-            zf.extractall(path=config['sysroot-cache-dir'])
+    sysroot_cache_dir = config['sysroot-cache-dir']
 
     return {
         'task_dep': ['download_qt_source'],
-        'actions': [unzip_file],
+        'actions': [(extract_zip, [zip_file_path, sysroot_cache_dir])],
         'file_dep': [zip_file_path],
         'targets': [target_path],
         'verbosity': 2
@@ -750,6 +779,186 @@ def task_make_install_qt_source():
         'task_dep': ['make_qt_source'],
         'actions': [make_install],
         'file_dep': [source_path],
+        'verbosity': 2
+    }
+
+
+def task_download_python_source():
+    python_url = config['python-source-url']
+    target_file = os.path.basename(urlparse(python_url).path)
+    target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
+    os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
+
+    return {
+        'task_dep': ['create_sysroot'],
+        'actions': [(check_module, ['requests']), (download_file, [python_url, target_file_path])],
+        'targets': [target_file_path],
+        'verbosity': 2
+    }
+
+
+def task_extract_python_source():
+    python_url = config['python-source-url']
+    xz_file = os.path.basename(urlparse(python_url).path)
+    xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
+
+    tar = config['tar']
+    sysroot_cache_dir = config['sysroot-cache-dir']
+
+    return {
+        'task_dep': ['download_python_source'],
+        'actions': [(check_cmd, [tar]), (extract_xz, [xz_file_path, sysroot_cache_dir])]
+    }
+
+
+def task_configure_python_source():
+    def configure():
+        current_path = os.getcwd()
+        os.chdir(config['python-install-dir'])
+
+        command = ["pyqtdeploycli", "--package", "python", "--target", config['python-target'], "configure"]
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('*', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        out, err = p.communicate()
+        print(out)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+
+    return {
+        'task_dep': ['extract_python_source'],
+        'actions': [configure],
+        'verbosity': 2
+    }
+
+
+def task_qmake_python_source():
+    def qmake():
+        current_path = os.getcwd()
+        os.chdir(config['python-install-dir'])
+
+        command = ["qmake", "SYSROOT={}".format(config['sysroot-dir'])]
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('*', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        out, err = p.communicate()
+        print(out)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+
+    return {
+        'task_dep': ['configure_python_source'],
+        'actions': [qmake],
+        'verbosity': 2
+    }
+
+
+def task_make_python_source():
+    def make():
+        current_path = os.getcwd()
+        os.chdir(config['python-install-dir'])
+
+        command = ["make", '-j{}'.format(multiprocessing.cpu_count() + 1)]
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('*', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        out, err = p.communicate()
+        print(out)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+
+    return {
+        'task_dep': ['qmake_python_source'],
+        'actions': [make],
+        'verbosity': 2
+    }
+
+
+def task_make_install_python_source():
+    def make_install():
+        current_path = os.getcwd()
+        os.chdir(config['python-install-dir'])
+
+        command = ["make install", '-j{}'.format(multiprocessing.cpu_count() + 1)]
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('*', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        out, err = p.communicate()
+        print(out)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+
+    return {
+        'task_dep': ['make_python_source'],
+        'actions': [make_install],
         'verbosity': 2
     }
 
