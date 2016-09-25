@@ -226,7 +226,7 @@ def task_download_icons():
         icon_path = get_icon_path(icon)
         yield {
             'name': icon,
-            'actions': [(check_module, ['requests']), (check_module, ['lxml']), (download_icon, [icon])],
+            'actions': [(check_module, ['requests', 'lxml']), (download_icon, [icon])],
             'targets': [icon_path],
             'uptodate': [(check_outdated, [icon], {})]
         }
