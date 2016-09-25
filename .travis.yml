@@ -29,8 +29,10 @@ addons:
       - git
       - python-setuptools
       - ruby
+      - gist
 before_install:
   - source ./.travis/helper.sh
+  - source ./.travis/gist.sh
   - source ./.travis/update_packages.sh
   - source ./.travis/qt.sh
   - source ./.travis/pandoc.sh

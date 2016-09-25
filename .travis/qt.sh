@@ -4,18 +4,6 @@ set -ex
 QT_BASE_DIR=/opt/qt57
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OSX
-    # install gist package
-    brew install gist
-
-    # write gist token to ~/.gist
-    pushd ~
-    python -c """
-import os
-with open('.gist', 'w') as f:
-    f.write(os.environ['GITHUB_GIST_TOKEN'])
-"""
-    popd # ~
-
     pushd /tmp
     wget https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
     gunzip qt-everywhere-opensource-src-5.7.0.tar.gz
