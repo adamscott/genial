@@ -38,5 +38,10 @@ before_install:
 install:
   - pip install doit
   - doit
+  - doit download_qt_source
+  - doit extract_qt_source
+  - doit configure_qt_source
+  - doit make_qt_source
+  - doit make_install_qt_source
 script:
   - tox

@@ -1,11 +1,19 @@
+import datetime
 import glob
+import math
+import multiprocessing
 import os
 import platform
 import re
 import shutil
+import subprocess
+import time
+import zipfile
+
+from urllib.parse import urlparse
 
 from doit.action import CmdAction
-from doit.exceptions import TaskFailed
+from doit.exceptions import TaskFailed, TaskError
 from doit import get_var
 
 
@@ -52,7 +60,9 @@ DOIT_CONFIG = {
         'generate_icons',
         'generate_plugins',
         'compile_qrc',
-        'compile_ui'
+        'compile_ui',
+        'create_sysroot',
+        'create_pdy'
     ]
 }
 
@@ -495,6 +505,206 @@ def task_compile_ui():
                 'file_dep': [file_full_path],
                 'targets': [output_file_full_path]
             }
+
+
+def task_create_sysroot():
+    target_dir = config['sysroot-dir']
+
+    def create_dir():
+        os.makedirs(target_dir, exist_ok=True)
+
+    return {
+        'actions': [create_dir],
+        'targets': [target_dir]
+    }
+
+
+def task_download_qt_source():
+    qt_url = config['qt-source-url']
+    target_file = os.path.basename(urlparse(qt_url).path)
+    target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
+    os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
+
+    def download_file():
+        import requests
+
+        r = requests.get(qt_url, stream=True)
+        start = datetime.datetime.now()
+        moment_ago = start
+        downloaded_size = 0
+        print("Downloading {}:".format(qt_url))
+        with open(target_file_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+                    downloaded_size += len(chunk)
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=10) < now:
+                    print(
+                        "Downloaded {}%".format(
+                            math.floor(downloaded_size/int(r.headers['content-length']) * 100) / 100
+                        )
+                    )
+                    moment_ago = now
+
+    return {
+        'actions': [check_requests, download_file],
+        'targets': [target_file_path],
+        'verbosity': 2
+    }
+
+
+def task_extract_qt_source():
+    qt_url = config['qt-source-url']
+    zip_file = os.path.basename(urlparse(qt_url).path)
+    zip_file_path = os.path.join(config['sysroot-cache-dir'], zip_file)
+    target_dir = os.path.splitext(zip_file)[0]
+    target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
+    os.makedirs(target_path, exist_ok=True)
+
+    def unzip_file():
+        zipfile.ZipFile.extractall(path=target_path)
+
+    return {
+        'actions': [unzip_file],
+        'file_dep': [zip_file_path],
+        'targets': [target_path],
+        'verbosity': 2
+    }
+
+
+def task_configure_qt_source():
+    qt_url = config['qt-source-url']
+    zip_file = os.path.basename(urlparse(qt_url).path)
+    source_dir = os.path.splitext(zip_file)[0]
+    source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
+
+    def configure():
+        current_path = os.getcwd()
+        os.chdir(source_path)
+
+        command = ['./configure', '-prefix', config['qt-install-dir'], '-static', '-release', '-nomake', 'examples']
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('.', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        log_path = os.path.join(source_path, 'configure.log')
+        print('Configure log written to {}'.format(log_path))
+        with open(log_path, 'w') as f:
+            f.write(p.stdout)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+
+    return {
+        'actions': [configure],
+        'file_dep': [source_path],
+        'verbosity': 2
+    }
+
+
+def task_make_qt_source():
+    qt_url = config['qt-source-url']
+    zip_file = os.path.basename(urlparse(qt_url).path)
+    source_dir = os.path.splitext(zip_file)[0]
+    source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
+
+    def make():
+        current_path = os.getcwd()
+        os.chdir(source_path)
+
+        command = ['make', '-j{}'.format((multiprocessing.cpu_count() + 1))]
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('.', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        log_path = os.path.join(source_path, 'make.log')
+        print('Make log written to {}'.format(log_path))
+        with open(log_path, 'w') as f:
+            f.write(p.stdout)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+
+    return {
+        'actions': [make],
+        'file_dep': [source_path],
+        'verbosity': 2
+    }
+
+
+def task_make_install_qt_source():
+    qt_url = config['qt-source-url']
+    zip_file = os.path.basename(urlparse(qt_url).path)
+    source_dir = os.path.splitext(zip_file)[0]
+    source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
+
+    os.makedirs(config['qt-install-dir'], exist_ok=True)
+
+    def make():
+        current_path = os.getcwd()
+        os.chdir(source_path)
+
+        command = ['make', 'install', '-j{}'.format((multiprocessing.cpu_count() + 1))]
+
+        try:
+            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except FileNotFoundError as e:
+            raise e
+
+        if p.poll() is None:
+            start_time = datetime.datetime.now()
+            moment_ago = start_time
+            while p.poll() is None:
+                now = datetime.datetime.now()
+                if moment_ago + datetime.timedelta(seconds=30) > now:
+                    print('.', end="")
+                time.sleep(1)
+            print("")
+
+        os.chdir(current_path)
+
+        log_path = os.path.join(source_path, 'make_install.log')
+        print('Make install log written to {}'.format(log_path))
+        with open(log_path, 'w') as f:
+            f.write(p.stdout)
+
+        if p.poll() > 0:
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+
+    return {
+        'actions': [make],
+        'file_dep': [source_path],
+        'verbosity': 2
+    }
 
 
 def task_create_pdy():
