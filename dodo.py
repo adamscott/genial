@@ -631,11 +631,12 @@ def task_configure_qt_source():
         nonlocal log_path
         log_path = os.path.join(source_path, 'configure.log')
         print('Configure log written to {}'.format(log_path))
+        out, err = p.communicate()
         with open(log_path, 'w') as f:
-            f.write(p.communicate()[0])
+            f.write(out)
 
         if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
         'task_dep': ['extract_qt_source'],
@@ -679,11 +680,12 @@ def task_make_qt_source():
         nonlocal log_path
         log_path = os.path.join(source_path, 'make.log')
         print('Make log written to {}'.format(log_path))
+        out, err = p.communicate()
         with open(log_path, 'w') as f:
-            f.write(p.communicate()[0])
+            f.write(out)
 
         if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
         'task_dep': ['configure_qt_source'],
@@ -729,11 +731,12 @@ def task_make_install_qt_source():
         nonlocal log_path
         log_path = os.path.join(source_path, 'make_install.log')
         print('Make install log written to {}'.format(log_path))
+        out, err = p.communicate()
         with open(log_path, 'w') as f:
-            f.write(p.communicate()[0])
+            f.write(out)
 
         if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
+            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
         'task_dep': ['make_qt_source'],
