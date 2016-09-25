@@ -618,7 +618,7 @@ def task_configure_qt_source():
             while p.poll() is None:
                 now = datetime.datetime.now()
                 if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('.', end="")
+                    print('*', end="")
                 time.sleep(1)
             print("")
 
@@ -664,7 +664,7 @@ def task_make_qt_source():
             while p.poll() is None:
                 now = datetime.datetime.now()
                 if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('.', end="")
+                    print('*', end="")
                 time.sleep(1)
             print("")
 
@@ -712,7 +712,7 @@ def task_make_install_qt_source():
             while p.poll() is None:
                 now = datetime.datetime.now()
                 if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('.', end="")
+                    print('*', end="")
                 time.sleep(1)
             print("")
 
