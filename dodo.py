@@ -629,7 +629,7 @@ def task_configure_qt_source():
         log_path = os.path.join(source_path, 'configure.log')
         print('Configure log written to {}'.format(log_path))
         with open(log_path, 'w') as f:
-            f.write(p.stdout)
+            f.write(p.communicate()[0])
 
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
@@ -676,7 +676,7 @@ def task_make_qt_source():
         log_path = os.path.join(source_path, 'make.log')
         print('Make log written to {}'.format(log_path))
         with open(log_path, 'w') as f:
-            f.write(p.stdout)
+            f.write(p.communicate()[0])
 
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
@@ -725,7 +725,7 @@ def task_make_install_qt_source():
         log_path = os.path.join(source_path, 'make_install.log')
         print('Make install log written to {}'.format(log_path))
         with open(log_path, 'w') as f:
-            f.write(p.stdout)
+            f.write(p.communicate()[0])
 
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
