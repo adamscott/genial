@@ -326,7 +326,6 @@ def task_generate_qm():
 
 
 def task_generate_locale():
-
     def create_rcc():
         if files_found:
             with open(target, 'w+') as f:
@@ -338,6 +337,7 @@ def task_generate_locale():
     qrc_content = "<RCC>"
     qrc_content += '\n  <qresource prefix="/locale">'
     files_found = []
+    os.makedirs(locale_dir, exist_ok=True)
     for file in os.listdir(locale_dir):
         if file.endswith(".qm"):
             files_found.append(os.path.join(locale_dir, file))
@@ -355,7 +355,6 @@ def task_generate_locale():
 
 
 def task_generate_icons():
-
     def create_rcc():
         if files_found:
             with open(target, 'w+') as f:
@@ -367,6 +366,7 @@ def task_generate_icons():
     qrc_content = "<RCC>"
     qrc_content += '\n  <qresource prefix="/icons">'
     files_found = []
+    os.makedirs(icons_dir, exist_ok=True)
     for file in os.listdir(icons_dir):
         if file.endswith(".svg"):
             files_found.append(os.path.join(icons_dir, file))
@@ -384,7 +384,6 @@ def task_generate_icons():
 
 
 def task_generate_plugins():
-
     def create_rcc():
         if files_found:
             with open(target, 'w+') as f:
@@ -396,6 +395,7 @@ def task_generate_plugins():
     qrc_content = "<RCC>"
     qrc_content += '\n  <qresource prefix="/icons">'
     files_found = []
+    os.makedirs(plugins_dir, exist_ok=True)
 
     current_dir = os.getcwd()
     os.chdir(resources_dir)
