@@ -79,9 +79,7 @@ DOIT_CONFIG = {
         'generate_icons',
         'generate_plugins',
         'compile_qrc',
-        'compile_ui',
-        'create_sysroot',
-        'create_pdy'
+        'compile_ui'
     ]
 }
 
