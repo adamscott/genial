@@ -564,7 +564,8 @@ def task_extract_qt_source():
     os.makedirs(target_path, exist_ok=True)
 
     def unzip_file():
-        zipfile.ZipFile.extractall(path=target_path)
+        with zipfile.ZipFile(zip_file_path) as zf:
+            zf.extractall(path=target_path)
 
     return {
         'actions': [unzip_file],
