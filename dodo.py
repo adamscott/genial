@@ -569,6 +569,7 @@ def task_download_qt_source():
         print("Finished downloading '{}'.".format(qt_url))
 
     return {
+        'task_dep': ['create_sysroot'],
         'actions': [(check_module, ['requests']), download_file],
         'targets': [target_file_path],
         'verbosity': 2
@@ -588,6 +589,7 @@ def task_extract_qt_source():
             zf.extractall(path=target_path)
 
     return {
+        'task_dep': ['download_qt_source'],
         'actions': [unzip_file],
         'file_dep': [zip_file_path],
         'targets': [target_path],
@@ -636,6 +638,7 @@ def task_configure_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
+        'task_dep': ['extract_qt_source'],
         'actions': [configure, (update_gist, ['configure', log_path])],
         'file_dep': [source_path],
         'verbosity': 2
@@ -683,6 +686,7 @@ def task_make_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
+        'task_dep': ['configure_qt_source'],
         'actions': [make, (update_gist, ['make', log_path])],
         'file_dep': [source_path],
         'verbosity': 2
@@ -732,6 +736,7 @@ def task_make_install_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), p.stderr))
 
     return {
+        'task_dep': ['make_qt_source'],
         'actions': [make_install, (update_gist, ['make_install', log_path])],
         'file_dep': [source_path],
         'verbosity': 2
