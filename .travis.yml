@@ -34,10 +34,23 @@ addons:
       - python-setuptools
       - ruby
       - rubygems
+      - make
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncurses5-dev
+      - libncursesw5-dev
+      - xz-utils
+
 before_install:
+  - source ./.travis/setup_packages.sh
   - source ./.travis/helper.sh
   - source ./.travis/gist.sh
-  - source ./.travis/setup_packages.sh
   - export PATH='~/genial/pyqtdeploy/qt-5.7.0/bin':$PATH
   - source ./.travis/pandoc.sh
   - source ./.travis/pyenv.sh
