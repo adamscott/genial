@@ -37,8 +37,8 @@ before_install:
   - source ./.travis/qt.sh
   - source ./.travis/pandoc.sh
   - source ./.travis/pyenv.sh
+  - source ./.travis/doit.sh
 install:
-  - pip install doit
   - doit
   - doit download_static_qt \
          extract_static_qt \
