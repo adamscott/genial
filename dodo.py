@@ -55,7 +55,7 @@ if default['target-system'] == "Windows":
     default['qt-static-qmake'] = os.path.join(default['qt-static-dir'], "bin", "qmake.exe")
     default['sip-static-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.zip"
     default['pyqt5-static-url'] = "https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.7/PyQt5_gpl-5.7.zip"
-    default['pyqtdeploy-target'] = 'win-{}'.format(default['target_arch'])
+    default['pyqtdeploy-target'] = 'win-{}'.format(default['target-arch'])
 else:  # Darwin and Linux
     default['qt-static-qmake'] = os.path.join(default['qt-static-dir'], "bin", "qmake")
     default['sip-static-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.tar.gz"
@@ -63,7 +63,7 @@ else:  # Darwin and Linux
     if default['target-system'] == "Darwin":
         default['pyqtdeploy-target'] = 'osx-64'
     else:  # Linux
-        default['pyqtdeploy-target'] = 'linux-{}'.format(default['target_arch'])
+        default['pyqtdeploy-target'] = 'linux-{}'.format(default['target-arch'])
 
 config = {
     'pandoc': get_var('pandoc', default['pandoc']),
