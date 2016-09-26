@@ -673,14 +673,16 @@ def task_cleanup_static_qt():
     qt_url = config['qt-source-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
     dir_name = os.path.splitext(os.path.splitext(xz_file)[0])[0]
-    target_file_path = os.path.join(config['sysroot-cache-dir'], dir_name)
+    extracted_dir_path = os.path.join(config['sysroot-cache-dir'], dir_name)
+    install_dir_path = config['qt-install-dir']
 
-    def remove_qt_source():
-        shutil.rmtree(target_file_path)
+    def remove_source_dir(*paths):
+        for path in paths:
+            shutil.rmtree(path)
 
     return {
-        'actions': [remove_qt_source],
-        'uptodate': [(check_is_not_dir, [target_file_path])]
+        'actions': [remove_source_dir],
+        'uptodate': [(check_is_not_dir, [extracted_dir_path, install_dir_path])]
     }
 
 
