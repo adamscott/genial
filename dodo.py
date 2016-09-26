@@ -671,7 +671,6 @@ def task_download_static_qt():
     qt_url = config['qt-static-url']
     target_file = os.path.basename(urlparse(qt_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
-    os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
 
     return {
         'task_dep': ['create_sysroot'],
