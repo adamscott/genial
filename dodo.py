@@ -595,7 +595,8 @@ def task_create_sysroot():
 
     return {
         'actions': [create_dir],
-        'targets': [target_dir]
+        'targets': [target_dir],
+        'uptodate': [(check_is_dir, [target_dir])]
     }
 
 
