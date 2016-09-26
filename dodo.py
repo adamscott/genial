@@ -855,13 +855,6 @@ def task_make_install_static_qt():
     }
 
 
-def task_prepare_static_qt():
-    return {
-        'task_dep': ['make_install_static_qt'],
-        'actions': [do_nothing]
-    }
-
-
 def task_download_static_python():
     python_url = config['python-static-url']
     target_file = os.path.basename(urlparse(python_url).path)
@@ -959,13 +952,6 @@ def task_make_install_static_python():
             'log_file': log_file
         })],
         'verbosity': 2
-    }
-
-
-def task_prepare_static_python():
-    return {
-        'task_dep': ['make_install_static_python'],
-        'actions': [do_nothing]
     }
 
 
@@ -1083,13 +1069,6 @@ def task_make_install_static_sip():
             'log_file': log_file
         })],
         'verbosity': 2
-    }
-
-
-def task_prepare_static_sip():
-    return {
-        'task_dep': ['make_install_static_sip'],
-        'actions': [do_nothing]
     }
 
 
