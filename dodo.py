@@ -233,7 +233,7 @@ def subprocess_wait_animation(p):
             if moment_ago + datetime.timedelta(seconds=1) > now:
                 print('\r{}'.format(anim_frames[counter]), end="")
                 counter += 1
-                counter = counter % len(anim_frames)
+                counter %= len(anim_frames)
                 moment_ago = now
             time.sleep(0.25)
         print("\r \r", end="")
