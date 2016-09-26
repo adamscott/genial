@@ -641,15 +641,17 @@ def task_compile_ui():
 
 
 def task_create_sysroot():
-    target_dir = config['sysroot-dir']
+    sysroot_dir = config['sysroot-dir']
+    sysroot_cache_dir = config['sysroot-cache-dir']
 
-    def create_dir():
-        os.makedirs(target_dir, exist_ok=True)
+    def create_dirs(*dirs):
+        for dir in dirs:
+            os.makedirs(dir, exist_ok=True)
 
     return {
-        'actions': [create_dir],
-        'targets': [target_dir],
-        'uptodate': [(check_is_dir, [target_dir])]
+        'actions': [(create_dirs, [sysroot_dir, sysroot_cache_dir])],
+        'targets': [sysroot_dir, sysroot_cache_dir],
+        'uptodate': [(check_is_dir, [sysroot_dir]), (check_is_dir, [sysroot_cache_dir])]
     }
 
 
@@ -691,7 +693,6 @@ def task_extract_static_qt():
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
     target_dir = os.path.splitext(os.path.splitext(xz_file)[0])[0]
     target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
-    os.makedirs(target_path, exist_ok=True)
 
     sysroot_cache_dir = config['sysroot-cache-dir']
 
@@ -855,7 +856,6 @@ def task_download_static_python():
     python_url = config['python-static-url']
     target_file = os.path.basename(urlparse(python_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
-    os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
 
     return {
         'task_dep': ['create_sysroot'],
@@ -955,7 +955,6 @@ def task_download_static_sip():
     sip_url = config['sip-static-url']
     target_file = os.path.basename(urlparse(sip_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
-    os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
 
     return {
         'task_dep': ['create_sysroot'],
