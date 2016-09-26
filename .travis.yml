@@ -45,6 +45,8 @@ before_install:
   - source ./.travis/doit.sh
 install:
   - doit
+      install_dependencies
+  - doit
       download_static_qt
       extract_static_qt
       configure_static_qt
