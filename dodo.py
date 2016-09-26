@@ -739,15 +739,7 @@ def task_configure_static_qt():
         except FileNotFoundError as e:
             raise e
 
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
+        subprocess_wait_animation(p)
 
         os.chdir(current_path)
 
