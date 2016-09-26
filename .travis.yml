@@ -33,7 +33,7 @@ addons:
       - git
       - python-setuptools
       - ruby
-      - gist
+      - rubygems
 before_install:
   - source ./.travis/helper.sh
   - source ./.travis/gist.sh
