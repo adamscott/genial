@@ -615,6 +615,21 @@ def task_download_qt_source():
     }
 
 
+def task_cleanup_qt_source():
+    qt_url = config['qt-source-url']
+    xz_file = os.path.basename(urlparse(qt_url).path)
+    dir_name = os.path.splitext(os.path.splitext(xz_file)[0])[0]
+    target_file_path = os.path.join(config['sysroot-cache-dir'], dir_name)
+
+    def remove_qt_source():
+        shutil.rmtree(target_file_path)
+
+    return {
+        'actions': [remove_qt_source],
+        'uptodate': [(check_is_not_dir, [target_file_path])]
+    }
+
+
 def task_extract_qt_source():
     qt_url = config['qt-source-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
@@ -626,7 +641,7 @@ def task_extract_qt_source():
     sysroot_cache_dir = config['sysroot-cache-dir']
 
     return {
-        'task_dep': ['download_qt_source'],
+        'task_dep': ['download_qt_source', 'cleanup_qt_source'],
         'actions': [(extract_xz, [xz_file_path, sysroot_cache_dir])],
         'file_dep': [xz_file_path],
         'targets': [target_path],
