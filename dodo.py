@@ -702,13 +702,13 @@ def task_extract_static_qt():
     qt_url = config['qt-static-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
+
     target_dir = os.path.splitext(os.path.splitext(xz_file)[0])[0]
     target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
-    sysroot_cache_dir = config['sysroot-cache-dir']
 
     return {
         'task_dep': ['download_static_qt'],
-        'actions': [(extract_tar, [xz_file, sysroot_cache_dir])],
+        'actions': [(extract_tar, [xz_file_path, config['sysroot-cache-dir']])],
         'file_dep': [xz_file_path],
         'targets': [target_path],
         'verbosity': 2,
@@ -909,9 +909,15 @@ def task_extract_static_python():
     xz_file = os.path.basename(urlparse(python_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
 
+    target_dir = os.path.splitext(os.path.splitext(xz_file)[0])[0]
+    target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
+
     return {
         'task_dep': ['download_static_python'],
         'actions': [(extract_tar, [xz_file_path, config['sysroot-dir']])],
+        'file_dep': [xz_file_path],
+        'targets': [target_path],
+        'verbosity': 2,
         'uptodate': [run_once]
     }
 
@@ -1012,7 +1018,11 @@ def task_extract_static_sip():
     compressed_file_path = os.path.join(config['sysroot-cache-dir'], compressed_file)
 
     task_dict = {
-        'task_dep': ['download_static_sip']
+        'task_dep': ['download_static_sip'],
+        'file_dep': [compressed_file_path],
+        'targets': [os.path.join(config['sysroot-dir'], config['sip-static-dir'])],
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
     if config['target-system'] != "Windows":
@@ -1124,7 +1134,11 @@ def task_extract_static_pyqt5():
     compressed_file_path = os.path.join(config['sysroot-cache-dir'], compressed_file)
 
     task_dict = {
-        'task_dep': ['download_static_pyqt5']
+        'task_dep': ['download_static_pyqt5'],
+        'file_dep': [compressed_file_path],
+        'targets': [os.path.join(config['sysroot-dir'], config['pyqt5-static-dir'])],
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
     if config['target-system'] != "Windows":
