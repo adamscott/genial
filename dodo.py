@@ -203,9 +203,8 @@ def extract_zip(zip_path, extract_path):
 
 
 def extract_tar(tar_path, extract_path):
-    archive = tarfile.open(tar_path)
-    archive.extractall(path=extract_path)
-    archive.close()
+    with tarfile.open(tar_path) as tf:
+        tf.extractall(path=extract_path)
 
 
 def cmd_with_animation(cmd="", path=".", log_file=None):
