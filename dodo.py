@@ -654,7 +654,7 @@ def task_create_sysroot():
     }
 
 
-def task_download_qt_source():
+def task_download_static_qt():
     qt_url = config['qt-source-url']
     target_file = os.path.basename(urlparse(qt_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
@@ -669,7 +669,7 @@ def task_download_qt_source():
     }
 
 
-def task_cleanup_qt_source():
+def task_cleanup_static_qt():
     qt_url = config['qt-source-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
     dir_name = os.path.splitext(os.path.splitext(xz_file)[0])[0]
@@ -684,7 +684,7 @@ def task_cleanup_qt_source():
     }
 
 
-def task_extract_qt_source():
+def task_extract_static_qt():
     qt_url = config['qt-source-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
@@ -695,7 +695,7 @@ def task_extract_qt_source():
     sysroot_cache_dir = config['sysroot-cache-dir']
 
     return {
-        'task_dep': ['download_qt_source', 'cleanup_qt_source'],
+        'task_dep': ['download_static_qt'],
         'actions': [(extract_xz, [xz_file_path, sysroot_cache_dir])],
         'file_dep': [xz_file_path],
         'targets': [target_path],
@@ -703,7 +703,7 @@ def task_extract_qt_source():
     }
 
 
-def task_configure_qt_source():
+def task_configure_static_qt():
     qt_url = config['qt-source-url']
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
@@ -751,14 +751,14 @@ def task_configure_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
-        'task_dep': ['extract_qt_source'],
+        'task_dep': ['extract_static_qt'],
         'actions': [configure],
         'file_dep': [source_path],
         'verbosity': 2
     }
 
 
-def task_make_qt_source():
+def task_make_static_qt():
     qt_url = config['qt-source-url']
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
@@ -794,14 +794,14 @@ def task_make_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
-        'task_dep': ['configure_qt_source'],
+        'task_dep': ['configure_static_qt'],
         'actions': [make],
         'file_dep': [source_path],
         'verbosity': 2
     }
 
 
-def task_make_install_qt_source():
+def task_make_install_static_qt():
     qt_url = config['qt-source-url']
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
@@ -839,21 +839,21 @@ def task_make_install_qt_source():
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
 
     return {
-        'task_dep': ['make_qt_source'],
+        'task_dep': ['make_static_qt'],
         'actions': [make_install],
         'file_dep': [source_path],
         'verbosity': 2
     }
 
 
-def task_prepare_qt_source():
+def task_prepare_static_qt():
     return {
-        'task_dep': ['make_install_python_source'],
+        'task_dep': ['make_install_static_qt'],
         'actions': [do_nothing]
     }
 
 
-def task_download_python_source():
+def task_download_static_python():
     python_url = config['python-source-url']
     target_file = os.path.basename(urlparse(python_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
@@ -868,7 +868,7 @@ def task_download_python_source():
     }
 
 
-def task_cleanup_python_source():
+def task_cleanup_static_python():
     target_path = config['python-source-dir']
 
     def remove_qt_source():
@@ -880,23 +880,24 @@ def task_cleanup_python_source():
     }
 
 
-def task_extract_python_source():
+def task_extract_static_python():
     python_url = config['python-source-url']
     xz_file = os.path.basename(urlparse(python_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
 
     return {
-        'task_dep': ['download_python_source', 'cleanup_python_source'],
-        'actions': [(extract_xz, [xz_file_path, config['sysroot-dir']])]
+        'task_dep': ['download_static_python'],
+        'actions': [(extract_xz, [xz_file_path, config['sysroot-dir']])],
+        'uptodate': [run_once]
     }
 
 
-def task_configure_python_source():
+def task_configure_static_python():
     command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['python-target']))
     launch_from = config['python-source-dir']
 
     return {
-        'task_dep': ['extract_python_source'],
+        'task_dep': ['extract_static_python'],
         'actions': [(cmd_with_animation, [], {
             'path': launch_from,
             'cmd': command
@@ -905,12 +906,12 @@ def task_configure_python_source():
     }
 
 
-def task_qmake_python_source():
+def task_qmake_static_python():
     command = shlex.split("qmake SYSROOT={}".format(config['sysroot-dir']))
     launch_from = config['python-source-dir']
 
     return {
-        'task_dep': ['configure_python_source'],
+        'task_dep': ['configure_static_python'],
         'actions': [(cmd_with_animation, [], {
             'path': launch_from,
             'cmd': command
@@ -919,13 +920,13 @@ def task_qmake_python_source():
     }
 
 
-def task_make_python_source():
+def task_make_static_python():
     command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
     launch_from = config['python-source-dir']
     log_file = "make.log"
 
     return {
-        'task_dep': ['qmake_python_source'],
+        'task_dep': ['qmake_static_python'],
         'actions': [(cmd_with_animation, [], {
             'path': launch_from,
             'cmd': command,
@@ -935,13 +936,13 @@ def task_make_python_source():
     }
 
 
-def task_make_install_python_source():
+def task_make_install_static_python():
     command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
     launch_from = config['python-source-dir']
     log_file = "make_install.log"
 
     return {
-        'task_dep': ['make_python_source'],
+        'task_dep': ['make_static_python'],
         'actions': [(cmd_with_animation, [], {
             'path': launch_from,
             'cmd': command,
@@ -951,9 +952,9 @@ def task_make_install_python_source():
     }
 
 
-def task_prepare_python_source():
+def task_prepare_static_python():
     return {
-        'task_dep': ['make_install_python_source'],
+        'task_dep': ['make_install_static_python'],
         'actions': [do_nothing]
     }
 
@@ -979,7 +980,7 @@ def task_extract_pip_source():
     compressed_file_path = os.path.join(config['sysroot-cache-dir'], compressed_file)
 
     task_dict = {
-        'task_dep': ['download_python_source']
+        'task_dep': ['download_static_python']
     }
 
     if config['target-system'] != "Windows":
