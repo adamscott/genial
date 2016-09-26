@@ -158,20 +158,11 @@ def check_is_not_dir(path):
 ''' ================= '''
 
 
-def update_gist(step, file):
+def update_gist(file):
     if is_continuous_integration() and check_cmd('gist') is not TaskFailed:
         gist_id = 'a9ada04ad9ee0b1920994b7a55f22774'
-        platform_system = platform.system()
-        if platform_system == 'Darwin': platform_system = 'osx'
-        if platform_system == 'Linux': platform_system = 'linux'
-        if platform_system == 'Windows': platform_system = 'windows'
 
-        target_file = "{}-{}.log"
-
-        with open(file, 'r') as rf:
-            pass
-
-        command = shlex.split('gist -u {} '.format(gist_id, step, platform_system))
+        command = shlex.split('gist -u {} {}'.format(gist_id, file))
 
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
                              universal_newlines=True)
@@ -761,13 +752,21 @@ def task_configure_static_qt():
         os.chdir(current_path)
 
         nonlocal log_path
-        log_path = os.path.join(source_path, 'configure.log')
+        system = platform.system()
+        if system == 'Darwin':
+            system = 'osx'
+        elif system == 'Linux':
+            system = 'linux'
+        elif system == 'Windows':
+            system = 'windows'
+        log_path = os.path.join(source_path, 'configure-{}.log'.format(system))
+
         print('Configure log written to {}'.format(log_path))
         out, err = p.communicate()
         with open(log_path, 'w') as f:
             f.write(out)
 
-        update_gist('configure', log_path)
+        update_gist(log_path)
 
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
@@ -805,13 +804,21 @@ def task_make_static_qt():
         os.chdir(current_path)
 
         nonlocal log_path
-        log_path = os.path.join(source_path, 'make.log')
+        system = platform.system()
+        if system == 'Darwin':
+            system = 'osx'
+        elif system == 'Linux':
+            system = 'linux'
+        elif system == 'Windows':
+            system = 'windows'
+        log_path = os.path.join(source_path, 'make-{}.log'.format(system))
+
         print('Make log written to {}'.format(log_path))
         out, err = p.communicate()
         with open(log_path, 'w') as f:
             f.write(out)
 
-        update_gist('make', log_path)
+        update_gist(log_path)
 
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
@@ -851,13 +858,21 @@ def task_make_install_static_qt():
         os.chdir(current_path)
 
         nonlocal log_path
-        log_path = os.path.join(source_path, 'make_install.log')
+        system = platform.system()
+        if system == 'Darwin':
+            system = 'osx'
+        elif system == 'Linux':
+            system = 'linux'
+        elif system == 'Windows':
+            system = 'windows'
+        log_path = os.path.join(source_path, 'make_install-{}.log'.format(system))
+
         print('Make install log written to {}'.format(log_path))
         out, err = p.communicate()
         with open(log_path, 'w') as f:
             f.write(out)
 
-        update_gist('make_install', log_path)
+        update_gist(log_path)
 
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
