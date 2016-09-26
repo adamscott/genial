@@ -967,7 +967,7 @@ def task_prepare_static_python():
     }
 
 
-def task_download_sip_source():
+def task_download_static_pip():
     sip_url = config['sip-source-url']
     target_file = os.path.basename(urlparse(sip_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
@@ -982,13 +982,13 @@ def task_download_sip_source():
     }
 
 
-def task_extract_pip_source():
+def task_extract_static_pip():
     python_url = config['python-source-url']
     compressed_file = os.path.basename(urlparse(python_url).path)
     compressed_file_path = os.path.join(config['sysroot-cache-dir'], compressed_file)
 
     task_dict = {
-        'task_dep': ['download_static_python']
+        'task_dep': ['download_static_pip']
     }
 
     if config['target-system'] != "Windows":
