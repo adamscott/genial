@@ -37,8 +37,7 @@ addons:
 before_install:
   - source ./.travis/helper.sh
   - source ./.travis/gist.sh
-  #- source ./.travis/update_packages.sh
-  - if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then; brew update; fi;
+  - source ./.travis/update_packages.sh
   #- source ./.travis/qt.sh
   - export PATH='~/genial/pyqtdeploy/qt-5.7.0/bin':$PATH
   - source ./.travis/pandoc.sh
