@@ -598,7 +598,7 @@ def task_download_qt_source():
         'actions': [(check_module, ['requests']), (download_file, [qt_url, target_file_path])],
         'targets': [target_file_path],
         'verbosity': 2,
-        'uptodate': [check_is_file, [target_file_path]]
+        'uptodate': [(check_is_file, [target_file_path])]
     }
 
 
@@ -791,7 +791,7 @@ def task_download_python_source():
         'actions': [(check_module, ['requests']), (download_file, [python_url, target_file_path])],
         'targets': [target_file_path],
         'verbosity': 2,
-        'uptodate': [check_is_file, [target_file_path]]
+        'uptodate': [(check_is_file, [target_file_path])]
     }
 
 
