@@ -126,7 +126,7 @@ def update_gist(step, file):
 
         command = shlex.split('gist -u {} -f {}-{}.log'.format(gist_id, step, platform_system))
 
-        p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
+        p = subprocess.Popen(command, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
                              universal_newlines=True)
         out, err = p.communicate(file)
         if p.poll() > 0:
@@ -639,7 +639,7 @@ def task_configure_qt_source():
         )
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
@@ -690,7 +690,7 @@ def task_make_qt_source():
         command = shlex.split('make -j{}'.format((multiprocessing.cpu_count() + 1)))
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
@@ -743,7 +743,7 @@ def task_make_install_qt_source():
         command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
@@ -814,7 +814,7 @@ def task_configure_python_source():
         command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['python-target']))
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
@@ -852,7 +852,7 @@ def task_qmake_python_source():
         command = shlex.split("qmake SYSROOT={}".format(config['sysroot-dir']))
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
@@ -890,7 +890,7 @@ def task_make_python_source():
         command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
@@ -928,7 +928,7 @@ def task_make_install_python_source():
         command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
 
         try:
-            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  universal_newlines=True)
         except FileNotFoundError as e:
             raise e
