@@ -36,21 +36,21 @@ default = {
     'target-arch': platform.architecture()[:2],
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
+    'pyqtdeploy-target': '',
     'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz',
     'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
     'python-source-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
     'python-source-dir': os.path.join('pyqtdeploy', 'Python-3.5.2'),
-    'python-target': '',
     'sip-source-url': '',
     'sip-source-dir': os.path.join('pyqtdeploy', 'sip-4.18.1')
 }
 
 if default['target-system'] == "Linux":
-    default['python-target'] = 'linux-{}'.format(default['target_arch'])
+    default['pyqtdeploy-target'] = 'linux-{}'.format(default['target_arch'])
 elif default['target-system'] == "Darwin":
-    default['python-target'] = 'osx-64'
+    default['pyqtdeploy-target'] = 'osx-64'
 elif default['target-system'] == "Windows":
-    default['python-target'] = 'win-{}'.format(default['target_arch'])
+    default['pyqtdeploy-target'] = 'win-{}'.format(default['target_arch'])
 
 if default['target-system'] == "Windows":
     default['sip-source-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.zip"
@@ -75,7 +75,7 @@ config = {
     'qt-install-dir': get_var('qt-install-dir', default['qt-install-dir']),
     'python-source-url': get_var('python-source-url', default['python-source-url']),
     'python-source-dir': get_var('python-source-dir', default['python-source-dir']),
-    'python-target': get_var('python-target', default['python-target']),
+    'pyqtdeploy-target': get_var('pyqtdeploy-target', default['pyqtdeploy-target']),
     'sip-source-url': get_var('sip-source-url', default['sip-source-url']),
     'sip-source-dir': get_var('sip-source-dir', default['sip-source-dir'])
 }
@@ -900,7 +900,7 @@ def task_extract_static_python():
 
 
 def task_configure_static_python():
-    command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['python-target']))
+    command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['pyqtdeploy-target']))
     launch_from = config['python-source-dir']
 
     return {
