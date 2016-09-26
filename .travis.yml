@@ -52,7 +52,6 @@ before_install:
   - source ./.travis/env.sh
   - source ./.travis/helper.sh
   - source ./.travis/gist.sh
-  - source ./.travis/pandoc.sh
   - source ./.travis/pyenv.sh
   - source ./.travis/doit.sh
 install:

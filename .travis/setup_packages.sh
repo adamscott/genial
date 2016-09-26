@@ -9,5 +9,8 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OS X
 
     # pyenv dependencies
     brew install autoconf openssl pkg-config readline xz
+
+    # needed to convert .md to .rst
+    brew install pandoc
 fi
 # No need to setup packages in Linux build
