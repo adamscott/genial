@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 
 from doit.action import CmdAction
 from doit.exceptions import TaskFailed, TaskError
+from doit.tools import run_once
 from doit import get_var
 
 
@@ -701,7 +702,8 @@ def task_extract_static_qt():
         'actions': [(extract_xz, [xz_file_path, sysroot_cache_dir])],
         'file_dep': [xz_file_path],
         'targets': [target_path],
-        'verbosity': 2
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
 
@@ -756,7 +758,8 @@ def task_configure_static_qt():
         'task_dep': ['extract_static_qt'],
         'actions': [configure],
         'file_dep': [source_path],
-        'verbosity': 2
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
 
@@ -799,7 +802,8 @@ def task_make_static_qt():
         'task_dep': ['configure_static_qt'],
         'actions': [make],
         'file_dep': [source_path],
-        'verbosity': 2
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
 
@@ -844,7 +848,8 @@ def task_make_install_static_qt():
         'task_dep': ['make_static_qt'],
         'actions': [make_install],
         'file_dep': [source_path],
-        'verbosity': 2
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
 
@@ -904,7 +909,8 @@ def task_configure_static_python():
             'path': launch_from,
             'cmd': command
         })],
-        'verbosity': 2
+        'verbosity': 2,
+        'uptodate': [run_once]
     }
 
 
