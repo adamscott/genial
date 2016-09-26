@@ -111,6 +111,18 @@ def check_is_file(path):
     return os.path.isfile(path)
 
 
+def check_is_not_file(path):
+    return not check_is_file(path)
+
+
+def check_is_dir(path):
+    return os.path.isdir(path)
+
+
+def check_is_not_dir(path):
+    return not check_is_dir(path)
+
+
 ''' ================= '''
 ''' === UTILITIES === '''
 ''' ================= '''
