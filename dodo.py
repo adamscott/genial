@@ -212,7 +212,13 @@ def extract_zip(zip_path, extract_path):
 def extract_tar(tar_path, extract_path):
     print("Extracting '{}' to '{}'".format(tar_path, extract_path))
     print("Currently here: {}".format(os.getcwd()))
-    with tarfile.open(tar_path) as tf:
+
+    if os.path.splitext(tar_path)[1] == '.xz':
+        mode = 'r:xz'
+    else:
+        mode = 'r:*'
+
+    with tarfile.open(tar_path, mode=mode) as tf:
         tf.extractall(path=extract_path)
 
 
