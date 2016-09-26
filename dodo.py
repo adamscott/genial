@@ -9,6 +9,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import tarfile
 import time
 import zipfile
 
@@ -30,7 +31,6 @@ default = {
     'pyqtdeploycli': 'pyqtdeploycli',
     'make': 'make',
     'gist': 'gist',
-    'tar': 'tar',
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
     'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.zip',
@@ -58,7 +58,6 @@ config = {
     'pyenv': get_var('pyenv', default['pyenv']),
     'pyqtdeploycli': get_var('pyqtdeploycli', default['pyqtdeploycli']),
     'gist': get_var('gist', default['gist']),
-    'tar': get_var('tar', default['tar']),
     'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
     'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
     'qt-source-url': get_var('qt-source-url', default['qt-source-url']),
@@ -170,9 +169,9 @@ def extract_xz(xz_path, extract_path):
     xz_parent_dir = os.path.dirname(xz_path)
     xz_basename = os.path.basename(xz_path)
 
-    cp = subprocess.run(['tar', 'zxvf', xz_basename, '-C', extract_path])
-    if cp.returncode > 0:
-        return TaskFailed('tar extraction failed. \n{}'.format(cp.stderr))
+    archive = tarfile.open(xz_path, mode='r:xz')
+    archive.extractall(path=extract_path)
+    archive.close()
 
 
 def do_nothing():
@@ -801,12 +800,9 @@ def task_extract_python_source():
     xz_file = os.path.basename(urlparse(python_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
 
-    tar = config['tar']
-    sysroot_cache_dir = config['sysroot-cache-dir']
-
     return {
         'task_dep': ['download_python_source'],
-        'actions': [(check_cmd, [tar]), (extract_xz, [xz_file_path, sysroot_cache_dir])]
+        'actions': [(extract_xz, [xz_file_path, config['sysroot-dir']])]
     }
 
 
