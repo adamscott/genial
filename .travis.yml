@@ -40,11 +40,13 @@ addons:
       - libbz2-dev
       - libreadline-dev
       - libsqlite3-dev
+      - libgdbm-dev
+      - liblzma-dev
+      - libncurses5-dev
+      - libncursesw5-dev
       - wget
       - curl
       - llvm
-      - libncurses5-dev
-      - libncursesw5-dev
       - xz-utils
 
 before_install:
