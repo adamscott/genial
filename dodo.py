@@ -807,13 +807,25 @@ def task_download_python_source():
     }
 
 
+def task_cleanup_python_source():
+    target_path = config['python-source-dir']
+
+    def remove_qt_source():
+        shutil.rmtree(target_path)
+
+    return {
+        'actions': [remove_qt_source],
+        'uptodate': [(check_is_not_dir, [target_path])]
+    }
+
+
 def task_extract_python_source():
     python_url = config['python-source-url']
     xz_file = os.path.basename(urlparse(python_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
 
     return {
-        'task_dep': ['download_python_source'],
+        'task_dep': ['download_python_source', 'cleanup_python_source'],
         'actions': [(extract_xz, [xz_file_path, config['sysroot-dir']])]
     }
 
