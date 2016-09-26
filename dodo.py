@@ -196,12 +196,8 @@ def extract_zip(zip_path, extract_path):
         zf.extractall(path=extract_path)
 
 
-def extract_xz(xz_path, extract_path):
-    current_path = os.getcwd()
-    xz_parent_dir = os.path.dirname(xz_path)
-    xz_basename = os.path.basename(xz_path)
-
-    archive = tarfile.open(xz_path, mode='r:xz')
+def extract_tar(tar_path, extract_path):
+    archive = tarfile.open(tar_path)
     archive.extractall(path=extract_path)
     archive.close()
 
@@ -701,7 +697,7 @@ def task_extract_static_qt():
 
     return {
         'task_dep': ['download_static_qt'],
-        'actions': [(extract_xz, [xz_file_path, sysroot_cache_dir])],
+        'actions': [(extract_tar, [xz_file_path, sysroot_cache_dir])],
         'file_dep': [xz_file_path],
         'targets': [target_path],
         'verbosity': 2,
@@ -889,7 +885,7 @@ def task_extract_static_python():
 
     return {
         'task_dep': ['download_static_python'],
-        'actions': [(extract_xz, [xz_file_path, config['sysroot-dir']])],
+        'actions': [(extract_tar, [xz_file_path, config['sysroot-dir']])],
         'uptodate': [run_once]
     }
 
@@ -980,7 +976,7 @@ def task_extract_static_sip():
     }
 
     if config['target-system'] != "Windows":
-        task_dict['actions'] = [(extract_xz, [compressed_file_path, config['sysroot-dir']])]
+        task_dict['actions'] = [(extract_tar, [compressed_file_path, config['sysroot-dir']])]
     else:
         task_dict['actions'] = [(extract_zip, [compressed_file_path, config['sysroot-dir']])]
 
