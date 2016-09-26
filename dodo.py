@@ -644,9 +644,9 @@ def task_create_sysroot():
     sysroot_dir = config['sysroot-dir']
     sysroot_cache_dir = config['sysroot-cache-dir']
 
-    def create_dirs(*dirs):
-        for dir in dirs:
-            os.makedirs(dir, exist_ok=True)
+    def create_dirs(*directories):
+        for directory in directories:
+            os.makedirs(directory, exist_ok=True)
 
     return {
         'actions': [(create_dirs, [sysroot_dir, sysroot_cache_dir])],
