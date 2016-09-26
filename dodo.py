@@ -6,6 +6,7 @@ import multiprocessing
 import os
 import platform
 import re
+import shlex
 import shutil
 import subprocess
 import time
@@ -124,7 +125,7 @@ def update_gist(step, file):
         if platform_system == 'Linux': platform_system = 'linux'
         if platform_system == 'Windows': platform_system = 'windows'
 
-        command = ['gist', '-f', '{}-{}.log'.format(step, platform_system), '-u', gist_id]
+        command = shlex.split('gist -u {} -f {}-{}.log'.format(gist_id, step, platform_system))
 
         p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
                              universal_newlines=True)
@@ -632,7 +633,11 @@ def task_configure_qt_source():
         current_path = os.getcwd()
         os.chdir(source_path)
 
-        command = ['./configure', '-prefix', config['qt-install-dir'], '-static', '-release', '-nomake', 'examples']
+        command = shlex.split(
+            './configure -prefix {} -static -release -nomake examples'.format(
+                config['qt-install-dir']
+            )
+        )
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -683,7 +688,7 @@ def task_make_qt_source():
         current_path = os.getcwd()
         os.chdir(source_path)
 
-        command = ['make', '-j{}'.format((multiprocessing.cpu_count() + 1))]
+        command = shlex.split('make -j{}'.format((multiprocessing.cpu_count() + 1)))
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -736,7 +741,7 @@ def task_make_install_qt_source():
         current_path = os.getcwd()
         os.chdir(source_path)
 
-        command = ['make', 'install', '-j{}'.format(multiprocessing.cpu_count() + 1)]
+        command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -810,7 +815,7 @@ def task_configure_python_source():
         current_path = os.getcwd()
         os.chdir(config['python-install-dir'])
 
-        command = ["pyqtdeploycli", "--package", "python", "--target", config['python-target'], "configure"]
+        command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['python-target']))
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -848,7 +853,7 @@ def task_qmake_python_source():
         current_path = os.getcwd()
         os.chdir(config['python-install-dir'])
 
-        command = ["qmake", "SYSROOT={}".format(config['sysroot-dir'])]
+        command = shlex.split("qmake SYSROOT={}".format(config['sysroot-dir']))
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -886,7 +891,7 @@ def task_make_python_source():
         current_path = os.getcwd()
         os.chdir(config['python-install-dir'])
 
-        command = ["make", '-j{}'.format(multiprocessing.cpu_count() + 1)]
+        command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -924,7 +929,7 @@ def task_make_install_python_source():
         current_path = os.getcwd()
         os.chdir(config['python-install-dir'])
 
-        command = ["make install", '-j{}'.format(multiprocessing.cpu_count() + 1)]
+        command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
 
         try:
             p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
