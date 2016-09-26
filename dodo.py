@@ -873,11 +873,11 @@ def task_download_static_python():
 def task_cleanup_static_python():
     target_path = config['python-source-dir']
 
-    def remove_qt_source():
+    def remove_source_dir():
         shutil.rmtree(target_path)
 
     return {
-        'actions': [remove_qt_source],
+        'actions': [remove_source_dir],
         'uptodate': [(check_is_not_dir, [target_path])]
     }
 
