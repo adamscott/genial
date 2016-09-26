@@ -107,6 +107,10 @@ def check_module(*modules):
             return TaskFailed("'{}' module not found.")
 
 
+def check_is_file(path):
+    return os.path.isfile(path)
+
+
 ''' ================= '''
 ''' === UTILITIES === '''
 ''' ================= '''
@@ -266,11 +270,6 @@ def task_download_icons():
     def get_icon_path(icon):
         return os.path.join(icons_dir, '{}.svg'.format(icon))
 
-    def check_outdated(icon):
-        if not os.path.isfile(get_icon_path(icon)):
-            return False
-        return True
-
     yield {
         'basename': 'download_icons',
         'name': None,
@@ -284,7 +283,7 @@ def task_download_icons():
             'name': icon,
             'actions': [(check_module, ['requests', 'lxml']), (download_icon, [icon])],
             'targets': [icon_path],
-            'uptodate': [(check_outdated, [icon], {})]
+            'uptodate': [(check_is_file, [get_icon_path(icon)])]
         }
 
 
@@ -310,11 +309,6 @@ def task_download_qtbase_ts():
     def get_language_qtbase_ts_path(language):
         return os.path.join(locale_dir, 'qtbase_{}.ts'.format(language))
 
-    def check_outdated(language):
-        if not os.path.isfile(get_language_qtbase_ts_path(language)):
-            return False
-        return True
-
     yield {
         'basename': 'download_qtbase_ts',
         'name': None,
@@ -328,7 +322,7 @@ def task_download_qtbase_ts():
             'name': language,
             'actions': [(check_module, ['requests']), (download_qtbase_ts, [language])],
             'targets': [language_qtbase_ts_path],
-            'uptodate': [(check_outdated, [language])]
+            'uptodate': [(check_is_file, [get_language_qtbase_ts_path(language)])]
         }
 
 
