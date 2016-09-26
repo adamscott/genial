@@ -38,7 +38,6 @@ before_install:
   - source ./.travis/helper.sh
   - source ./.travis/gist.sh
   - source ./.travis/setup_packages.sh
-  #- source ./.travis/qt.sh
   - export PATH='~/genial/pyqtdeploy/qt-5.7.0/bin':$PATH
   - source ./.travis/pandoc.sh
   - source ./.travis/pyenv.sh
