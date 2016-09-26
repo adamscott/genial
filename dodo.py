@@ -713,12 +713,11 @@ def task_extract_static_qt():
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
     target_dir = os.path.splitext(os.path.splitext(xz_file)[0])[0]
     target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
-
     sysroot_cache_dir = config['sysroot-cache-dir']
 
     return {
         'task_dep': ['download_static_qt'],
-        'actions': [(extract_tar, [xz_file_path, sysroot_cache_dir])],
+        'actions': [(extract_tar, [xz_file, sysroot_cache_dir])],
         'file_dep': [xz_file_path],
         'targets': [target_path],
         'verbosity': 2,
