@@ -198,11 +198,13 @@ def download_file(url, target_path):
 
 
 def extract_zip(zip_path, extract_path):
+    print("Extracting '{}' to '{}'".format(zip_path, extract_path))
     with zipfile.ZipFile(zip_path) as zf:
         zf.extractall(path=extract_path)
 
 
 def extract_tar(tar_path, extract_path):
+    print("Extracting '{}' to '{}'".format(tar_path, extract_path))
     with tarfile.open(tar_path) as tf:
         tf.extractall(path=extract_path)
 
