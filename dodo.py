@@ -33,7 +33,7 @@ default = {
     'gist': 'gist',
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
-    'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.zip',
+    'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz',
     'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
     'python-source-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
     'python-install-dir': os.path.join('pyqtdeploy', 'Python-3.5.2')
@@ -604,9 +604,9 @@ def task_download_qt_source():
 
 def task_extract_qt_source():
     qt_url = config['qt-source-url']
-    zip_file = os.path.basename(urlparse(qt_url).path)
-    zip_file_path = os.path.join(config['sysroot-cache-dir'], zip_file)
-    target_dir = os.path.splitext(zip_file)[0]
+    xz_file = os.path.basename(urlparse(qt_url).path)
+    xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
+    target_dir = os.path.splitext(os.path.splitext(xz_file)[0])[0]
     target_path = os.path.join(config['sysroot-cache-dir'], target_dir)
     os.makedirs(target_path, exist_ok=True)
 
@@ -614,8 +614,8 @@ def task_extract_qt_source():
 
     return {
         'task_dep': ['download_qt_source'],
-        'actions': [(extract_zip, [zip_file_path, sysroot_cache_dir])],
-        'file_dep': [zip_file_path],
+        'actions': [(extract_xz, [xz_file_path, sysroot_cache_dir])],
+        'file_dep': [xz_file_path],
         'targets': [target_path],
         'verbosity': 2
     }
