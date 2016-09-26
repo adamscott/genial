@@ -2,7 +2,7 @@
 set -ex
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OS X
-    brew upgrade pyenv
+    $(: do nothing, already installed)
 
 else # Linux
     # Install pyenv
