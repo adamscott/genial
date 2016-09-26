@@ -31,22 +31,30 @@ default = {
     'pyqtdeploycli': 'pyqtdeploycli',
     'make': 'make',
     'gist': 'gist',
+    'target-system': platform.system(),
+    'target-arch': platform.architecture()[:2],
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
     'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz',
     'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
     'python-source-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
-    'python-install-dir': os.path.join('pyqtdeploy', 'Python-3.5.2')
+    'python-source-dir': os.path.join('pyqtdeploy', 'Python-3.5.2'),
+    'python-target': '',
+    'sip-source-url': '',
+    'sip-source-dir': os.path.join('pyqtdeploy', 'sip-4.18.1')
 }
 
-platform_system = platform.system()
-platform_arch = platform.architecture()[0][:2]
-if platform_system == "Linux":
-    default['python-target'] = 'linux-{}'.format(platform_arch)
-elif platform_system == "Darwin":
+if default['target-system'] == "Linux":
+    default['python-target'] = 'linux-{}'.format(default['target_arch'])
+elif default['target-system'] == "Darwin":
     default['python-target'] = 'osx-64'
-elif platform_system == "Windows":
-    default['python-target'] = 'win-{}'.format(platform_arch)
+elif default['target-system'] == "Windows":
+    default['python-target'] = 'win-{}'.format(default['target_arch'])
+
+if default['target-system'] == "Windows":
+    default['sip-source-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.zip"
+else:
+    default['sip-source-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.tar.gz"
 
 config = {
     'pandoc': get_var('pandoc', default['pandoc']),
@@ -58,13 +66,17 @@ config = {
     'pyenv': get_var('pyenv', default['pyenv']),
     'pyqtdeploycli': get_var('pyqtdeploycli', default['pyqtdeploycli']),
     'gist': get_var('gist', default['gist']),
+    'target-system': get_var('target-system', default['target-system']),
+    'target-arch': get_var('target-arch', default['target-arch']),
     'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
     'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
     'qt-source-url': get_var('qt-source-url', default['qt-source-url']),
     'qt-install-dir': get_var('qt-install-dir', default['qt-install-dir']),
     'python-source-url': get_var('python-source-url', default['python-source-url']),
-    'python-install-dir': get_var('python-install-dir', default['python-install-dir']),
-    'python-target': get_var('python-target', default['python-target'])
+    'python-source-dir': get_var('python-source-dir', default['python-source-dir']),
+    'python-target': get_var('python-target', default['python-target']),
+    'sip-source-url': get_var('sip-source-url', default['sip-source-url']),
+    'sip-source-dir': get_var('sip-source-dir', default['sip-source-dir'])
 }
 
 DOIT_CONFIG = {
@@ -136,11 +148,16 @@ def update_gist(step, file):
         if platform_system == 'Linux': platform_system = 'linux'
         if platform_system == 'Windows': platform_system = 'windows'
 
-        command = shlex.split('gist -u {} -f {}-{}.log'.format(gist_id, step, platform_system))
+        target_file = "{}-{}.log"
+
+        with open(file, 'r') as rf:
+            pass
+
+        command = shlex.split('gist -u {} '.format(gist_id, step, platform_system))
 
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
                              universal_newlines=True)
-        out, err = p.communicate(file)
+        out, err = p.communicate()
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), out))
 
@@ -184,6 +201,43 @@ def extract_xz(xz_path, extract_path):
     archive = tarfile.open(xz_path, mode='r:xz')
     archive.extractall(path=extract_path)
     archive.close()
+
+
+def cmd_with_animation(cmd="", path=".", log_file=None):
+    current_path = os.getcwd()
+    os.chdir(path)
+
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         universal_newlines=True)
+    subprocess_wait_animation(p)
+    out, err = p.communicate()
+
+    if not log_file:
+        print(out.strip())
+    else:
+        with open(log_file, 'w') as f:
+            f.write(out)
+    if p.poll() > 0:
+        return TaskError("Command '{}' failed.\n{}".format(" ".join(cmd), err))
+
+    os.chdir(current_path)
+
+
+def subprocess_wait_animation(p):
+    anim_frames = ['▀', '▐', '▄', '▌']
+    if p.poll() is None:
+        counter = 0
+        start_time = datetime.datetime.now()
+        moment_ago = start_time
+        while p.poll() is None:
+            now = datetime.datetime.now()
+            if moment_ago + datetime.timedelta(seconds=1) > now:
+                print('\r{}'.format(anim_frames[counter]), end="")
+                counter += 1
+                counter = counter % len(anim_frames)
+                moment_ago = now
+            time.sleep(0.25)
+        print("\r \r", end="")
 
 
 def do_nothing():
@@ -723,15 +777,7 @@ def task_make_qt_source():
         except FileNotFoundError as e:
             raise e
 
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
+        subprocess_wait_animation(p)
 
         os.chdir(current_path)
 
@@ -776,15 +822,7 @@ def task_make_install_qt_source():
         except FileNotFoundError as e:
             raise e
 
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
+        subprocess_wait_animation(p)
 
         os.chdir(current_path)
 
@@ -805,6 +843,13 @@ def task_make_install_qt_source():
         'actions': [make_install],
         'file_dep': [source_path],
         'verbosity': 2
+    }
+
+
+def task_prepare_qt_source():
+    return {
+        'task_dep': ['make_install_python_source'],
+        'actions': [do_nothing]
     }
 
 
@@ -847,155 +892,102 @@ def task_extract_python_source():
 
 
 def task_configure_python_source():
-    def configure():
-        current_path = os.getcwd()
-        os.chdir(config['python-install-dir'])
-
-        command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['python-target']))
-
-        try:
-            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                 universal_newlines=True)
-        except FileNotFoundError as e:
-            raise e
-
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
-
-        os.chdir(current_path)
-
-        out, err = p.communicate()
-        print(out)
-
-        if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+    command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['python-target']))
+    launch_from = config['python-source-dir']
 
     return {
         'task_dep': ['extract_python_source'],
-        'actions': [configure],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command
+        })],
         'verbosity': 2
     }
 
 
 def task_qmake_python_source():
-    def qmake():
-        current_path = os.getcwd()
-        os.chdir(config['python-install-dir'])
-
-        command = shlex.split("qmake SYSROOT={}".format(config['sysroot-dir']))
-
-        try:
-            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                 universal_newlines=True)
-        except FileNotFoundError as e:
-            raise e
-
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
-
-        os.chdir(current_path)
-
-        out, err = p.communicate()
-        print(out)
-
-        if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+    command = shlex.split("qmake SYSROOT={}".format(config['sysroot-dir']))
+    launch_from = config['python-source-dir']
 
     return {
         'task_dep': ['configure_python_source'],
-        'actions': [qmake],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command
+        })],
         'verbosity': 2
     }
 
 
 def task_make_python_source():
-    def make():
-        current_path = os.getcwd()
-        os.chdir(config['python-install-dir'])
-
-        command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
-
-        try:
-            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                 universal_newlines=True)
-        except FileNotFoundError as e:
-            raise e
-
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
-
-        os.chdir(current_path)
-
-        out, err = p.communicate()
-        print(out)
-
-        if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+    command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
+    launch_from = config['python-source-dir']
+    log_file = "make.log"
 
     return {
         'task_dep': ['qmake_python_source'],
-        'actions': [make],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command,
+            'log_file': log_file
+        })],
         'verbosity': 2
     }
 
 
 def task_make_install_python_source():
-    def make_install():
-        current_path = os.getcwd()
-        os.chdir(config['python-install-dir'])
-
-        command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
-
-        try:
-            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                 universal_newlines=True)
-        except FileNotFoundError as e:
-            raise e
-
-        if p.poll() is None:
-            start_time = datetime.datetime.now()
-            moment_ago = start_time
-            while p.poll() is None:
-                now = datetime.datetime.now()
-                if moment_ago + datetime.timedelta(seconds=30) > now:
-                    print('*', end="")
-                time.sleep(1)
-            print("")
-
-        os.chdir(current_path)
-
-        out, err = p.communicate()
-        print(out)
-
-        if p.poll() > 0:
-            return TaskError("Command '{}' failed.\n{}".format(" ".join(command), err))
+    command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
+    launch_from = config['python-source-dir']
+    log_file = "make_install.log"
 
     return {
         'task_dep': ['make_python_source'],
-        'actions': [make_install],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command,
+            'log_file': log_file
+        })],
         'verbosity': 2
     }
+
+
+def task_prepare_python_source():
+    return {
+        'task_dep': ['make_install_python_source'],
+        'actions': [do_nothing]
+    }
+
+
+def task_download_sip_source():
+    sip_url = config['sip-source-url']
+    target_file = os.path.basename(urlparse(sip_url).path)
+    target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
+    os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
+
+    return {
+        'task_dep': ['create_sysroot'],
+        'actions': [(check_module, ['requests']), (download_file, [sip_url, target_file_path])],
+        'targets': [target_file_path],
+        'verbosity': 2,
+        'uptodate': [(check_is_file, [target_file_path])]
+    }
+
+
+def task_extract_pip_source():
+    python_url = config['python-source-url']
+    compressed_file = os.path.basename(urlparse(python_url).path)
+    compressed_file_path = os.path.join(config['sysroot-cache-dir'], compressed_file)
+
+    task_dict = {
+        'task_dep': ['download_python_source']
+    }
+
+    if config['target-system'] != "Windows":
+        task_dict['actions'] = [(extract_xz, [compressed_file_path, config['sysroot-dir']])]
+    else:
+        task_dict['actions'] = [(extract_zip, [compressed_file_path, config['sysroot-dir']])]
+
+    return task_dict
 
 
 def task_create_pdy():
