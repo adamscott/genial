@@ -1,5 +1,6 @@
 import datetime
 import glob
+import hashlib
 import importlib
 import math
 import multiprocessing
@@ -41,9 +42,11 @@ default = {
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
     'pyqtdeploy-target': '',
     'qt-static-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz',
+    'qt-static-url-md5': '63ec6b584757eef8cd713e4958297251',
     'qt-static-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
     'qt-static-qmake': '',
     'python-static-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
+    'python-static-url-md5': '8906efbacfcdc7c3c9198aeefafd159e',
     'python-static-dir': os.path.join('pyqtdeploy', 'Python-3.5.2'),
     'sip-static-url': '',
     'sip-static-dir': os.path.join('pyqtdeploy', 'sip-4.18.1'),
@@ -80,9 +83,11 @@ config = {
     'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
     'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
     'qt-static-url': get_var('qt-static-url', default['qt-static-url']),
+    'qt-static-url-md5': get_var('qt-static-url-md5', default['qt-static-url-md5']),
     'qt-static-dir': get_var('qt-static-dir', default['qt-static-dir']),
     'qt-static-qmake': get_var('qt-static-qmake', default['qt-static-qmake']),
     'python-static-url': get_var('python-static-url', default['python-static-url']),
+    'python-static-url-md5': get_var('python-static-url-md5', default['python-static-url-md5']),
     'python-static-dir': get_var('python-static-dir', default['python-static-dir']),
     'pyqtdeploy-target': get_var('pyqtdeploy-target', default['pyqtdeploy-target']),
     'sip-static-url': get_var('sip-static-url', default['sip-static-url']),
@@ -244,6 +249,35 @@ def subprocess_wait_animation(p):
                 moment_ago = now
             time.sleep(0.25)
         print("\r \r", end="")
+
+
+def lazy_read(file_object, chunks=1024):
+    # http://stackoverflow.com/questions/519633/lazy-method-for-reading-big-file-in-python
+    while True:
+        data = file_object.read(chunks)
+        if not data:
+            break
+        yield data
+
+
+def check_sum(path, type='md5', digest=''):
+    if not os.path.isfile(path):
+        return TaskFailed("'{}' is not a file. Cannot checksum.".format(path))
+
+    if type == 'md5':
+        m = hashlib.md5()
+        with open(path, 'rb') as f:
+            for chunk in lazy_read(f):
+                m.update(chunk)
+        md5_sum = m.hexdigest()
+
+        if digest == md5_sum:
+            print("'{}' ({}) matches the md5sum. ".format(path, digest))
+            return True
+        else:
+            return TaskFailed("'{}' ({}) do not match the md5sum.".format(path, digest))
+    else:
+        return TaskFailed("'{}' is not a suppported sum type.".format(type))
 
 
 def do_nothing():
@@ -674,7 +708,11 @@ def task_download_static_qt():
 
     return {
         'task_dep': ['create_sysroot'],
-        'actions': [(check_module, ['requests']), (download_file, [qt_url, target_file_path])],
+        'actions': [
+            (check_module, ['requests']),
+            (download_file, [qt_url, target_file_path]),
+            (check_sum, [target_file_path], {'digest': config['qt-static-url-md5']})
+        ],
         'targets': [target_file_path],
         'verbosity': 2,
         'uptodate': [(check_is_file, [target_file_path])]
@@ -885,7 +923,11 @@ def task_download_static_python():
 
     return {
         'task_dep': ['create_sysroot'],
-        'actions': [(check_module, ['requests']), (download_file, [python_url, target_file_path])],
+        'actions': [
+            (check_module, ['requests']),
+            (download_file, [python_url, target_file_path]),
+            (check_sum, [target_file_path], {'digest': config['python-static-url-md5']})
+        ],
         'targets': [target_file_path],
         'verbosity': 2,
         'uptodate': [(check_is_file, [target_file_path])]
