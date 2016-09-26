@@ -134,7 +134,7 @@ def check_module(*modules):
         try:
             importlib.import_module(module)
         except ImportError:
-            return TaskFailed("'{}' module not found.")
+            return TaskFailed("'{}' module not found.".format(module))
 
 
 def check_is_file(path):
