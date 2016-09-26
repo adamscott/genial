@@ -728,8 +728,8 @@ def task_extract_static_qt():
 
 def task_configure_static_qt():
     qt_url = config['qt-static-url']
-    zip_file = os.path.basename(urlparse(qt_url).path)
-    source_dir = os.path.splitext(zip_file)[0]
+    tar_file = os.path.basename(urlparse(qt_url).path)
+    source_dir = os.path.splitext(os.path.splitext(tar_file)[0])[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
     log_path = ""
 
@@ -784,8 +784,8 @@ def task_configure_static_qt():
 
 def task_make_static_qt():
     qt_url = config['qt-static-url']
-    zip_file = os.path.basename(urlparse(qt_url).path)
-    source_dir = os.path.splitext(zip_file)[0]
+    tar_file = os.path.basename(urlparse(qt_url).path)
+    source_dir = os.path.splitext(os.path.splitext(tar_file)[0])[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
     log_path = ""
 
@@ -828,8 +828,8 @@ def task_make_static_qt():
 
 def task_make_install_static_qt():
     qt_url = config['qt-static-url']
-    zip_file = os.path.basename(urlparse(qt_url).path)
-    source_dir = os.path.splitext(zip_file)[0]
+    tar_file = os.path.basename(urlparse(qt_url).path)
+    source_dir = os.path.splitext(os.path.splitext(tar_file)[0])[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
     log_path = ""
 
