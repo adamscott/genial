@@ -40,22 +40,31 @@ before_install:
   - source ./.travis/doit.sh
 install:
   - doit
-  - doit download_static_qt \
-         extract_static_qt \
-         configure_static_qt \
-         make_static_qt \
-         make_install_static_qt
-  - doit download_static_python \
-         extract_static_python \
-         configure_static_python \
-         qmake_static_python \
-         make_static_python \
-         make_install_static_python
-  - doit download_static_sip \
-         extract_static_sip \
-         configure_static_sip \
-         qmake_static_sip \
-         make_static_sip \
-         make_install_static_sip
+  - doit
+      download_static_qt
+      extract_static_qt
+      configure_static_qt
+      make_static_qt
+      make_install_static_qt
+  - doit
+      download_static_python
+      extract_static_python
+      configure_static_python
+      qmake_static_python
+      make_static_python
+      make_install_static_python
+  - doit
+      download_static_sip
+      extract_static_sip
+      configure_static_sip
+      qmake_static_sip
+      make_static_sip
+      make_install_static_sip
+  - doit
+      download_static_pyqt5
+      extract_static_pyqt5
+      configure_static_pyqt5
+      make_static_pyqt5
+      make_install_static_pyqt5
 script:
   - tox
