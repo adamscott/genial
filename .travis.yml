@@ -40,7 +40,8 @@ before_install:
 install:
   - pip install doit
   - doit
-  - doit make_install_qt_source
-  - doit make_install_python_source
+  - doit prepare_static_qt
+  - doit prepare_static_python
+  - doit prepare_static_sip
 script:
   - tox

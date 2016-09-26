@@ -37,25 +37,26 @@ default = {
     'sysroot-dir': 'pyqtdeploy',
     'sysroot-cache-dir': os.path.join('pyqtdeploy', 'cache'),
     'pyqtdeploy-target': '',
-    'qt-source-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz',
-    'qt-install-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
-    'python-source-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
-    'python-source-dir': os.path.join('pyqtdeploy', 'Python-3.5.2'),
-    'sip-source-url': '',
-    'sip-source-dir': os.path.join('pyqtdeploy', 'sip-4.18.1')
+    'qt-static-url': 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz',
+    'qt-static-dir': os.path.join('pyqtdeploy', 'qt-5.7.0'),
+    'qt-static-qmake': '',
+    'python-static-url': 'https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz',
+    'python-static-dir': os.path.join('pyqtdeploy', 'Python-3.5.2'),
+    'sip-static-url': '',
+    'sip-static-dir': os.path.join('pyqtdeploy', 'sip-4.18.1')
 }
 
-if default['target-system'] == "Linux":
-    default['pyqtdeploy-target'] = 'linux-{}'.format(default['target_arch'])
-elif default['target-system'] == "Darwin":
-    default['pyqtdeploy-target'] = 'osx-64'
-elif default['target-system'] == "Windows":
-    default['pyqtdeploy-target'] = 'win-{}'.format(default['target_arch'])
-
 if default['target-system'] == "Windows":
-    default['sip-source-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.zip"
-else:
-    default['sip-source-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.tar.gz"
+    default['qt-static-qmake'] = os.path.abspath(os.path.join(default['qt-static-dir'], "bin", "qmake.exe"))
+    default['sip-static-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.zip"
+    default['pyqtdeploy-target'] = 'win-{}'.format(default['target_arch'])
+else:  # Darwin and Linux
+    default['qt-static-qmake'] = os.path.abspath(os.path.join(default['qt-static-dir'], "bin", "qmake"))
+    default['sip-static-url'] = "https://sourceforge.net/projects/pyqt/files/sip/sip-4.18.1/sip-4.18.1.tar.gz"
+    if default['target-system'] == "Darwin":
+        default['pyqtdeploy-target'] = 'osx-64'
+    else:  # Linux
+        default['pyqtdeploy-target'] = 'linux-{}'.format(default['target_arch'])
 
 config = {
     'pandoc': get_var('pandoc', default['pandoc']),
@@ -71,13 +72,14 @@ config = {
     'target-arch': get_var('target-arch', default['target-arch']),
     'sysroot-dir': get_var('sysroot-dir', default['sysroot-dir']),
     'sysroot-cache-dir': get_var('sysroot-cache-dir', default['sysroot-cache-dir']),
-    'qt-source-url': get_var('qt-source-url', default['qt-source-url']),
-    'qt-install-dir': get_var('qt-install-dir', default['qt-install-dir']),
-    'python-source-url': get_var('python-source-url', default['python-source-url']),
-    'python-source-dir': get_var('python-source-dir', default['python-source-dir']),
+    'qt-static-url': get_var('qt-static-url', default['qt-static-url']),
+    'qt-static-dir': get_var('qt-static-dir', default['qt-static-dir']),
+    'qt-static-qmake': get_var('qt-static-qmake', default['qt-static-qmake']),
+    'python-static-url': get_var('python-static-url', default['python-static-url']),
+    'python-static-dir': get_var('python-static-dir', default['python-static-dir']),
     'pyqtdeploy-target': get_var('pyqtdeploy-target', default['pyqtdeploy-target']),
-    'sip-source-url': get_var('sip-source-url', default['sip-source-url']),
-    'sip-source-dir': get_var('sip-source-dir', default['sip-source-dir'])
+    'sip-static-url': get_var('sip-static-url', default['sip-static-url']),
+    'sip-static-dir': get_var('sip-static-dir', default['sip-static-dir'])
 }
 
 DOIT_CONFIG = {
@@ -656,7 +658,7 @@ def task_create_sysroot():
 
 
 def task_download_static_qt():
-    qt_url = config['qt-source-url']
+    qt_url = config['qt-static-url']
     target_file = os.path.basename(urlparse(qt_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
     os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
@@ -671,11 +673,11 @@ def task_download_static_qt():
 
 
 def task_cleanup_static_qt():
-    qt_url = config['qt-source-url']
+    qt_url = config['qt-static-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
     dir_name = os.path.splitext(os.path.splitext(xz_file)[0])[0]
     extracted_dir_path = os.path.join(config['sysroot-cache-dir'], dir_name)
-    install_dir_path = config['qt-install-dir']
+    install_dir_path = config['qt-static-dir']
 
     def remove_source_dir(*paths):
         for path in paths:
@@ -688,7 +690,7 @@ def task_cleanup_static_qt():
 
 
 def task_extract_static_qt():
-    qt_url = config['qt-source-url']
+    qt_url = config['qt-static-url']
     xz_file = os.path.basename(urlparse(qt_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
     target_dir = os.path.splitext(os.path.splitext(xz_file)[0])[0]
@@ -708,7 +710,7 @@ def task_extract_static_qt():
 
 
 def task_configure_static_qt():
-    qt_url = config['qt-source-url']
+    qt_url = config['qt-static-url']
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
@@ -720,7 +722,7 @@ def task_configure_static_qt():
 
         command = shlex.split(
             './configure -prefix {} -static -release -nomake examples'.format(
-                config['qt-install-dir']
+                config['qt-static-dir']
             )
         )
 
@@ -764,7 +766,7 @@ def task_configure_static_qt():
 
 
 def task_make_static_qt():
-    qt_url = config['qt-source-url']
+    qt_url = config['qt-static-url']
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
@@ -808,13 +810,13 @@ def task_make_static_qt():
 
 
 def task_make_install_static_qt():
-    qt_url = config['qt-source-url']
+    qt_url = config['qt-static-url']
     zip_file = os.path.basename(urlparse(qt_url).path)
     source_dir = os.path.splitext(zip_file)[0]
     source_path = os.path.join(config['sysroot-cache-dir'], source_dir)
     log_path = ""
 
-    os.makedirs(config['qt-install-dir'], exist_ok=True)
+    os.makedirs(config['qt-static-dir'], exist_ok=True)
 
     def make_install():
         current_path = os.getcwd()
@@ -861,7 +863,7 @@ def task_prepare_static_qt():
 
 
 def task_download_static_python():
-    python_url = config['python-source-url']
+    python_url = config['python-static-url']
     target_file = os.path.basename(urlparse(python_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
     os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
@@ -876,7 +878,7 @@ def task_download_static_python():
 
 
 def task_cleanup_static_python():
-    target_path = config['python-source-dir']
+    target_path = config['python-static-dir']
 
     def remove_source_dir():
         shutil.rmtree(target_path)
@@ -888,7 +890,7 @@ def task_cleanup_static_python():
 
 
 def task_extract_static_python():
-    python_url = config['python-source-url']
+    python_url = config['python-static-url']
     xz_file = os.path.basename(urlparse(python_url).path)
     xz_file_path = os.path.join(config['sysroot-cache-dir'], xz_file)
 
@@ -901,7 +903,7 @@ def task_extract_static_python():
 
 def task_configure_static_python():
     command = shlex.split("pyqtdeploycli configure --package python --target {}".format(config['pyqtdeploy-target']))
-    launch_from = config['python-source-dir']
+    launch_from = config['python-static-dir']
 
     return {
         'task_dep': ['extract_static_python'],
@@ -915,8 +917,8 @@ def task_configure_static_python():
 
 
 def task_qmake_static_python():
-    command = shlex.split("qmake SYSROOT={}".format(config['sysroot-dir']))
-    launch_from = config['python-source-dir']
+    command = shlex.split("{} SYSROOT={}".format(config['qt-static-qmake'], config['sysroot-dir']))
+    launch_from = config['python-static-dir']
 
     return {
         'task_dep': ['configure_static_python'],
@@ -930,7 +932,7 @@ def task_qmake_static_python():
 
 def task_make_static_python():
     command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
-    launch_from = config['python-source-dir']
+    launch_from = config['python-static-dir']
     log_file = "make.log"
 
     return {
@@ -946,7 +948,7 @@ def task_make_static_python():
 
 def task_make_install_static_python():
     command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
-    launch_from = config['python-source-dir']
+    launch_from = config['python-static-dir']
     log_file = "make_install.log"
 
     return {
@@ -967,8 +969,8 @@ def task_prepare_static_python():
     }
 
 
-def task_download_static_pip():
-    sip_url = config['sip-source-url']
+def task_download_static_sip():
+    sip_url = config['sip-static-url']
     target_file = os.path.basename(urlparse(sip_url).path)
     target_file_path = os.path.join(config['sysroot-cache-dir'], target_file)
     os.makedirs(config['sysroot-cache-dir'], exist_ok=True)
@@ -982,13 +984,13 @@ def task_download_static_pip():
     }
 
 
-def task_extract_static_pip():
-    python_url = config['python-source-url']
-    compressed_file = os.path.basename(urlparse(python_url).path)
+def task_extract_static_sip():
+    sip_url = config['sip-static-url']
+    compressed_file = os.path.basename(urlparse(sip_url).path)
     compressed_file_path = os.path.join(config['sysroot-cache-dir'], compressed_file)
 
     task_dict = {
-        'task_dep': ['download_static_pip']
+        'task_dep': ['download_static_sip']
     }
 
     if config['target-system'] != "Windows":
@@ -997,6 +999,98 @@ def task_extract_static_pip():
         task_dict['actions'] = [(extract_zip, [compressed_file_path, config['sysroot-dir']])]
 
     return task_dict
+
+
+def task_configure_static_sip():
+    command_pyqtdeploycli_configure = shlex.split(
+        "pyqtdeploycli configure --package sip --target {}".format(config['pyqtdeploy-target'])
+    )
+    command_configure_py = shlex.split(
+        "python configure.py --static --sysroot={} --no-tools --use-qmake --configuration=sip-{}.cfg".format(
+            os.path.abspath(config['sysroot-dir']),
+            config['pyqtdeploy-target']
+        )
+    )
+    launch_from = config['sip-static-dir']
+
+    return {
+        'task_dep': ['extract_static_sip'],
+        'actions': [
+            (cmd_with_animation, [], {'path': launch_from, 'cmd': command_pyqtdeploycli_configure}),
+            (cmd_with_animation, [], {'path': launch_from, 'cmd': command_configure_py})
+        ],
+        'verbosity': 2,
+        'uptodate': [run_once]
+    }
+
+
+def task_qmake_static_sip():
+    command = shlex.split(config['qt-static-qmake'])
+    launch_from = config['sip-static-dir']
+
+    return {
+        'task_dep': ['configure_static_sip'],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command
+        })],
+        'verbosity': 2
+    }
+
+
+def task_make_static_sip():
+    command = shlex.split('make -j{}'.format(multiprocessing.cpu_count() + 1))
+    launch_from = config['sip-static-dir']
+    log_file = "make.log"
+
+    return {
+        'task_dep': ['qmake_static_python'],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command,
+            'log_file': log_file
+        })],
+        'verbosity': 2
+    }
+
+
+def task_make_install_static_sip():
+    command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
+    launch_from = config['sip-static-dir']
+    log_file = "make_install.log"
+
+    return {
+        'task_dep': ['qmake_static_python'],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command,
+            'log_file': log_file
+        })],
+        'verbosity': 2
+    }
+
+
+def task_make_install_static_sip():
+    command = shlex.split('make install -j{}'.format(multiprocessing.cpu_count() + 1))
+    launch_from = config['sip-static-dir']
+    log_file = "make_install.log"
+
+    return {
+        'task_dep': ['make_static_python'],
+        'actions': [(cmd_with_animation, [], {
+            'path': launch_from,
+            'cmd': command,
+            'log_file': log_file
+        })],
+        'verbosity': 2
+    }
+
+
+def task_prepare_static_sip():
+    return {
+        'task_dep': ['make_install_static_sip'],
+        'actions': [do_nothing]
+    }
 
 
 def task_create_pdy():
