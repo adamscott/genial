@@ -8,7 +8,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OS X
     brew install coreutils
 
     # pyenv dependencies
-    brew install autoconf openssl pkg-config readline xz
+    brew install autoconf openssl readline xz
 
     # needed to convert .md to .rst
     brew install pandoc
