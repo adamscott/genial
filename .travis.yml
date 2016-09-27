@@ -49,15 +49,14 @@ addons:
       - curl
       - llvm
       - xz-utils
-
 before_install:
-  - source ./.travis/setup_packages.sh
+  - test $TRAVIS_OS_NAME = 'osx' && brew install bash && /usr/local/Cellar/bash/4.4/bin/bash
   - source ./.travis/env.sh
-  - source ./.travis/helper.sh
-  - source ./.travis/gist.sh
-  - source ./.travis/qt.sh
-  - source ./.travis/pyenv.sh
-  - source ./.travis/doit.sh
+  - ./.travis/setup_packages.sh
+  - ./.travis/gist.sh
+  - ./.travis/qt.sh
+  - ./.travis/pyenv.sh
+  - ./.travis/doit.sh
 install:
   - doit
 script:

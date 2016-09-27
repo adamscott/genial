@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
-declare -A LOCAL  # sets local variable array
+source colors.sh
+source helper.sh
+
+declare -a LOCAL  # sets local variable array
 
 LOCAL[tmp_dir]=`mktemp -d 2>/dev/null || mktemp -d -t 'qt_tmp_dir'`
 LOCAL[qt_install_dir]=$(echo ~)/qt
