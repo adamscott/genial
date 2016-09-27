@@ -199,22 +199,19 @@ def extract_tar(tar_path, extract_path):
 
 def cmd_with_animation(cmd="", path=".", log_file=None):
     current_path = os.getcwd()
-    os.chdir(path)
+    log_file_path = os.path.join(path, log_file)
 
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                         universal_newlines=True)
+    p = subprocess.Popen(cmd, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     subprocess_wait_animation(p)
     out, err = p.communicate()
 
     if not log_file:
         print(out.strip())
     else:
-        with open(log_file, 'w') as f:
+        with open(log_file_path, 'w') as f:
             f.write(out)
     if p.poll() > 0:
         return TaskError("Command '{}' failed.\n{}".format(" ".join(cmd), err))
-
-    os.chdir(current_path)
 
 
 def subprocess_wait_animation(p):
