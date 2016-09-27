@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-set -ex
-
 # Based on travis_wait
 # https://github.com/travis-ci/travis-build/blob/bbe7c12b6f2c8bdc6cd9a7d3e839a729048648ae/lib/travis/build/templates/header.sh
 build_wait() {
