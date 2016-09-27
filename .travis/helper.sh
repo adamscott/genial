@@ -17,8 +17,8 @@ build_wait() {
   local cmd="$@"
   local log_file=travis_wait_$$.log
 
-  if [ -z "${LOG_FILE_NAME}" ]; then
-    LOG_FILE_NAME=$log_file
+  if [ -z "${BUILD_WAIT_LOG}" ]; then
+    BUILD_WAIT_LOG=$log_file
   fi
 
   $cmd &>$log_file &
@@ -40,13 +40,9 @@ build_wait() {
     echo -e "\n${ANSI_RED}The command $cmd exited with $result.${ANSI_RESET}"
   fi
 
-  # Do not want to bust the whole log
-  #echo -e "\n${ANSI_GREEN}Log:${ANSI_RESET}\n"
-  #cat $log_file
-
   # Copy log to the determined log file name
-  echo -e "\n${ANSI_GREEN}Writing log to file '${LOG_FILE_NAME}'.${ANSI_RESET}\n"
-  cp $log_file $LOG_FILE_NAME
+  echo -e "\n${ANSI_GREEN}Writing log to file '${BUILD_WAIT_LOG}'.${ANSI_RESET}\n"
+  cp $log_file "${BUILD_WAIT_LOG}"
 
   return $result
 }
