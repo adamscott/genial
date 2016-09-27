@@ -673,7 +673,7 @@ def task_setup_cx_freeze_repository():
         os.makedirs(dir_name, exist_ok=True)
 
     def check_uptodate(task):
-        if task.options['force']:
+        if task.options and task.options.get('force'):
             return False
         else:
             return check_is_dir(config['cx_freeze_dir'])
@@ -697,7 +697,7 @@ def task_install_cx_freeze():
     )
 
     def check_uptodate(task):
-        if task.options['force']:
+        if task.options and task.options.get('force'):
             return False
         else:
             return check_module("cx_Freeze") is True
