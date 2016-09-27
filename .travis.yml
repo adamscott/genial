@@ -50,7 +50,7 @@ addons:
       - llvm
       - xz-utils
 before_install:
-  - (test $TRAVIS_OS_NAME = 'osx' && brew install bash && alias bash=/usr/local/Cellar/bash/4.4/bin/bash)
+  - if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew install bash && alias bash=/usr/local/Cellar/bash/4.4/bin/bash; fi
   - source .travis/env.sh
   - pushd .travis && bash setup_packages.sh && popd
   - pushd .travis && bash gist.sh && popd
