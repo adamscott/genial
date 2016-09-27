@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
-if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OS X
+if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
     alias gnu_readlink=greadlink
 
-else # Linux
+else  # Linux
     alias gnu_readlink=readlink
 fi
 

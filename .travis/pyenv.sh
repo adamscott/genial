@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -ex
 
-if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OS X
-    brew uninstall pyenv # uninstall outdated pyenv
+if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
+    brew uninstall pyenv  # uninstall outdated pyenv
 fi
 
 # Unified pyenv install

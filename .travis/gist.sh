@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -ex
 
-if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then # OS X
+if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
     # install gist package
     brew install gist
 
-else # Linux
+else  # Linux
     gem install gist
 fi
 # gist is already installed by .travis.yml on Linux
