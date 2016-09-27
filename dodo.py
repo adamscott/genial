@@ -691,9 +691,7 @@ def task_setup_cx_freeze_repository():
 def task_install_cx_freeze():
     _cx_freeze_dir = config['cx_freeze_dir']
     _python_bin = config['python']
-    _build_install_cmd = shlex.split(
-        "(cd {0} && {1} setup.py build && {1} setup.py install)".format(_cx_freeze_dir, _python_bin)
-    )
+    _build_install_cmd = shlex.split("{0} setup.py build && {0} setup.py install".format(_python_bin))
 
     def check_uptodate(task):
         if task.options and task.options.get('force'):
@@ -703,8 +701,9 @@ def task_install_cx_freeze():
 
     return {
         'task_dep': ['setup_cx_freeze_repository'],
-        'actions': [_build_install_cmd],
+        'actions': [CmdAction(subprocess.list2cmdline(_build_install_cmd), cwd=_cx_freeze_dir)],
         'uptodate': [check_uptodate],
-        'params': [common_params['force']]
+        'params': [common_params['force']],
+        'verbosity': 0
     }
 
