@@ -26,6 +26,7 @@ from doit import get_var
 ''' ============== '''
 
 default = {
+    'project_root': os.getcwd(),
     'pandoc': 'pandoc',
     'pylupdate5': 'pylupdate5',
     'lrelease': 'lrelease',
@@ -42,6 +43,7 @@ default = {
 }
 
 config = {
+    'project_root': get_var('project_root', default['project_root']),
     'pandoc': get_var('pandoc', default['pandoc']),
     'pylupdate5': get_var('pylupdate5', default['pylupdate5']),
     'lrelease': get_var('lrelease', default['lrelease']),
@@ -195,7 +197,6 @@ def extract_tar(tar_path, extract_path):
 
 
 def cmd_with_animation(cmd="", path=".", log_file=None):
-    current_path = os.getcwd()
     log_file_path = os.path.join(path, log_file)
 
     p = subprocess.Popen(cmd, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -571,7 +572,6 @@ def task_generate_plugins():
     files_found = []
     os.makedirs(plugins_dir, exist_ok=True)
 
-    current_dir = os.getcwd()
     os.chdir(resources_dir)
     for root, dirs, files in os.walk("plugins"):
         for file in files:
@@ -585,7 +585,7 @@ def task_generate_plugins():
                     os.path.join(plugin_dir, file),
                     os.path.join(root, file)
                 )
-    os.chdir(current_dir)
+    os.chdir(config['project_root'])
 
     qrc_content += "\n  </qresource>"
     qrc_content += "\n</RCC>\n"
@@ -704,4 +704,3 @@ def task_install_cx_freeze():
         'params': [common_params['force']],
         'verbosity': 0
     }
-
