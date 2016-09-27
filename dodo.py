@@ -144,8 +144,7 @@ def update_gist(file):
 
         command = shlex.split('gist -u {} {}'.format(gist_id, file))
 
-        p = subprocess.Popen(command, stdin=subprocess.PIPE, stderr=subprocess.PIPE,
-                             universal_newlines=True)
+        p = subprocess.Popen(command, stdin=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         out, err = p.communicate()
         if p.poll() > 0:
             return TaskError("Command '{}' failed.\n{}".format(" ".join(command), out))
