@@ -35,6 +35,10 @@ default = {
     'pyenv': 'pyenv',
     'make': 'make',
     'gist': 'gist',
+    'hg': 'hg',
+    'python': 'python',
+    'cx_freeze_url': 'https://bitbucket.org/anthony_tuininga/cx_freeze',
+    'cx_freeze_dir': 'cx_freeze'
 }
 
 config = {
@@ -46,6 +50,10 @@ config = {
     'pip': get_var('pip', default['pip']),
     'pyenv': get_var('pyenv', default['pyenv']),
     'gist': get_var('gist', default['gist']),
+    'hg': get_var('hg', default['hg']),
+    'python': get_var('python', default['python']),
+    'cx_freeze_url': get_var('cx_freeze_url', default['cx_freeze_url']),
+    'cx_freeze_dir': get_var('cx_freeze_dir', default['cx_freeze_dir'])
 }
 
 
@@ -56,6 +64,8 @@ config = {
 
 DOIT_CONFIG = {
     'default_tasks': [
+        'setup_cx_freeze_repository',
+        'install_cx_freeze',
         'install_dependencies',
         'convert_md',
         'download_icons',
@@ -68,6 +78,17 @@ DOIT_CONFIG = {
         'compile_qrc',
         'compile_ui'
     ]
+}
+
+
+common_params = {
+    'force': {
+        'name': 'force',
+        'short': 'f',
+        'long': 'force',
+        'type': bool,
+        'default': False
+    }
 }
 
 
@@ -643,4 +664,51 @@ def task_compile_ui():
                 'file_dep': [file_full_path],
                 'targets': [output_file_full_path]
             }
+
+
+def task_setup_cx_freeze_repository():
+    _clone_cmd = shlex.split("{} clone {}".format(config['hg'], config['cx_freeze_url']))
+
+    def make_dirs(dir_name, task):
+        if task.options['force']:
+            if os.path.isdir(dir_name):
+                shutil.rmtree(dir_name)
+        os.makedirs(dir_name, exist_ok=True)
+
+    def check_uptodate(task):
+        if task.options['force']:
+            return False
+        else:
+            return check_is_dir(config['cx_freeze_dir'])
+
+    return {
+        'actions': [
+            (check_cmd, [config['hg']]),
+            (make_dirs, [config['cx_freeze_dir']]),
+            _clone_cmd
+        ],
+        'uptodate': [check_uptodate],
+        'params': [common_params['force']]
+    }
+
+
+def task_install_cx_freeze():
+    _cx_freeze_dir = config['cx_freeze_dir']
+    _python_bin = config['python']
+    _build_install_cmd = shlex.split(
+        "(cd {0} && {1} setup.py build && {1} setup.py install)".format(_cx_freeze_dir, _python_bin)
+    )
+
+    def check_uptodate(task):
+        if task.options['force']:
+            return False
+        else:
+            return check_module("cx_Freeze") is True
+
+    return {
+        'task_dep': ['setup_cx_freeze_repository'],
+        'actions': [_build_install_cmd],
+        'uptodate': [check_uptodate],
+        'params': [common_params['force']]
+    }
 

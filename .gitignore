@@ -28,6 +28,8 @@ genial.pro
 .DS_Store
 # Generated genial.pdy
 genial.pdy
+# cx_Freeze repository
+cx_freeze
 
 # ---------------------------------------------------------------------
 

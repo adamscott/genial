@@ -31,6 +31,7 @@ addons:
       - build-essential
       - curl
       - git
+      - mercurial
       - python-setuptools
       - ruby
       - rubygems
