@@ -84,6 +84,7 @@ def check_cmd(*commands):
     for command in commands:
         if not shutil.which(command):
             return TaskFailed("'{}' not found.".format(command))
+    return True
 
 
 def check_module(*modules):
@@ -92,6 +93,7 @@ def check_module(*modules):
             importlib.import_module(module)
         except ImportError:
             return TaskFailed("'{}' module not found.".format(module))
+    return True
 
 
 def check_is_file(path):
