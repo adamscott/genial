@@ -146,8 +146,8 @@ def download_file(url, target_path):
             now = datetime.datetime.now()
             if moment_ago + datetime.timedelta(seconds=1) < now:
                 print(
-                    "\rDownloaded {}%".format(
-                        math.floor(downloaded_size / int(r.headers['content-length']) * 100)
+                    "\rDownloaded {:2d}%".format(
+                        downloaded_size / int(r.headers['content-length'])
                     ),
                     end=""
                 )
@@ -500,7 +500,7 @@ def task_generate_locale():
     for file in os.listdir(locale_dir):
         if file.endswith(".qm"):
             files_found.append(os.path.join(locale_dir, file))
-            qrc_content += "\n    <file alias='{}'>locale/{}</file>".format(file, file)
+            qrc_content += "\n    <file alias='{0}'>locale/{0}</file>".format(file)
     qrc_content += "\n  </qresource>"
     qrc_content += "\n</RCC>\n"
 
@@ -529,7 +529,7 @@ def task_generate_icons():
     for file in os.listdir(icons_dir):
         if file.endswith(".svg"):
             files_found.append(os.path.join(icons_dir, file))
-            qrc_content += "\n    <file alias='{}'>icons/{}</file>".format(file, file)
+            qrc_content += "\n    <file alias='{0}'>icons/{0}</file>".format(file)
     qrc_content += "\n  </qresource>"
     qrc_content += "\n</RCC>\n"
 
