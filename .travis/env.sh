@@ -1,3 +1,5 @@
+#@IgnoreInspection BashAddShebang
+
 # Add ~/.pyenv to $PATH
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
     export PATH="/Users/travis/.pyenv/bin:$PATH"
@@ -11,4 +13,4 @@ export PATH="${QT_INSTALL_DIR}/bin":$PATH
 
 # Sets coloredlogs pattern
 export COLOREDLOGS_LOG_FORMAT='[%(asctime)s] %(levelname)s %(message)s'
-export COLOREDLOGS_FIELD_STYLES='levelname=magenta'
+export COLOREDLOGS_FIELD_STYLES='asctime=green;levelname=magenta'
