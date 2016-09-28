@@ -80,10 +80,10 @@ _make_install_log="make_install-${TRAVIS_OS_NAME}.log"
 BUILD_WAIT_LOG="${_make_log}"
 
 log_verbose "==> make"
-make qtbase -j3
+python wait.py make -j3 >"${_make_log}"
 
 log_verbose "==> make install"
-make -j3 install &> "${_make_install_log}"
+python wait.py make -j3 install &> "${_make_install_log}"
 
 log_verbose "==> Sending logs to gist"
 gist \

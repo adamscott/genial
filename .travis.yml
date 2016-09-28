@@ -79,9 +79,9 @@ before_install:
   - source .travis/env.sh
   - pushd .travis && bash setup_packages.sh && popd
   - pushd .travis && bash gist.sh && popd
-  - pushd .travis && bash qt.sh && popd
   - pushd .travis && bash pyenv.sh && popd
   - eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
+  - pushd .travis && bash qt.sh && popd
   - pushd .travis && bash doit.sh && popd
 install:
   - doit
