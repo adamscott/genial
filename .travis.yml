@@ -53,27 +53,11 @@ addons:
       - xz-utils
       - gcc-5
       - g++-5
-      - libxcb1
-      - libxcb1-dev
-      - libx11-xcb1
+      - "^libxcb.*"
       - libx11-xcb-dev
-      - libxcb-keysyms1
-      - libxcb-keysyms1-dev
-      - libxcb-image0
-      - libxcb-image0-dev
-      - libxcb-shm0
-      - libxcb-shm0-dev
-      - libxcb-icccm4
-      - libxcb-icccm4-dev
-      - libxcb-sync0
-      - libxcb-sync0-dev
-      - libxcb-xfixes0-dev
+      - libglu1-mesa-dev
       - libxrender-dev
-      - libxcb-shape0-dev 
-      - libxcb-randr0-dev
-      - libxcb-render-util0
-      - libxcb-render-util0-dev
-      - libxcb-glx0-dev
+      - libxi-dev
 before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew install bash && alias bash=/usr/local/Cellar/bash/4.4/bin/bash; fi
   - source .travis/env.sh
