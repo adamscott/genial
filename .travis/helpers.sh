@@ -46,6 +46,28 @@ build_wait() {
   return $result
 }
 
+# https://github.com/travis-ci/travis-build/blob/bbe7c12b6f2c8bdc6cd9a7d3e839a729048648ae/lib/travis/build/templates/header.sh
+travis_jigger() {
+  # helper method for travis_wait()
+  local cmd_pid=$1
+  shift
+  local timeout=$1 # in minutes
+  shift
+  local count=0
+
+  # clear the line
+  echo -e "\n"
+
+  while [ $count -lt $timeout ]; do
+    count=$(($count + 1))
+    echo -ne "Still running ($count of $timeout): $@\r"
+    sleep 60
+  done
+
+  echo -e "\n${ANSI_RED}Timeout (${timeout} minutes) reached. Terminating \"$@\"${ANSI_RESET}\n"
+  kill -9 $cmd_pid
+}
+
 install_coloredlogs() {
     pip install --user coloredlogs
 }
