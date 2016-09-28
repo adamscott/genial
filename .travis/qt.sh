@@ -83,7 +83,7 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
         "${_make_install_log}"
 else  # Linux
     log_verbose "==> Adding 'ppa:beineri/opt-qt57-trusty' to apt repositories"
-    sudo add-apt-repository ppa:beineri/opt-qt57-trusty
+    sudo apt-add-repository ppa:beineri/opt-qt57-trusty -y
     log_verbose "==> Running 'apt-get update'"
     sudo apt-get update
 
