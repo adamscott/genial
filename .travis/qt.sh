@@ -87,6 +87,6 @@ make -j3 install &> "${_make_install_log}"
 
 log_verbose "==> Sending logs to gist"
 gist \
-    -u "${LOCAL[gist_id]}" \
-    "${LOCAL[make_log]}" \
-    "${LOCAL[make_install_log]}"
+    -u "${_gist_id}" \
+    "${_make_log}" \
+    "${_make_install_log}"
