@@ -1,3 +1,5 @@
+#@IgnoreInspection BashAddShebang
+
 # Based on travis_wait
 # https://github.com/travis-ci/travis-build/blob/bbe7c12b6f2c8bdc6cd9a7d3e839a729048648ae/lib/travis/build/templates/header.sh
 build_wait() {
@@ -42,4 +44,53 @@ build_wait() {
   cp $log_file "${BUILD_WAIT_LOG}"
 
   return $result
+}
+
+install_coloredlogs() {
+    pip install coloredlogs
+}
+
+is_coloredlogs_installed() {
+    local list
+    list=$(pip list)
+    echo "${list}" | grep -q coloredlogs
+    echo $?
+}
+
+log_info() { local text=$1; _log info "$text" }
+log_debug() { local text=$1; _log debug "$text"; }
+log_warn() { local text=$1; _log warn "$text"; }
+log_error() { local text=$1; _log error "$text"; }
+log_critical() { local text=$1; _log critical "$text"; }
+
+_log() {
+    if [[ "$(is_coloredlogs_installed)" -ne "0" ]] ; then
+        install_coloredlogs
+    fi
+
+    local type=$1
+
+    if [[ '$type' =~ ^(info|debug|warn|error|critical)$ ]] ; then
+        type=info
+    fi
+
+    if [[ "$#" -gt "1" ]]; then
+        shift
+    fi
+
+    local text=$1
+
+    local script=''
+    read -d '' script << END
+import logging
+import os
+import sys
+import coloredlogs
+
+logger = logging.getLogger()
+coloredlogs.install(level='DEBUG', stream=sys.stdout)
+logger.${type}('${text}')
+END
+
+    python -c "${script}"
 }

@@ -2,8 +2,10 @@
 set -e
 
 source colors.sh
+source helper.sh
 
-echo -e "${COLOR[lightyellow_fg]}=> Setup packages${COLOR[default_fg]}"
+#echo -e "${COLOR[lightyellow_fg]}=> Setup packages${COLOR[default_fg]}"
+log_info "=> Setup packages"
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
     echo -e "${COLOR[lightyellow_fg]}==> Updating brew${COLOR[default_fg]}"
