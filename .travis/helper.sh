@@ -47,7 +47,7 @@ build_wait() {
 }
 
 install_coloredlogs() {
-    pip install coloredlogs
+    pip install --user coloredlogs
 }
 
 is_coloredlogs_installed() {
