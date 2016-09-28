@@ -23,10 +23,12 @@ if [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then  # Linux
     echo 'QMAKE_COMPILER = gcc-5' >>qtbase/mkspecs/linux-g++-64/qmake.conf
     echo 'QMAKE_CC = gcc-5' >>qtbase/mkspecs/linux-g++-64/qmake.conf
     echo 'QMAKE_CXX = g++-5' >>qtbase/mkspecs/linux-g++-64/qmake.conf
+    cat qtbase/mkspecs/linux-g++-64/qmake.conf
 fi
 
 log_verbose "==> configure"
 ./configure \
+    $(if [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then echo '-platform linux-g++-64 '; fi)\
     $(: === MISC ===)\
     -opensource \
     -confirm-license \
