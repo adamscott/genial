@@ -15,8 +15,8 @@ fi
 
 # write gist token to ~/.gist
 echo -e "${COLOR[lightyellow_fg]}==> Sets gist token to ~/.gist${COLOR[default_fg]}"
-python -c """
+python - << END
 import os
 with open(os.path.join(os.path.expanduser('~'), '.gist'), 'w') as f:
     f.write(os.environ['GITHUB_GIST_TOKEN'])
-"""
+END
