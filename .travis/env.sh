@@ -10,4 +10,4 @@ export QT_INSTALL_DIR="$(echo ~)/qt"
 export PATH="${QT_INSTALL_DIR}/bin":$PATH
 
 # Sets coloredlogs pattern
-export COLOREDLOGS_LOG_FORMAT='[%(hostname)s] %(asctime)s - %(message)s'
+export COLOREDLOGS_LOG_FORMAT='[%(asctime)s] %(message)s'
