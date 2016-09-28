@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-source colors.sh
+source helpers.sh
 
-echo -e "${COLOR[lightyellow_fg]}==> Installing doit${COLOR[default_fg]}"
+log_verbose "=> Setup doit"
+log_verbose "==> Installing doit"
 pip install doit

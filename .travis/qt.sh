@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-source colors.sh
-source helper.sh
+source helpers.sh
 
-echo -e "${COLOR[lightyellow_fg]}=> Qt installation${COLOR[default_fg]}"
+log_verbose "=> Qt installation"
 
 _tmp=`mktemp -d 2>/dev/null || mktemp -d -t 'qt_tmp_dir'`
 
@@ -12,13 +11,13 @@ mkdir -p "${_tmp}"
 mkdir -p QT_INSTALL_DIR
 
 pushd "${_tmp}"
-echo -e "${COLOR[lightyellow_fg]}==> Downloading Qt source code${COLOR[default_fg]}"
+log_verbose "==> Downloading Qt source code"
 wget 'https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.xz'
-echo -e "${COLOR[lightyellow_fg]}==> Extracting Qt source code${COLOR[default_fg]}"
+log_verbose "==> Extracting Qt source code"
 tar xf 'qt-everywhere-opensource-src-5.7.0.tar.xz'
 
 pushd qt-everywhere-opensource-src-5.7.0
-echo -e "${COLOR[lightyellow_fg]}==> configure${COLOR[default_fg]}"
+log_verbose "==> configure"
 ./configure \
     $(: === MISC ===)\
     -opensource \
@@ -70,13 +69,13 @@ _make_log="make-${TRAVIS_OS_NAME}.log"
 _make_install_log="make_install-${TRAVIS_OS_NAME}.log"
 BUILD_WAIT_LOG="${_make_log}"
 
-echo -e "${COLOR[lightyellow_fg]}==> make${COLOR[default_fg]}"
+log_verbose "==> make"
 build_wait make -j3
 
-echo -e "${COLOR[lightyellow_fg]}==> make install${COLOR[default_fg]}"
+log_verbose "==> make install"
 make -j3 install &> "${_make_install_log}"
 
-echo -e "${COLOR[lightyellow_fg]}==> Sending logs to gist${COLOR[default_fg]}"
+log_verbose "==> Sending logs to gist"
 gist \
     -u "${LOCAL[gist_id]}" \
     "${LOCAL[make_log]}" \

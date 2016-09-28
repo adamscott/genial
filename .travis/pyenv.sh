@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -e
 
-source colors.sh
+source helpers.sh
 
-echo -e "${COLOR[lightyellow_fg]}=> Setup pyenv${COLOR[default_fg]}"
+log_verbose "=> Setup pyenv"
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
-    echo -e "${COLOR[lightyellow_fg]}==> Uninstalling outdated pyenv${COLOR[default_fg]}"
+    log_verbose "==> Uninstalling outdated pyenv"
     brew uninstall pyenv  # uninstall outdated pyenv
 fi
 
-echo -e "${COLOR[lightyellow_fg]}==> Installing pyenv${COLOR[default_fg]}"
+log_verbose "==> Installing pyenv"
 wget -qO- https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 
 # Makes builds a little faster
@@ -27,15 +27,17 @@ python_version="3.5.2"
 python_build_log="python-${python_version}-${TRAVIS_OS_NAME}.log"
 
 # Installs and sets global python to v3.5.2
-echo -e "${COLOR[lightyellow_fg]}==> Install python 3.5.2${COLOR[default_fg]}"
+log_verbose "==> Install python 3.5.2"
 pyenv install --verbose "${python_version}" &>"${python_build_log}"
-echo -e "${COLOR[lightyellow_fg]}==> Set global python version to 3.5.2${COLOR[default_fg]}"
+log_verbose "==> Set global python version to 3.5.2 (and coloredlogs/verboselogs install right after)"
 pyenv global "${python_version}"
 
 # Update gist
-echo -e "${COLOR[lightyellow_fg]}==> Sending logs to gist${COLOR[default_fg]}"
+log_verbose "==> Sending logs to gist"
 gist -u 1519c3ffb6bcccdf40223563f3a84448 "${python_build_log}"
 
 # Get the latest version of pip and setuptools, which both come preinstalled, but outdated
+log_verbose "==> Updating pip"
 pip install --upgrade pip
+log_verbose "==> Updating setuptools"
 pip install --upgrade setuptools

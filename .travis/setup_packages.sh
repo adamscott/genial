@@ -1,28 +1,26 @@
 #!/usr/bin/env bash
 set -e
 
-source colors.sh
 source helper.sh
 
-#echo -e "${COLOR[lightyellow_fg]}=> Setup packages${COLOR[default_fg]}"
-log_info "=> Setup packages"
+log_verbose "=> Setup packages"
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
-    echo -e "${COLOR[lightyellow_fg]}==> Updating brew${COLOR[default_fg]}"
+    log_verbose "==> Updating brew"
     brew update
 
     # pyenv dependencies
-    echo -e "${COLOR[lightyellow_fg]}==> Installing autoconf${COLOR[default_fg]}"
+    log_verbose "==> Installing autoconf"
     brew install autoconf
-    echo -e "${COLOR[lightyellow_fg]}==> Installing openssl${COLOR[default_fg]}"
+    log_verbose "==> Installing openssl"
     brew install openssl
-    echo -e "${COLOR[lightyellow_fg]}==> Installing readline${COLOR[default_fg]}"
+    log_verbose "==> Installing readline"
     brew install readline
-    echo -e "${COLOR[lightyellow_fg]}==> Installing xz${COLOR[default_fg]}"
+    log_verbose "==> Installing xz"
     brew install xz
 
     # needed to convert .md to .rst
-    echo -e "${COLOR[lightyellow_fg]}==> Installing pandoc${COLOR[default_fg]}"
+    log_verbose "==> Installing pandoc"
     brew install pandoc
 fi
 # No need to setup packages in Linux build
