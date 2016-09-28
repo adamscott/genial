@@ -53,8 +53,8 @@ while p.poll() is None:
 
 out, err = p.communicate()
 if p.poll() > 0:
-    sys.exit("\r'{}': {} ({})       \n{}".format(command_str, '✗', p.poll(), err.strip()))
+    sys.exit("\r'{}': ✗ ({})       \n{}".format(command_str, p.poll(), err.strip()))
 else:
-    print("\r'{}': {}           ".format(command_str, '✓'))
+    print("\r'{}': ✓           ".format(command_str))
     if out:
         print(out)
