@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-source helper.sh
+source helpers.sh
 
 log_verbose "=> Setup packages"
 
