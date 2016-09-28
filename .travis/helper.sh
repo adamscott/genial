@@ -50,6 +50,10 @@ install_coloredlogs() {
     pip install --user coloredlogs
 }
 
+install_verboselogs() {
+    pip install --user verboselogs
+}
+
 is_coloredlogs_installed() {
     local list
     list=$(pip list)
@@ -57,8 +61,16 @@ is_coloredlogs_installed() {
     echo $?
 }
 
+is_verboselogs_installed() {
+    local list
+    list=$(pip list)
+    echo "${list}" | grep -q verboselogs
+    echo $?
+}
+
+log_verbose() { local text=$1; _log verbose "${text}"; }
 log_info() { local text=$1; _log info "${text}"; }
-log_debug() { local text=$1; _log debug "{$text}"; }
+log_debug() { local text=$1; _log debug "${text}"; }
 log_warn() { local text=$1; _log warn "${text}"; }
 log_error() { local text=$1; _log error "${text}"; }
 log_critical() { local text=$1; _log critical "${text}"; }
@@ -68,9 +80,14 @@ _log() {
         install_coloredlogs
     fi
 
+    if [[ "$(is_verboselogs_installed)" -ne "0" ]]; then
+        install_verboselogs
+    fi
+
     local type=$1
 
-    if [[ "$type" =~ ^(info|debug|warn|error|critical)$ ]]; then
+    if ! [[ "$type" =~ ^(info|verbose|debug|warn|error|critical)$ ]] ; then
+
         type=info
     fi
 
@@ -83,12 +100,12 @@ _log() {
     set +e  # read will return 1, thus end the build without this
     local script=''
     read -r -d '' script <<EOF
-import logging
 import os
 import sys
 import coloredlogs
+from verboselogs import VerboseLogger
 
-logger = logging.getLogger()
+logger = VerboseLogger('genial')
 coloredlogs.install(level='DEBUG', stream=sys.stdout)
 logger.${type}('${text}')
 EOF
