@@ -74,6 +74,10 @@ addons:
       - libxcb-render-util0
       - libxcb-render-util0-dev
       - libxcb-glx0-dev
+      - libx11-xcb-dev
+      - libglu1-mesa-dev
+      - libxrender-dev
+
 before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew install bash && alias bash=/usr/local/Cellar/bash/4.4/bin/bash; fi
   - source .travis/env.sh
