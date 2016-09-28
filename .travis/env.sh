@@ -8,8 +8,13 @@ else  # Linux
 fi
 
 # Sets $PATH to access Qt binaries
-export QT_INSTALL_DIR="$(echo ~)/qt"
-export PATH="${QT_INSTALL_DIR}/bin":$PATH
+if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then  # OS X
+    export QT_INSTALL_DIR="$(echo ~)/qt"
+    export PATH="${QT_INSTALL_DIR}/bin":$PATH
+else
+    export QT_INSTALL_DIR="/opt/qt57"
+    export PATH="${QT_INSTALL_DIR}/bin":$PATH
+fi
 
 # Sets coloredlogs pattern
 export COLOREDLOGS_LOG_FORMAT='[%(asctime)s] %(levelname)s %(message)s'
