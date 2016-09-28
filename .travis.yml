@@ -32,7 +32,7 @@ addons:
       - mercurial
       - python-setuptools
       - ruby
-      - rubygems
+      - rubygems-integration
       - make
       - libssl-dev
       - zlib1g-dev
