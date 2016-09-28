@@ -17,6 +17,13 @@ log_verbose "==> Extracting Qt source code"
 tar xf 'qt-everywhere-opensource-src-5.7.0.tar.xz'
 
 pushd qt-everywhere-opensource-src-5.7.0
+
+if [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then  # Linux
+    log_verbose "==> Updating gcc and g++ references to gcc-5 and g++-5"
+    perl -pi -e 's/QMAKE_CC = gcc/QMAKE_CC = gcc-5/g' qt/mkspecs/linux-g++-64
+    perl -pi -e 's/QMAKE_CC = g++/QMAKE_CC = g++-5/g' qt/mkspecs/linux-g++-64
+fi
+
 log_verbose "==> configure"
 ./configure \
     $(: === MISC ===)\

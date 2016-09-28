@@ -51,6 +51,7 @@ addons:
       - curl
       - llvm
       - xz-utils
+      - gcc-5
       - g++-5
 before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew install bash && alias bash=/usr/local/Cellar/bash/4.4/bin/bash; fi
