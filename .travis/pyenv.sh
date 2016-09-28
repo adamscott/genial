@@ -27,7 +27,7 @@ python_version="3.5.2"
 python_build_log="python-${python_version}-${TRAVIS_OS_NAME}.log"
 
 # Installs and sets global python to v3.5.2
-log_verbose "==> Install python 3.5.2"
+log_verbose "==> Installing python 3.5.2"
 pyenv install --verbose "${python_version}" &>"${python_build_log}"
 log_verbose "==> Set global python version to 3.5.2 (and coloredlogs/verboselogs install right after)"
 pyenv global "${python_version}"
