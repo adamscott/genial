@@ -127,10 +127,13 @@ import sys
 import coloredlogs
 from verboselogs import VerboseLogger
 
+args = sys.argv[1:]
+text = " ".join(args)
+
 logger = VerboseLogger('genial')
 coloredlogs.install(level='DEBUG', stream=sys.stdout)
-logger.${type}('${text}')
+logger.${type}(text)
 EOF
     set -e
-    python -c "${script}"
+    python -c "${script}" "${text}"
 }
