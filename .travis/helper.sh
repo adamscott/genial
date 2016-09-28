@@ -80,6 +80,7 @@ _log() {
 
     local text=$1
 
+    set +e  # read will return 1, thus end the build without this
     local script=''
     read -r -d '' script <<EOF
 import logging
@@ -91,6 +92,6 @@ logger = logging.getLogger()
 coloredlogs.install(level='DEBUG', stream=sys.stdout)
 logger.${type}('${text}')
 EOF
-
+    set -e
     python -c "${script}"
 }
