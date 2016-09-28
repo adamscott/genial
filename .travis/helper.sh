@@ -57,20 +57,20 @@ is_coloredlogs_installed() {
     echo $?
 }
 
-log_info() { local text=$1; _log info "$text" }
-log_debug() { local text=$1; _log debug "$text"; }
-log_warn() { local text=$1; _log warn "$text"; }
-log_error() { local text=$1; _log error "$text"; }
-log_critical() { local text=$1; _log critical "$text"; }
+log_info() { local text=$1; _log info "${text}"; }
+log_debug() { local text=$1; _log debug "{$text}"; }
+log_warn() { local text=$1; _log warn "${text}"; }
+log_error() { local text=$1; _log error "${text}"; }
+log_critical() { local text=$1; _log critical "${text}"; }
 
 _log() {
-    if [[ "$(is_coloredlogs_installed)" -ne "0" ]] ; then
+    if [[ "$(is_coloredlogs_installed)" -ne "0" ]]; then
         install_coloredlogs
     fi
 
     local type=$1
 
-    if [[ '$type' =~ ^(info|debug|warn|error|critical)$ ]] ; then
+    if [[ "$type" =~ ^(info|debug|warn|error|critical)$ ]]; then
         type=info
     fi
 
@@ -81,7 +81,7 @@ _log() {
     local text=$1
 
     local script=''
-    read -d '' script <<EOF
+    read -r -d '' script <<EOF
 import logging
 import os
 import sys
