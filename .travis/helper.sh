@@ -81,7 +81,7 @@ _log() {
     local text=$1
 
     local script=''
-    read -d '' script << END
+    read -d '' script <<EOF
 import logging
 import os
 import sys
@@ -90,7 +90,7 @@ import coloredlogs
 logger = logging.getLogger()
 coloredlogs.install(level='DEBUG', stream=sys.stdout)
 logger.${type}('${text}')
-END
+EOF
 
     python -c "${script}"
 }
