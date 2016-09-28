@@ -20,8 +20,9 @@ pushd qt-everywhere-opensource-src-5.7.0
 
 if [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then  # Linux
     log_verbose "==> Updating gcc and g++ references to gcc-5 and g++-5"
-    perl -pi -e 's/QMAKE_CC = gcc/QMAKE_CC = gcc-5/g' qt/mkspecs/linux-g++-64
-    perl -pi -e 's/QMAKE_CC = g++/QMAKE_CC = g++-5/g' qt/mkspecs/linux-g++-64
+    echo 'QMAKE_COMPILER = gcc-5' >>qtbase/mkspecs/linux-g++-64/qmake.conf
+    echo 'QMAKE_CC = gcc-5' >>qtbase/mkspecs/linux-g++-64/qmake.conf
+    echo 'QMAKE_CXX = g++-5' >>qtbase/mkspecs/linux-g++-64/qmake.conf
 fi
 
 log_verbose "==> configure"
